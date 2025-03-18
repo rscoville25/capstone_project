@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdi6ukc02bn0a"
-path.s3tc="res://.godot/imported/chara_blue.png-f66eb76a6cef0d485cb2ef23683dfcf2.s3tc.ctex"
+uid="uid://m2ih20yn1b45"
+path.s3tc="res://.godot/imported/untitled_chara_blue.png-c3e9ad523ff6dc1a77fd460bc87c5268.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "d83a4d0c2dc5df8b333fec715c3b11f2"
+}
 
 [deps]
 
-source_file="res://src/textures/chara_blue.png"
-dest_files=["res://.godot/imported/chara_blue.png-f66eb76a6cef0d485cb2ef23683dfcf2.s3tc.ctex"]
+source_file="res://src/models/untitled_chara_blue.png"
+dest_files=["res://.godot/imported/untitled_chara_blue.png-c3e9ad523ff6dc1a77fd460bc87c5268.s3tc.ctex"]
 
 [params]
 

@@ -1,15 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=5 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
-[ext_resource type="Texture2D" uid="uid://bdi6ukc02bn0a" path="res://src/textures/chara_blue.png" id="2_463lg"]
+[ext_resource type="PackedScene" uid="uid://f7ufx23utd22" path="res://scenes/characters/basicEnemy.tscn" id="2_6y3n2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_s3el7"]
 size = Vector3(100, 0.5, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hb38g"]
 size = Vector3(100, 0.5, 100)
-
-[sub_resource type="Environment" id="Environment_n81dj"]
 
 [node name="Main" type="Node3D"]
 
@@ -23,12 +21,5 @@ shape = SubResource("BoxShape3D_hb38g")
 
 [node name="Player" parent="." instance=ExtResource("1_m5ix2")]
 
-[node name="HealthBar" type="TextureProgressBar" parent="Player"]
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(80.88, 16)
-value = 100.0
-texture_progress = ExtResource("2_463lg")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_n81dj")
+[node name="BasicEnemy" parent="." instance=ExtResource("2_6y3n2")]
+transform = Transform3D(-0.972084, 0, 0.234633, 0, 1, 0, -0.234633, 0, -0.972084, 0, 0, 22.7731)

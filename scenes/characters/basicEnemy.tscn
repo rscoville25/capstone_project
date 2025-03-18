@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://f7ufx23utd22"]
+
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="1_43fvp"]
+[ext_resource type="Script" path="res://scripts/basic_enemy.gd" id="1_131g2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2l1us"]
+radius = 1.43052
+height = 10.6538
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nyhqa"]
+radius = 0.579973
+height = 10.8897
+
+[node name="BasicEnemy" type="CharacterBody3D"]
+script = ExtResource("1_131g2")
+
+[node name="chara" parent="." instance=ExtResource("1_43fvp")]
+
+[node name="LiveBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.19741, 0)
+shape = SubResource("CapsuleShape3D_2l1us")
+
+[node name="DeathHit" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0132117, 0.999913, 0, -0.999913, -0.0132117, 0, 5.0359, 0)
+shape = SubResource("CapsuleShape3D_nyhqa")
+disabled = true
