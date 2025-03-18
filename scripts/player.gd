@@ -6,7 +6,8 @@ const LERP_VALUE : float = 0.15
 @onready var spring_arm_pivot : Node3D = $SpringArmPivot
 @onready var ui_hp : TextureProgressBar = $HealthBar
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
-@onready var hitbox : Area3D = $chara/Hitbox
+@onready var hitbox_light : Area3D = $chara/HitboxLight
+@onready var hitbox_heavy : Area3D = $chara/HitboxHeavy
 
 # three speeds for walking, running, and taking a stance
 const WALK = 10.0
@@ -23,6 +24,8 @@ var cur_attack = attacks[0]
 var health = 100
 var att = 100
 var lvl = 1
+
+var timer = 0
 
 func _physics_process(delta):
 	
@@ -42,17 +45,24 @@ func _physics_process(delta):
 	if Input.is_action_pressed("light_attack"):
 		attacking = true
 		cur_attack = attacks[1]
-		health -= 1
+		light_attack(att)
 		
 	if Input.is_action_pressed("heavy_attack"):
+		timer += 1
 		attacking = true
 		cur_attack = attacks[3]
+		if (timer % 77) == 30 || (timer % 77) == 31:
+			heavy_attack(att)
+			
+	if Input.is_action_just_released("heavy_attack") :
+		timer = 0
+
 	
 	# get direction of movement
-	var move_direction : Vector3 = Vector3.ZERO
-	move_direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	move_direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	move_direction = move_direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
+	var direction : Vector3 = Vector3.ZERO
+	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -61,7 +71,6 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		if speed == WALK:
 			_anim_tree["parameters/playback"].travel("Walking")
@@ -75,31 +84,34 @@ func _physics_process(delta):
 		_anim_tree["parameters/playback"].travel("Idle")
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
-
-
 		
 	if !attacking:	
-		if move_direction:
+		if direction:
 			player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 			
-		move_and_slide()
 	else:
 		if cur_attack == attacks[1]:
 			_anim_tree["parameters/playback"].travel("Punching")
 		elif cur_attack == attacks[3]:
 			_anim_tree["parameters/playback"].travel("Roundhouse Kick")	
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 			
-func attack(strength, power):
-	var enemies_hit = hitbox.get_overlapping_bodies()
-	var damage = 0
-	if strength == "light":
-		damage = (power / 4)
-	elif strength == "medium":
-		damage = (power / 3)
-	else:
-		damage = (power / 2)
+	move_and_slide()
+			
+func light_attack(power):
+	var enemies_hit = hitbox_light.get_overlapping_bodies()
+	var damage = power / 4
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
-			e.hit()
+			e.hit(damage)
+			
+func heavy_attack(power):
+	var enemies_hit = hitbox_heavy.get_overlapping_bodies()
+	var damage = power / 2
+	
+	for e in enemies_hit:
+		if e.has_method("hit"):
+			e.hit(damage)
 	

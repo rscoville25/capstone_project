@@ -41,7 +41,3 @@ offset_bottom = 17.944
 scale = Vector2(502.788, 10.9956)
 value = 100.0
 texture_progress = ExtResource("4_kwek8")
-
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
