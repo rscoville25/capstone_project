@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dkprpl4xb4073"
-path="res://.godot/imported/chara.gltf-f91fd141909fc6a61ba8929ae62836c3.scn"
+path="res://.godot/imported/chara.gltf-b0157dff10f9961200d97527b9649832.scn"
 
 [deps]
 
-source_file="res://src/assets/chara.gltf"
-dest_files=["res://.godot/imported/chara.gltf-f91fd141909fc6a61ba8929ae62836c3.scn"]
+source_file="res://src/models/chara.gltf"
+dest_files=["res://.godot/imported/chara.gltf-b0157dff10f9961200d97527b9649832.scn"]
 
 [params]
 
