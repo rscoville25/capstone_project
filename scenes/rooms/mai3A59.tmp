@@ -26,3 +26,6 @@ shape = SubResource("BoxShape3D_hb38g")
 
 [node name="Spawner" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.73092, -24.5345)
+
+[node name="BasicEnemy" parent="." instance=ExtResource("2_6y3n2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.83375, 0.25, 22.7115)

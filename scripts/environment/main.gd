@@ -1,28 +1,34 @@
 extends Node3D
 
-var cur_wave : int
 
 @export var enemy : PackedScene
 
-var enemy_amt : int
+@onready var spawner : Marker3D = $Spawner
+
+
 var spawn_on
 
 func _ready():
-	cur_wave = 0
+	Global.wave = 0
+	Global.enemies_spawned = 0
 
 	
 	
 func _process(delta):
-	if enemy_amt <= 1:
-		cur_wave += 1
-		spawn(cur_wave)
+	if Global.enemies_spawned <= 0 :
+		Global.wave += 1
+		spawn(Global.wave)
+		Global.enemies_spawned += 1
+		
+	
+	
+
+	
 	
 
 func spawn(wave):
-	var spawner = $Spawner
 	if wave >= 1:
 		var enemy1 = enemy.instantiate()
 		enemy1.global_position = spawner.global_position
 		add_child(enemy1)
 		
-	enemy_amt += 1
