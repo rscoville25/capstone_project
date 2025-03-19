@@ -33,3 +33,4 @@ func death():
 	live_box.disabled = true
 	
 	
+	

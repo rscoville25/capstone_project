@@ -43,8 +43,10 @@ func _physics_process(delta):
 		speed = WALK
 	
 	if Input.is_action_pressed("light_attack"):
+		timer += 1
 		attacking = true
 		cur_attack = attacks[1]
+		
 		light_attack(att)
 		
 	if Input.is_action_pressed("heavy_attack"):
