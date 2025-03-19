@@ -27,16 +27,20 @@ var max_health = health
 var att = 100
 var lvl = 1
 
+# timer for stuff
 var timer = 0
 
 func _physics_process(delta):
 	
+	# UI business
 	ui_hp.value = health
 	ui_hp.max_value = max_health
+	
+	# tells you when you're attacking and what attack is being used
 	attacking = false
 	cur_attack = attacks[0]
 
-	
+	# Change speeds and makes sure you can't run when stanced
 	if Input.is_action_pressed("run"):
 		speed = RUN
 	elif Input.is_action_pressed("fight_stance") && !Input.is_action_pressed("run"):
@@ -45,6 +49,7 @@ func _physics_process(delta):
 	else:
 		speed = WALK
 	
+	# Inputs for the three attacks. Cannot do two attacks at once. Not elegant but it works
 	if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
@@ -58,16 +63,18 @@ func _physics_process(delta):
 		cur_attack = attacks[2]
 		if (timer % 62) == 34 || (timer % 62) == 35:
 			medium_attack(att)
-		
-		
+			
 	if Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[3]
 		if (timer % 77) == 30 || (timer % 77) == 31:
 			heavy_attack(att)
-			
+	
+	# set timer to 0 when attack buttons are released. May change to when attack buttons pressed
 	if Input.is_action_just_released("heavy_attack"):
+		timer = 0
+	if Input.is_action_just_released("medium_attack"):
 		timer = 0
 	if Input.is_action_just_released("light_attack"):
 		timer = 0
