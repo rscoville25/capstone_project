@@ -46,8 +46,8 @@ func _physics_process(delta):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[1]
-		
-		light_attack(att)
+		if (timer % 77) == 30 || (timer % 77) == 31:
+			light_attack(att)
 		
 	if Input.is_action_pressed("heavy_attack"):
 		timer += 1

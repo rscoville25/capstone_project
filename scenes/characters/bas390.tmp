@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://f7ufx23utd22"]
+[gd_scene load_steps=5 format=3 uid="uid://f7ufx23utd22"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="1_43fvp"]
 [ext_resource type="Script" path="res://scripts/characters/basic_enemy.gd" id="1_131g2"]
-[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="3_chdry"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2l1us"]
 radius = 1.43052
@@ -25,11 +24,3 @@ shape = SubResource("CapsuleShape3D_2l1us")
 transform = Transform3D(1, 0, 0, 0, -0.0132117, 0.999913, 0, -0.999913, -0.0132117, 0, 5.0359, 0)
 shape = SubResource("CapsuleShape3D_nyhqa")
 disabled = true
-
-[node name="HealthBar" type="TextureProgressBar" parent="."]
-offset_left = 23.0
-offset_top = 529.0
-offset_right = 63.0
-offset_bottom = 569.0
-scale = Vector2(1097.04, 36.0629)
-texture_progress = ExtResource("3_chdry")

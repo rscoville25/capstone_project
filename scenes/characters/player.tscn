@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
-[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/models/untitled_chara_blue.png" id="4_kwek8"]
+[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
 radius = 1.81226
@@ -41,7 +41,3 @@ offset_bottom = 17.944
 scale = Vector2(502.788, 10.9956)
 value = 100.0
 texture_progress = ExtResource("4_kwek8")
-
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
