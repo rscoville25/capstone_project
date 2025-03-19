@@ -5,10 +5,13 @@ extends CharacterBody3D
 @onready var death_box : CollisionShape3D = $DeathHit
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var ui_hp : TextureProgressBar = $HealthBar
+@onready var hit_sound : AudioStreamPlayer3D = $HitSound
 
 var death_timer : int
 @export var health = 1000
 var max_health = health
+
+var is_hit = false
 
 func _ready():
 	death_box.disabled = true
@@ -25,7 +28,16 @@ func _physics_process(delta):
 	ui_hp.max_value = max_health
 	
 	if health >= 0:
-		_anim_tree["parameters/playback"].travel("Idle")
+		if is_hit:
+			death_timer += 1
+			_anim_tree["parameters/playback"].travel("Idle")
+			velocity.z = -1
+			if death_timer >= 30:
+				death_timer = 0
+				velocity.z = 0
+				is_hit = false
+		else:
+			_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
 	else:
 		death()
 		death_timer += 1
@@ -42,6 +54,9 @@ func _physics_process(delta):
 		
 		
 func hit(dmg):
+	hit_sound.play()
+	death_timer = 0
+	is_hit = true
 	health -= dmg
 	
 func death():

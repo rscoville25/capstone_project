@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://bnysjrldq7hr4"]
+
+[ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
+[ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
+[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
+radius = 1.81226
+height = 10.3736
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_c7bmg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
+shape = SubResource("CapsuleShape3D_3ec55")
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.10729, 0)
+script = ExtResource("2_0npem")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.908139, -0.0464048)
+spring_length = 15.0
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 0.991687, 0.128674, 0, -0.128674, 0.991687, 0, 0.386555, -0.733664)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SpringArmPivot/SpringArm3D/Camera3D"]
+
+[node name="chara" parent="." instance=ExtResource("3_hrgne")]
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+anchors_preset = -1
+anchor_right = 0.001
+anchor_bottom = 0.122
+offset_right = 61.848
+offset_bottom = 17.944
+scale = Vector2(502.788, 10.9956)
+value = 100.0
+texture_progress = ExtResource("4_kwek8")
