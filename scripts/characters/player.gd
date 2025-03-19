@@ -22,7 +22,8 @@ var attacks = ["none", "light", "medium", "heavy"]
 var cur_attack = attacks[0]
 
 # all stats (hp, attack, level, etc)
-var health = 100
+var health = 1000
+var max_health = health
 var att = 100
 var lvl = 1
 
@@ -31,6 +32,7 @@ var timer = 0
 func _physics_process(delta):
 	
 	ui_hp.value = health
+	ui_hp.max_value = max_health
 	attacking = false
 	cur_attack = attacks[0]
 
@@ -43,14 +45,14 @@ func _physics_process(delta):
 	else:
 		speed = WALK
 	
-	if Input.is_action_pressed("light_attack"):
+	if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[1]
 		if (timer % 33) == 17 || (timer % 33) == 18:
 			light_attack(att)
 			
-	if Input.is_action_pressed("medium_attack"):
+	if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[2]
@@ -73,8 +75,9 @@ func _physics_process(delta):
 	
 	# get direction of movement
 	var direction : Vector3 = Vector3.ZERO
-	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	if speed != STANCE:
+		direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+		direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 	
 	# Add the gravity.
@@ -94,7 +97,10 @@ func _physics_process(delta):
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 	else:
-		_anim_tree["parameters/playback"].travel("Idle")
+		if speed == STANCE:
+			_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
+		else:
+			_anim_tree["parameters/playback"].travel("Idle")
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
 		

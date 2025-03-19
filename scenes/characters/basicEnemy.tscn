@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://f7ufx23utd22"]
+[gd_scene load_steps=7 format=3 uid="uid://f7ufx23utd22"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="1_43fvp"]
 [ext_resource type="Script" path="res://scripts/characters/basic_enemy.gd" id="1_131g2"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="3_chdry"]
+[ext_resource type="AudioStream" uid="uid://g5edwu8xbrdx" path="res://src/sound/punch-41105.mp3" id="4_absnr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2l1us"]
 radius = 1.43052
@@ -32,4 +33,15 @@ offset_top = 529.0
 offset_right = 63.0
 offset_bottom = 569.0
 scale = Vector2(1097.04, 36.0629)
+value = 100.0
 texture_progress = ExtResource("3_chdry")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 37.0
+offset_top = 569.0
+offset_right = 90.0
+offset_bottom = 592.0
+text = "Enemy"
+
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_absnr")

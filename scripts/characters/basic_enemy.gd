@@ -5,6 +5,7 @@ extends CharacterBody3D
 @onready var death_box : CollisionShape3D = $DeathHit
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var ui_hp : TextureProgressBar = $HealthBar
+@onready var hit_sound : AudioStreamPlayer3D = $HitSound
 
 var death_timer : int
 @export var health = 1000
@@ -53,6 +54,7 @@ func _physics_process(delta):
 		
 		
 func hit(dmg):
+	hit_sound.play()
 	death_timer = 0
 	is_hit = true
 	health -= dmg

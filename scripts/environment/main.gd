@@ -3,10 +3,12 @@ extends Node3D
 @export var enemy : PackedScene
 
 @onready var spawner : Marker3D = $Spawner
+@onready var music : AudioStreamPlayer = $Music
 
 func _ready():
 	Global.wave = 0
 	Global.enemies_spawned = 0
+	music.play()
 
 	
 	
