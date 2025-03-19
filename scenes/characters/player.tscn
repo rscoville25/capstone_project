@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bnysjrldq7hr4"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_c7bmg"]
-[ext_resource type="Script" path="res://scripts/spring_arm_pivot.gd" id="2_0npem"]
+[ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
+[ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/models/untitled_chara_blue.png" id="4_kwek8"]
 

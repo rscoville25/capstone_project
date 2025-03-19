@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://f7ufx23utd22"]
 
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="1_43fvp"]
-[ext_resource type="Script" path="res://scripts/basic_enemy.gd" id="1_131g2"]
+[ext_resource type="Script" path="res://scripts/characters/basic_enemy.gd" id="1_131g2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2l1us"]
 radius = 1.43052
