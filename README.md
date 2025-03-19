@@ -10,3 +10,7 @@ A 3d beat-em-up style game built in Godot
 - **Adobe Mixamo**: Premade animations made by Adobe that look better than anything I could do. Has almost everything I could have wanted to animate
   -  https://www.mixamo.com/
 - And of course, random Youtube tutorials helped me with any question I had regarding how certain thing worked 
+
+## Known Bugs
+- Pressing two attack buttons at the same time has both register damage, while the stronger attack's animation plays
+- Spawner is not quite finished yet
