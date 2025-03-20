@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=23 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -56,6 +56,9 @@ size = Vector3(1, 50, 50)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d62w0"]
 size = Vector3(1, 50, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_daod8"]
+size = Vector3(200, 100, 200)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ldvck")
@@ -166,3 +169,9 @@ shape = SubResource("BoxShape3D_d62w0")
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Press Start to Continue"
+
+[node name="Arena" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("BoxShape3D_daod8")

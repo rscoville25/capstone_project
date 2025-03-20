@@ -7,6 +7,9 @@ extends Node3D
 @onready var music : AudioStreamPlayer = $Music
 @onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
 @onready var door : MeshInstance3D = $PhysicalDoor
+@onready var ui_text : Label = $Label
+@onready var nav_region : NavigationRegion3D = $NavigationRegion3D
+@onready var arena_area : Area3D = $Arena
 
 var spawn_time = 0
 
@@ -15,18 +18,25 @@ func _ready():
 	Global.enemies_spawned = 0
 	music.play()
 	Global.shop_time = true
-
+	ui_text.visible = true
 	
 	
 func _process(delta):
 	get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 	
 	if Global.shop_time == true:
-		if Input.is_action_just_pressed("start"):
-			Global.shop_time = false
-			Global.wave += 1
+		ui_text.visible = true
+		ui_text.text = "Go To Arena"
+		if player.is_in_arena:
+			ui_text.text = "Press Start to Begin"
+			if Input.is_action_just_pressed("start"):
+				
+				Global.shop_time = false
+				Global.wave += 1
 		door.global_transform.origin.y = -25
 	else:
+		door.global_transform.origin.y = 25
+		ui_text.visible = false
 		if Global.enemies_spawned < Global.wave:
 			spawn_time += 1
 			if spawn_time % 60 == 2:

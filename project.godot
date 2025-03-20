@@ -25,6 +25,7 @@ project/assembly_name="capstone_project"
 [global_group]
 
 enemies_g=""
+player=""
 
 [importer_defaults]
 
