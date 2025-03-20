@@ -14,4 +14,5 @@ A 3d beat-em-up style game built in Godot
 ## Known Bugs
 - Heat particle effect not consistant with the heat variable
 - Enemies not rotating to face the player
-- Particle effects not rendering the lighting correctly (hardware issue?)
+- Some animations playing when the're not supposed to
+- 
