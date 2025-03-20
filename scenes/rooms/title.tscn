@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwpjk6jwpr8g6"]
+
+[ext_resource type="Script" path="res://scripts/environment/title.gd" id="1_pngot"]
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="2_errse"]
+
+[node name="Title" type="Node3D"]
+script = ExtResource("1_pngot")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press start to continue"
+
+[node name="chara" parent="." instance=ExtResource("2_errse")]
+
+[node name="Camera3D" type="Camera3D" parent="chara"]
+transform = Transform3D(0.471966, 0, -0.881617, 0, 1, 0, 0.881617, 0, 0.471966, -7.47576, 8.72173, 3.87651)
+fov = 50.0

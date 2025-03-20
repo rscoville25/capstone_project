@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=22 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -50,9 +50,6 @@ size = Vector3(100, 0.5, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ff3vs"]
 size = Vector3(100, 0.5, 100)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_k72v7"]
-size = Vector3(1, 50, 50)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ck8pi"]
 size = Vector3(1, 50, 50)
@@ -156,12 +153,6 @@ mesh = SubResource("BoxMesh_0fywe")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShopFloor/StaticBody3D"]
 shape = SubResource("BoxShape3D_ff3vs")
 
-[node name="ShopDoor" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 25, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopDoor"]
-shape = SubResource("BoxShape3D_k72v7")
-
 [node name="PhysicalDoor" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 25, 0)
 mesh = SubResource("BoxMesh_ck8pi")
@@ -170,3 +161,8 @@ mesh = SubResource("BoxMesh_ck8pi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicalDoor/StaticBody3D"]
 shape = SubResource("BoxShape3D_d62w0")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press Start to Continue"
