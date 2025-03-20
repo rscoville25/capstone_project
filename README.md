@@ -12,4 +12,6 @@ A 3d beat-em-up style game built in Godot
 - And of course, random Youtube tutorials helped me with any question I had regarding how certain thing worked 
 
 ## Known Bugs
-- Spawner is not quite finished yet
+- Heat particle effect not consistant with the heat variable
+- Enemies not rotating to face the player
+- Particle effects not rendering the lighting correctly (hardware issue?)
