@@ -13,7 +13,7 @@ height = 10.6538
 radius = 0.579973
 height = 10.8897
 
-[node name="BasicEnemy" type="CharacterBody3D"]
+[node name="BasicEnemy" type="CharacterBody3D" groups=["enemies_g"]]
 script = ExtResource("1_131g2")
 
 [node name="chara" parent="." instance=ExtResource("1_43fvp")]
@@ -45,3 +45,8 @@ text = "Enemy"
 
 [node name="HitSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_absnr")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." groups=["enemies_g"]]
+target_desired_distance = 5.0
+
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

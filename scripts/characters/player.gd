@@ -27,8 +27,11 @@ var max_health = health
 var att = 100
 var lvl = 1
 
-# timer for stuff
+# timer for stuff, as well as stun value
 var timer = 0
+var stun = 0
+
+var is_hurt = false
 
 func _physics_process(delta):
 	
@@ -111,11 +114,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
 		
-	if !attacking:	
-		if direction:
-			player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
-			
-	else:
+	if attacking:	
 		if cur_attack == attacks[1]:
 			_anim_tree["parameters/playback"].travel("Punching")
 		elif cur_attack == attacks[2]:
@@ -124,6 +123,11 @@ func _physics_process(delta):
 			_anim_tree["parameters/playback"].travel("Roundhouse Kick")	
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
+
+	else:
+		if direction:
+			player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
+
 			
 	move_and_slide()
 			
@@ -151,3 +155,7 @@ func heavy_attack(power):
 		if e.has_method("hit"):
 			e.hit(damage)
 	
+func hurt(dmg, stn):
+	is_hurt = true
+	health -= dmg
+	stun = stn
