@@ -10,6 +10,7 @@ const LERP_VALUE : float = 0.15
 @onready var hit_sound : AudioStreamPlayer3D = $HitSound
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 @onready var hitbox : Area3D = $chara/HitboxLight
+@onready var heat_fx : GPUParticles3D = $chara/HeatParticles
 
 var death_timer : int
 var attack_timer : int
@@ -25,12 +26,14 @@ func _ready():
 	live_box.disabled = false
 	death_timer = 0
 	attack_timer = 0
+	heat_fx.emitting = false
 
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):	
+	
 	ui_hp.value = health
 	ui_hp.max_value = max_health
 	
