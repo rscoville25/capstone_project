@@ -9,6 +9,8 @@ const LERP_VALUE : float = 0.15
 @onready var hitbox_light : Area3D = $chara/HitboxLight
 @onready var hitbox_medium : Area3D = $chara/HitboxMedium
 @onready var hitbox_heavy : Area3D = $chara/HitboxHeavy
+@onready var kick_fx : GPUParticles3D = $chara/GPUParticles3D
+@onready var heat_fx : GPUParticles3D = $chara/HeatParticles
 
 # three speeds for walking, running, and taking a stance
 const WALK = 10.0
@@ -26,17 +28,36 @@ var health = 1000
 var max_health = health
 var att = 100
 var lvl = 1
+var heat = 0
 
+# timer for stuff, as well as stun value
 var timer = 0
+var stun = 0
 
+var is_hurt = false
+
+func _ready():
+	kick_fx.emitting = false
+	kick_fx.one_shot = true
+	heat_fx.emitting = true
+	heat_fx.speed_scale = 0
+	
 func _physics_process(delta):
 	
+	if heat_fx.speed_scale != heat * 0.3:
+		heat_fx.speed_scale += 0.1
+
+	
+	
+	# UI business
 	ui_hp.value = health
 	ui_hp.max_value = max_health
+	
+	# tells you when you're attacking and what attack is being used
 	attacking = false
 	cur_attack = attacks[0]
 
-	
+	# Change speeds and makes sure you can't run when stanced
 	if Input.is_action_pressed("run"):
 		speed = RUN
 	elif Input.is_action_pressed("fight_stance") && !Input.is_action_pressed("run"):
@@ -45,11 +66,15 @@ func _physics_process(delta):
 	else:
 		speed = WALK
 	
+	# Inputs for the three attacks. Cannot do two attacks at once. Not elegant but it works
 	if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[1]
 		if (timer % 33) == 17 || (timer % 33) == 18:
+			heat += 25
+			if heat > 100:
+				heat = 100
 			light_attack(att)
 			
 	if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
@@ -57,17 +82,28 @@ func _physics_process(delta):
 		attacking = true
 		cur_attack = attacks[2]
 		if (timer % 62) == 34 || (timer % 62) == 35:
+			heat += 33
+			if heat > 100:
+				heat = 100
 			medium_attack(att)
-		
-		
+			
 	if Input.is_action_pressed("heavy_attack"):
 		timer += 1
 		attacking = true
 		cur_attack = attacks[3]
 		if (timer % 77) == 30 || (timer % 77) == 31:
+			heat += 50
+			if heat > 100:
+				heat = 100
 			heavy_attack(att)
-			
+		if (timer % 77) >= 30 && (timer % 77) <= 38:
+			kick_fx.emitting = true
+
+	
+	# set timer to 0 when attack buttons are released. May change to when attack buttons pressed
 	if Input.is_action_just_released("heavy_attack"):
+		timer = 0
+	if Input.is_action_just_released("medium_attack"):
 		timer = 0
 	if Input.is_action_just_released("light_attack"):
 		timer = 0
@@ -104,11 +140,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
 		
-	if !attacking:	
-		if direction:
-			player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
-			
-	else:
+	if attacking:	
 		if cur_attack == attacks[1]:
 			_anim_tree["parameters/playback"].travel("Punching")
 		elif cur_attack == attacks[2]:
@@ -117,6 +149,11 @@ func _physics_process(delta):
 			_anim_tree["parameters/playback"].travel("Roundhouse Kick")	
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
+
+	else:
+		if direction:
+			player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
+
 			
 	move_and_slide()
 			
@@ -144,3 +181,7 @@ func heavy_attack(power):
 		if e.has_method("hit"):
 			e.hit(damage)
 	
+func hurt(dmg, stn):
+	is_hurt = true
+	health -= dmg
+	stun = stn

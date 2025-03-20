@@ -22,6 +22,10 @@ Global="*res://scripts/global/global.gd"
 
 project/assembly_name="capstone_project"
 
+[global_group]
+
+enemies_g=""
+
 [importer_defaults]
 
 scene={

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=14 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -6,6 +6,13 @@
 [ext_resource type="Texture2D" uid="uid://nohf73haqycb" path="res://src/textures/kenney_prototype_textures/light/texture_13.png" id="3_g06kd"]
 [ext_resource type="Texture2D" uid="uid://cag1cen6l5gaj" path="res://src/textures/kenney_prototype_textures/dark/texture_01.png" id="4_vw2ur"]
 [ext_resource type="AudioStream" uid="uid://b0ay1bngtrjgv" path="res://src/sound/05 For Dinner.mp3" id="6_d8ayk"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_llaf8"]
+vertices = PackedVector3Array(-99.275, 0.75, -99.275, -99.275, 0.75, 99.475, 99.475, 0.75, 99.475, 99.475, 0.75, -99.275)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+agent_height = 0.0
+agent_radius = 0.0
+agent_max_climb = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vcb78"]
 albedo_texture = ExtResource("3_g06kd")
@@ -31,57 +38,66 @@ size = Vector3(0.5, 100, 200)
 script = ExtResource("1_ldvck")
 enemy = ExtResource("2_6y3n2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_s3el7")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource("BoxShape3D_hb38g")
-
 [node name="Player" parent="." instance=ExtResource("1_m5ix2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.408663, 0, 40.409)
 
 [node name="Spawner" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.73092, -24.5345)
-
-[node name="Wall1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 50, 0)
-mesh = SubResource("BoxMesh_86yn5")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall1"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall1/StaticBody3D"]
-shape = SubResource("BoxShape3D_e5ns0")
-
-[node name="Wall2" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, 100)
-mesh = SubResource("BoxMesh_86yn5")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall2"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2/StaticBody3D"]
-shape = SubResource("BoxShape3D_e5ns0")
-
-[node name="Wall3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 50, 0)
-mesh = SubResource("BoxMesh_86yn5")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall3"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall3/StaticBody3D"]
-shape = SubResource("BoxShape3D_e5ns0")
-
-[node name="Wall4" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, -100)
-mesh = SubResource("BoxMesh_86yn5")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Wall4"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall4/StaticBody3D"]
-shape = SubResource("BoxShape3D_e5ns0")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.5674, 4.73092, -47.3653)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_d8ayk")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_llaf8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
+mesh = SubResource("BoxMesh_s3el7")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MeshInstance3D/StaticBody3D"]
+shape = SubResource("BoxShape3D_hb38g")
+
+[node name="Wall1" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 50, 0)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall1/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="Wall2" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, 100)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall2/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="Wall3" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 50, 0)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall3/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="Wall4" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, -100)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall4/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
