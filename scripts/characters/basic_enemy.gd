@@ -6,7 +6,6 @@ const LERP_VALUE : float = 0.15
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
 @onready var death_box : CollisionShape3D = $DeathHit
 @onready var live_box : CollisionShape3D = $LiveBox
-@onready var ui_hp : TextureProgressBar = $HealthBar
 @onready var hit_sound : AudioStreamPlayer3D = $HitSound
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 @onready var hitbox : Area3D = $chara/HitboxLight
@@ -34,9 +33,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):	
 	attacking = false
-	
-	ui_hp.value = health
-	ui_hp.max_value = max_health
 	
 	var cur_location = global_transform.origin
 	var destination = nav_agent.get_next_path_position()

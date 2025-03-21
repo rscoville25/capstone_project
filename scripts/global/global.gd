@@ -5,4 +5,4 @@ var enemies_spawned : int = 0
 
 var character_position : Vector3
 
-var shop_time : bool
+var shop_time : bool = false

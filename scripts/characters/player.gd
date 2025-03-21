@@ -14,6 +14,7 @@ const LERP_VALUE : float = 0.15
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var death_box : CollisionShape3D = $DeathHit
+@onready var ui_heat : Label = $Momentum
 
 # three speeds for walking, running, and taking a stance
 const WALK = 10.0
@@ -30,7 +31,8 @@ var cur_attack = attacks[0]
 # all stats (hp, attack, level, etc)
 var health = 1000
 var max_health = health
-var att = 100
+var att = 1
+var def = 1
 var lvl = 1
 var heat = 0
 
@@ -40,17 +42,27 @@ var stun = 0
 var dge_count = 0
 
 var is_hurt = false
+@export var is_in_arena = true
+var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
 
 func _ready():
 	kick_fx.emitting = false
 	kick_fx.one_shot = true
 	heat_fx.emitting = true
-	heat_fx.speed_scale = 0
+	heat_fx.speed_scale = 3
+	heat_fx.amount_ratio = 0
 	
 func _physics_process(delta):
+	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	
-	if heat_fx.speed_scale != heat * 0.3:
-		heat_fx.speed_scale += 0.1
+	is_in_arena = false
+	
+	if global_transform.origin.x <= 100:
+		is_in_arena = true
+	print(is_in_arena)
+	
+	if heat_fx.amount_ratio != heat * 0.01:
+		heat_fx.amount_ratio += 0.01
 	
 	_anim_tree["parameters/playback"].travel("Idle")
 	dodge_fx.emitting = false
@@ -93,42 +105,40 @@ func _physics_process(delta):
 					attacking = true
 					cur_attack = attacks[1]
 					if (timer % 33) == 17 || (timer % 33) == 18:
-						heat += 25
+						heat += 1
 						if heat > 100:
 							heat = 100
-						light_attack(att)
+						light_attack(att, heat)
 						
 				if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
-					timer += 1
+					timer += 2
 					attacking = true
 					cur_attack = attacks[2]
 					if (timer % 62) == 34 || (timer % 62) == 35:
-						heat += 33
+						heat += 2
 						if heat > 100:
 							heat = 100
-						medium_attack(att)
+						medium_attack(att, heat)
 						
 				if Input.is_action_pressed("heavy_attack"):
-					timer += 1
+					timer += 3
 					attacking = true
 					cur_attack = attacks[3]
 					if (timer % 77) == 30 || (timer % 77) == 31:
-						heat += 50
+						heat += 3					
 						if heat > 100:
 							heat = 100
-						heavy_attack(att)
+						heavy_attack(att, heat)
 					if (timer % 77) >= 30 && (timer % 77) <= 38:
 						kick_fx.emitting = true
 
 			
 			# set timer to 0 when attack buttons are pressed
-			if Input.is_action_just_pressed("heavy_attack"):
+			if Input.is_action_just_released("heavy_attack"):
 				timer = 0
-			if Input.is_action_just_pressed("medium_attack"):
+			if Input.is_action_just_released("medium_attack"):
 				timer = 0
-			if Input.is_action_just_pressed("light_attack"):
-				timer = 0
-			if Input.is_action_just_pressed("dodge"):
+			if Input.is_action_just_released("light_attack"):
 				timer = 0
 
 			
@@ -196,25 +206,25 @@ func _physics_process(delta):
 				
 	move_and_slide()
 			
-func light_attack(power):
+func light_attack(power, bonus):
 	var enemies_hit = hitbox_light.get_overlapping_bodies()
-	var damage = power / 4
+	var damage = power * 25 * (bonus * 0.15)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
 			e.hit(damage)
 			
-func medium_attack(power):
+func medium_attack(power, bonus):
 	var enemies_hit = hitbox_medium.get_overlapping_bodies()
-	var damage = power / 3
+	var damage = power * 33 * (bonus * 0.15)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
 			e.hit(damage)
 			
-func heavy_attack(power):
+func heavy_attack(power, bonus):
 	var enemies_hit = hitbox_heavy.get_overlapping_bodies()
-	var damage = power / 2
+	var damage = power * 50 * (bonus * 0.15)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
@@ -224,9 +234,17 @@ func hurt(dmg, stn):
 	is_hurt = true
 	if !Input.is_action_pressed("fight_stance"):
 		health -= dmg
+		if heat <= 0:
+			heat = 0
+		else:
+			heat -= 20
 		stun = stn
 	else:
 		health -= 1
+		if heat <= 0:
+			heat = 0
+		else:	
+			heat -= 1
 
 func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
