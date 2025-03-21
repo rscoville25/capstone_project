@@ -1,13 +1,14 @@
 extends Node3D
 
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
+@onready var music : AudioStreamPlayer = $Music
 
 var select_timer = 0
 var start_timer = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	music.play()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

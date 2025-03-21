@@ -4,7 +4,6 @@ extends Node3D
 
 @onready var player : CharacterBody3D = $Player
 @onready var spawner : Marker3D = $Spawner
-@onready var music : AudioStreamPlayer = $Music
 @onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
 @onready var door : MeshInstance3D = $PhysicalDoor
 @onready var ui_text : Label = $Label
@@ -16,7 +15,6 @@ var spawn_time = 0
 func _ready():
 	Global.wave = 0
 	Global.enemies_spawned = 0
-	music.play()
 	Global.shop_time = true
 	ui_text.visible = true
 	

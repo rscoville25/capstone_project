@@ -1,11 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=22 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
 [ext_resource type="PackedScene" uid="uid://f7ufx23utd22" path="res://scenes/characters/basicEnemy.tscn" id="2_6y3n2"]
 [ext_resource type="Texture2D" uid="uid://nohf73haqycb" path="res://src/textures/kenney_prototype_textures/light/texture_13.png" id="3_g06kd"]
 [ext_resource type="Texture2D" uid="uid://cag1cen6l5gaj" path="res://src/textures/kenney_prototype_textures/dark/texture_01.png" id="4_vw2ur"]
-[ext_resource type="AudioStream" uid="uid://b0ay1bngtrjgv" path="res://src/sound/05 For Dinner.mp3" id="6_d8ayk"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_llaf8"]
 vertices = PackedVector3Array(-99.275, 0.75, -99.275, -99.275, 0.75, 99.475, 99.475, 0.75, 99.475, 99.475, 0.75, -99.275)
@@ -72,9 +71,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.5674, 4.73092, -47.3653)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_d8ayk")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_llaf8")
