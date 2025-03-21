@@ -3,12 +3,15 @@ extends Node3D
 @export var enemy : PackedScene
 
 @onready var player : CharacterBody3D = $Player
+@onready var input_prompt : TextureRect = $Player/InputPrompt
 @onready var spawner : Marker3D = $Spawner
 @onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
 @onready var door : MeshInstance3D = $PhysicalDoor
 @onready var ui_text : Label = $Label
 @onready var nav_region : NavigationRegion3D = $NavigationRegion3D
 @onready var arena_area : Area3D = $Arena
+@onready var shopkeeper : AnimationTree = $Shopkeeper/AnimationTree
+@onready var shopkeeper_main : GPUParticles3D = $Shopkeeper/HeatParticles
 
 var spawn_time = 0
 
@@ -17,30 +20,41 @@ func _ready():
 	Global.enemies_spawned = 0
 	Global.shop_time = true
 	ui_text.visible = true
+	shopkeeper_main.emitting = false
+	input_prompt.visible = false
 	
 	
 func _process(delta):
+	# enemy pathfinding
 	get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 	
+	# shop animation
+	shopkeeper["parameters/playback"].travel("Idle")
+	
+	# detects if player is inside the arena. If true, press start to begin the wave
 	if Global.shop_time == true:
 		ui_text.visible = true
 		ui_text.text = "Go To Arena"
 		if player.is_in_arena:
 			ui_text.text = "Press Start to Begin"
 			if Input.is_action_just_pressed("start"):
-				
 				Global.shop_time = false
 				Global.wave += 1
+		# shop door open during shop time
 		door.global_transform.origin.y = -25
 	else:
+		# shop door closed during fight time
 		door.global_transform.origin.y = 25
 		ui_text.visible = false
+		
+		# spawn a certain amount of enemies depending on the wave
 		if Global.enemies_spawned < Global.wave:
 			spawn_time += 1
 			if spawn_time % 60 == 2:
 				spawn(Global.wave)
 				Global.enemies_spawned += 1
 
+# function that spawns the enemies
 func spawn(wave):
 	if wave >= 1:
 		var enemy1 = enemy.instantiate()

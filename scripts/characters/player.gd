@@ -1,7 +1,5 @@
 extends CharacterBody3D
 
-const LERP_VALUE : float = 0.15
-
 @onready var player_mesh : Node3D = $chara
 @onready var spring_arm_pivot : Node3D = $SpringArmPivot
 @onready var ui_hp : TextureProgressBar = $HealthBar
@@ -16,9 +14,11 @@ const LERP_VALUE : float = 0.15
 @onready var death_box : CollisionShape3D = $DeathHit
 @onready var ui_heat : Label = $Momentum
 
+const LERP_VALUE : float = 0.15
+
 # three speeds for walking, running, and taking a stance
-const WALK = 10.0
-const RUN = 25.0
+const WALK = 15.0
+const RUN = 30.0
 const STANCE = 7.0
 const DODGE = 50.0
 var speed = WALK
@@ -53,16 +53,17 @@ func _ready():
 	heat_fx.amount_ratio = 0
 	
 func _physics_process(delta):
+	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	
+	# default to being in the arena as false
 	is_in_arena = false
 	
+	# bounds to be considered in the arena
 	if global_transform.origin.x <= 100:
 		is_in_arena = true
-	print(is_in_arena)
 	
-	if heat_fx.amount_ratio != heat * 0.01:
-		heat_fx.amount_ratio += 0.01
+	heat_fx.amount_ratio = heat * 0.01
 	
 	_anim_tree["parameters/playback"].travel("Idle")
 	dodge_fx.emitting = false
@@ -171,6 +172,8 @@ func _physics_process(delta):
 			# Get the input direction and handle the movement/deceleration.
 			# As good practice, you should replace UI actions with custom gameplay actions.
 			var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+			
+			# A lot of what comes next could be a match statement, but this works for now (even if it is very ugly)
 			if direction:
 				if speed == WALK:
 					_anim_tree["parameters/playback"].travel("Walking")
@@ -208,7 +211,7 @@ func _physics_process(delta):
 			
 func light_attack(power, bonus):
 	var enemies_hit = hitbox_light.get_overlapping_bodies()
-	var damage = power * 25 * (bonus * 0.15)
+	var damage = power * 25 + (bonus * 0.5)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
@@ -216,7 +219,7 @@ func light_attack(power, bonus):
 			
 func medium_attack(power, bonus):
 	var enemies_hit = hitbox_medium.get_overlapping_bodies()
-	var damage = power * 33 * (bonus * 0.15)
+	var damage = power * 33 + (bonus * 0.5)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
@@ -224,7 +227,7 @@ func medium_attack(power, bonus):
 			
 func heavy_attack(power, bonus):
 	var enemies_hit = hitbox_heavy.get_overlapping_bodies()
-	var damage = power * 50 * (bonus * 0.15)
+	var damage = power * 50 + (bonus * 0.5)
 	
 	for e in enemies_hit:
 		if e.has_method("hit"):
