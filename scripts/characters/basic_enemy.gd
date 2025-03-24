@@ -18,6 +18,7 @@ var attack_timer : int
 var max_health = health
 
 var attacking = false
+var rnd_delay = 0
 var is_hit = false
 
 
@@ -38,6 +39,8 @@ func _physics_process(delta):
 	var destination = nav_agent.get_next_path_position()
 	var local_destination = destination - cur_location
 	var direction = local_destination.normalized()
+	
+	nav_agent.set_velocity(direction)
 		
 	if Global.pause:
 		velocity.x = 0
@@ -68,10 +71,7 @@ func _physics_process(delta):
 		
 		if not is_on_floor():
 			velocity += get_gravity() * delta
-		
-	
-		
-		move_and_slide()
+
 		
 		
 func hit(dmg):
@@ -101,9 +101,15 @@ func _on_navigation_agent_3d_target_reached() -> void:
 	if !is_hit:
 		attacking = true
 		attack_timer += 1
-		if attack_timer % 120 <= 33:
+		if attack_timer == 1:
+			rnd_delay = randi_range(60, 180)
+		if attack_timer % rnd_delay <= 33:
 			_anim_tree["parameters/playback"].travel("Punching")
 		else:
 			_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")		
-		if (attack_timer % 120) == 17 || (attack_timer % 120) == 18:
+		if (attack_timer % rnd_delay) == 17 || (attack_timer % rnd_delay) == 18:
 			enemy_attack(25, 15)
+
+func _on_navigation_agent_3d_velocity_computed(safe_velocity: Vector3) -> void:
+	velocity = velocity.move_toward(safe_velocity, 0.25)
+	move_and_slide()
