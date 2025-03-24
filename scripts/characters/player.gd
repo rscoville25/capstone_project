@@ -14,6 +14,8 @@ extends CharacterBody3D
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var death_box : CollisionShape3D = $DeathHit
 @onready var ui_heat : Label = $Momentum
+@onready var ui_money : Label = $Money
+@onready var ui_exp : Label = $Experience
 
 const LERP_VALUE : float = 0.15
 
@@ -30,11 +32,10 @@ var attacks = ["none", "light", "medium", "heavy"]
 var cur_attack = attacks[0]
 
 # all stats (hp, attack, level, etc)
-var health = 1000
-var max_health = health
-var att = 1
-var def = 1
-var lvl = 1
+@export var health = 1000
+@export var max_health = health
+@export var att = 1
+@export var def = 1
 var heat = 0
 @export var money = 100
 @export var experience = 0
@@ -61,6 +62,8 @@ func _physics_process(delta):
 	print(at_shop)
 	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
+	ui_money.text = "$%s" % [str(money)]
+	ui_exp.text = "%sxp" % [str(experience)]
 	
 	# default to being in the arena as false
 	is_in_arena = false
@@ -260,7 +263,7 @@ func heavy_attack(power, bonus):
 func hurt(dmg, stn):
 	is_hurt = true
 	if !Input.is_action_pressed("fight_stance"):
-		health -= dmg
+		health -= dmg - ((def - 1) * 1.5)
 		if heat <= 0:
 			heat = 0
 		else:

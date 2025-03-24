@@ -47,7 +47,7 @@ func _physics_process(delta):
 			if is_hit:
 				attack_timer = 0
 				death_timer += 1
-				_anim_tree["parameters/playback"].travel("Idle")
+				_anim_tree["parameters/playback"].travel("Hit To Body")
 				velocity.z = -1
 				if death_timer >= 30:
 					death_timer = 0
@@ -63,7 +63,7 @@ func _physics_process(delta):
 			death()
 			death_timer += 1
 			if death_timer >= 65:
-				Global.enemies_spawned -= 1
+				Global.enemies_defeated += 1
 				queue_free()
 		
 		if not is_on_floor():

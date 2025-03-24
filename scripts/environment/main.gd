@@ -21,6 +21,12 @@ extends Node3D
 @onready var shop_select : Label = $ShopSelect
 
 var spawn_time = 0
+var shop_item = 0
+
+var items_in_shop = ["Health Restore", "Momentum Boost", "HP Up", "Attack Up", "Defense Up" ]
+var hp_cost = 1
+var att_cost = 1
+var def_cost = 1
 
 func _ready():
 	Global.wave = 0
@@ -53,11 +59,47 @@ func _process(delta):
 		shop_window.visible = true
 		shop_inventory.visible = true
 		shop_select.visible = true
+		shop_select.global_position.y = shop_item * 23 + 29
 		if Input.is_action_just_pressed("ui_down"):
-			shop_select.global_position.y += 23
+			if shop_item != 4:
+				shop_item += 1
+			else:
+				shop_item = 0
 		if Input.is_action_just_pressed("ui_up"):
-			shop_select.global_position.y -= 23
+			if shop_item != 0:
+				shop_item -= 1
+			else:
+				shop_item = 4
 		
+		if Input.is_action_just_pressed("dodge"):
+			match shop_item:
+				0:
+					if player.money >= 100:
+						player.money -= 100
+				1:
+					if player.money >= 75:
+						player.money -= 75
+				2:
+					if player.experience >= hp_cost:
+						player.max_health += 100
+						player.health = player.max_health
+						player.experience -= hp_cost
+						hp_cost *= 2
+
+				3:
+					if player.experience >= att_cost:
+						player.att += 1
+						player.health = player.max_health
+						player.experience -= att_cost
+						att_cost *= 2
+
+				4:
+					if player.experience >= def_cost:
+						player.def += 1
+						player.health = player.max_health
+						player.experience -= def_cost
+						def_cost *= 2
+
 	else:
 		player_camera.current = true
 		shop_window.visible = false
@@ -75,8 +117,9 @@ func _process(delta):
 		if player.is_in_arena:
 			ui_text.text = "Press Start to Begin"
 			if Input.is_action_just_pressed("start"):
-				Global.shop_time = false
+				spawn_time = 0
 				Global.wave += 1
+				Global.shop_time = false
 		# shop door open during shop time
 		door.global_transform.origin.y = -25
 		if player.at_shop:
@@ -96,11 +139,17 @@ func _process(delta):
 		
 		# spawn a certain amount of enemies depending on the wave
 		if !Global.pause:
+			spawn_time += 1
 			if Global.enemies_spawned < Global.wave:
-				spawn_time += 1
-				if spawn_time % 60 == 2:
+				if spawn_time % 60 == 1:
 					spawn(Global.wave)
 					Global.enemies_spawned += 1
+			if Global.enemies_spawned <= Global.enemies_defeated && spawn_time % 60 > 10:
+				player.money += 100 * Global.wave
+				player.experience += Global.wave
+				Global.enemies_spawned = 0
+				Global.enemies_defeated = 0
+				Global.shop_time = true
 
 # function that spawns the enemies
 func spawn(wave):
