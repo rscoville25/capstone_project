@@ -4,6 +4,7 @@ extends Node3D
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
+@onready var player_camera : Camera3D = $Player/SpringArmPivot/SpringArm3D/Camera3D
 @onready var spawner : Marker3D = $Spawner
 @onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
 @onready var door : MeshInstance3D = $PhysicalDoor
@@ -12,6 +13,12 @@ extends Node3D
 @onready var arena_area : Area3D = $Arena
 @onready var shopkeeper : AnimationTree = $Shopkeeper/AnimationTree
 @onready var shopkeeper_main : GPUParticles3D = $Shopkeeper/HeatParticles
+@onready var pause_text : Label = $PauseText
+@onready var shop_camera : Camera3D = $Shopkeeper/Camera3D
+@onready var shop_area : Area3D = $ShopArea
+@onready var shop_window : ColorRect = $ShopWindow
+@onready var shop_inventory : RichTextLabel = $ShopList
+@onready var shop_select : Label = $ShopSelect
 
 var spawn_time = 0
 
@@ -22,18 +29,48 @@ func _ready():
 	ui_text.visible = true
 	shopkeeper_main.emitting = false
 	input_prompt.visible = false
+	pause_text.visible = false
 	
 	
 func _process(delta):
+	if Input.is_action_just_pressed("start"):
+		if Global.pause:
+			Global.pause = false
+		elif !Global.pause && !Global.shop_time:
+			Global.pause = true
+	
+	if Global.pause:
+		pause_text.visible = true	
 	# enemy pathfinding
-	get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
+	else:			
+		pause_text.visible = false
+		get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
+		
+	if Global.buying:
+		shop_camera.current = true
+		ui_text.visible = false
+		input_prompt.visible = false
+		shop_window.visible = true
+		shop_inventory.visible = true
+		shop_select.visible = true
+		if Input.is_action_just_pressed("ui_down"):
+			shop_select.global_position.y += 23
+		if Input.is_action_just_pressed("ui_up"):
+			shop_select.global_position.y -= 23
+		
+	else:
+		player_camera.current = true
+		shop_window.visible = false
+		shop_inventory.visible = false
+		shop_select.visible = false
 	
 	# shop animation
 	shopkeeper["parameters/playback"].travel("Idle")
 	
 	# detects if player is inside the arena. If true, press start to begin the wave
 	if Global.shop_time == true:
-		ui_text.visible = true
+		if !Global.buying:
+			ui_text.visible = true
 		ui_text.text = "Go To Arena"
 		if player.is_in_arena:
 			ui_text.text = "Press Start to Begin"
@@ -42,17 +79,28 @@ func _process(delta):
 				Global.wave += 1
 		# shop door open during shop time
 		door.global_transform.origin.y = -25
+		if player.at_shop:
+			input_prompt.visible = true
+			if Input.is_action_just_pressed("interact"):
+				if !Global.buying:
+					Global.buying = true
+				else:
+					Global.buying = false
+		else:
+			input_prompt.visible = false
+		
 	else:
 		# shop door closed during fight time
 		door.global_transform.origin.y = 25
 		ui_text.visible = false
 		
 		# spawn a certain amount of enemies depending on the wave
-		if Global.enemies_spawned < Global.wave:
-			spawn_time += 1
-			if spawn_time % 60 == 2:
-				spawn(Global.wave)
-				Global.enemies_spawned += 1
+		if !Global.pause:
+			if Global.enemies_spawned < Global.wave:
+				spawn_time += 1
+				if spawn_time % 60 == 2:
+					spawn(Global.wave)
+					Global.enemies_spawned += 1
 
 # function that spawns the enemies
 func spawn(wave):
@@ -61,3 +109,8 @@ func spawn(wave):
 		enemy1.global_position = spawner.global_position
 		add_child(enemy1)
 		
+func _on_shop_area_area_entered(area: Area3D) -> void:
+	player.at_shop = true
+
+func _on_shop_area_area_exited(area: Area3D) -> void:
+	player.at_shop = false
