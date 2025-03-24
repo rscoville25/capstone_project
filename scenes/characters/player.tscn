@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=8 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
+[ext_resource type="Texture2D" uid="uid://dwaqb1lctvbdf" path="res://src/textures/controller/Xbox_Left_Bumper.svg.png" id="5_lojhk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
 radius = 1.81226
@@ -34,26 +35,50 @@ transform = Transform3D(1, 0, 0, 0, 0.991687, 0.128674, 0, -0.128674, 0.991687, 
 
 [node name="chara" parent="." instance=ExtResource("3_hrgne")]
 
-[node name="HealthBar" type="TextureProgressBar" parent="."]
-anchors_preset = -1
-anchor_right = 0.001
-anchor_bottom = 0.122
-offset_left = -1.0
-offset_top = 19.0
-offset_right = 60.848
-offset_bottom = 34.944
-scale = Vector2(502.788, 10.9956)
-value = 100.0
-texture_progress = ExtResource("4_kwek8")
-
 [node name="DeathHit" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.0132117, 0.999913, 0, -0.999913, -0.0132117, 0, 5.0359, 0)
 shape = SubResource("CapsuleShape3D_3a30n")
 disabled = true
 
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+anchors_preset = -1
+anchor_right = 0.001
+anchor_bottom = 0.122
+offset_left = 1.0
+offset_top = 23.0
+offset_right = 62.848
+offset_bottom = 38.944
+scale = Vector2(502.788, 10.9956)
+value = 100.0
+texture_progress = ExtResource("4_kwek8")
+
 [node name="Momentum" type="Label" parent="."]
 offset_left = 6.0
 offset_top = 36.0
-offset_right = 46.0
+offset_right = 157.0
 offset_bottom = 59.0
 text = "Momentum: 0 / 100"
+
+[node name="InputPrompt" type="TextureRect" parent="."]
+offset_left = 518.0
+offset_top = 12.0
+offset_right = 2438.0
+offset_bottom = 910.0
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("5_lojhk")
+
+[node name="Money" type="Label" parent="."]
+offset_left = 1049.0
+offset_top = 1.0
+offset_right = 1147.0
+offset_bottom = 24.0
+text = "$100"
+horizontal_alignment = 2
+
+[node name="Experience" type="Label" parent="."]
+offset_left = 1108.0
+offset_top = 24.0
+offset_right = 1148.0
+offset_bottom = 47.0
+text = "0xp"
+horizontal_alignment = 2

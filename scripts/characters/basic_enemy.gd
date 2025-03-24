@@ -10,6 +10,7 @@ const LERP_VALUE : float = 0.15
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 @onready var hitbox : Area3D = $chara/HitboxLight
 @onready var heat_fx : GPUParticles3D = $chara/HeatParticles
+@onready var anim_player: AnimationPlayer = $chara/AnimationPlayer
 
 var death_timer : int
 var attack_timer : int
@@ -33,41 +34,44 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):	
 	attacking = false
-	
 	var cur_location = global_transform.origin
 	var destination = nav_agent.get_next_path_position()
 	var local_destination = destination - cur_location
 	var direction = local_destination.normalized()
 		
-	if health >= 0:
-		if is_hit:
-			attack_timer = 0
-			death_timer += 1
-			_anim_tree["parameters/playback"].travel("Idle")
-			velocity.z = -1
-			if death_timer >= 30:
-				death_timer = 0
-				velocity.z = 0
-				is_hit = false
-		else:
-			if !attacking:
-				attack_timer = 0
-				_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
-				rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
-				velocity = direction * 7.0
+	if Global.pause:
+		velocity.x = 0
+		velocity.y = 0
 	else:
-		death()
-		death_timer += 1
-		if death_timer >= 65:
-			Global.enemies_spawned -= 1
-			queue_free()
-	
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+		if health >= 0:
+			if is_hit:
+				attack_timer = 0
+				death_timer += 1
+				_anim_tree["parameters/playback"].travel("Hit To Body")
+				velocity.z = -1
+				if death_timer >= 30:
+					death_timer = 0
+					velocity.z = 0
+					is_hit = false
+			else:
+				if !attacking:
+					attack_timer = 0
+					_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
+					rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
+					velocity = direction * 7.0
+		else:
+			death()
+			death_timer += 1
+			if death_timer >= 65:
+				Global.enemies_defeated += 1
+				queue_free()
+		
+		if not is_on_floor():
+			velocity += get_gravity() * delta
 		
 	
 		
-	move_and_slide()
+		move_and_slide()
 		
 		
 func hit(dmg):

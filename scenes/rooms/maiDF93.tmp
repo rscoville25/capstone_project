@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=30 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -80,9 +80,6 @@ size = Vector3(5, 4, 20)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqtd3"]
 size = Vector3(5, 4, 20)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_qk8vd"]
-size = Vector3(5, 100, 20)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ldvck")
@@ -201,7 +198,6 @@ shape = SubResource("BoxShape3D_daod8")
 
 [node name="InShopWall1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 50, 0)
-visible = false
 mesh = SubResource("BoxMesh_iloob")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="InShopWall1"]
@@ -228,7 +224,7 @@ mesh = SubResource("BoxMesh_iloob")
 shape = SubResource("BoxShape3D_ld56d")
 
 [node name="ShopCounter" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.706, 2, 0)
 mesh = SubResource("BoxMesh_4kshd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter"]
@@ -238,9 +234,6 @@ shape = SubResource("BoxShape3D_bqtd3")
 
 [node name="Shopkeeper" parent="." instance=ExtResource("6_734e5")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Shopkeeper"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.317, 34.2228, 0)
@@ -255,41 +248,3 @@ offset_right = 599.0
 offset_bottom = 677.0
 scale = Vector2(4, 4)
 text = "- Pause -"
-
-[node name="ShopArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea"]
-shape = SubResource("BoxShape3D_qk8vd")
-
-[node name="ShopWindow" type="ColorRect" parent="."]
-offset_left = 685.0
-offset_top = 22.0
-offset_right = 725.0
-offset_bottom = 62.0
-scale = Vector2(9.92, 12.28)
-color = Color(0.733005, 0.733005, 0.733005, 1)
-
-[node name="ShopList" type="RichTextLabel" parent="."]
-modulate = Color(0, 0, 0, 1)
-custom_minimum_size = Vector2(350, 450)
-offset_left = 732.0
-offset_top = 29.0
-offset_right = 1082.0
-offset_bottom = 479.0
-text = "Health Restore: $100
-Momentum Boost: $75
-HP Up: 1xp
-Attack Up: 1xp
-Defense Up: 1xp"
-
-[node name="ShopSelect" type="Label" parent="."]
-modulate = Color(0, 0, 0, 1)
-offset_left = 705.0
-offset_top = 29.0
-offset_right = 745.0
-offset_bottom = 52.0
-text = "->"
-
-[connection signal="area_entered" from="ShopArea" to="." method="_on_shop_area_area_entered"]
-[connection signal="area_exited" from="ShopArea" to="." method="_on_shop_area_area_exited"]
