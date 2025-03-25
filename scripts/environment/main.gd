@@ -19,6 +19,18 @@ extends Node3D
 @onready var shop_window : ColorRect = $ShopWindow
 @onready var shop_inventory : RichTextLabel = $ShopList
 @onready var shop_select : Label = $ShopSelect
+@onready var pause_menu : ColorRect = $PauseMenu
+@onready var item1 : Label = $PauseMenu/VBoxContainer/Item1
+@onready var item2 : Label = $PauseMenu/VBoxContainer/Item2
+@onready var item3 : Label = $PauseMenu/VBoxContainer/Item3
+@onready var item4 : Label = $PauseMenu/VBoxContainer/Item4
+@onready var item5 : Label = $PauseMenu/VBoxContainer/Item5
+@onready var item6 : Label = $PauseMenu/VBoxContainer/Item6
+@onready var item7 : Label = $PauseMenu/VBoxContainer/Item7
+@onready var item8 : Label = $PauseMenu/VBoxContainer/Item8
+@onready var item9 : Label = $PauseMenu/VBoxContainer/Item9
+@onready var item10 : Label = $PauseMenu/VBoxContainer/Item10
+
 
 var spawn_time = 0
 var shop_item = 0
@@ -36,17 +48,23 @@ func _ready():
 	shopkeeper_main.emitting = false
 	input_prompt.visible = false
 	pause_text.visible = false
+	pause_menu.visible = false
 	
 	
 func _process(delta):
+		
 	if Input.is_action_just_pressed("start"):
 		if Global.pause:
 			Global.pause = false
+			pause_menu.visible = false
 		elif !Global.pause && !Global.shop_time:
 			Global.pause = true
+			pause_menu.visible = true
 	
 	if Global.pause:
-		pause_text.visible = true	
+		pause_text.visible = true
+		
+		
 	# enemy pathfinding
 	else:			
 		pause_text.visible = false
@@ -76,9 +94,14 @@ func _process(delta):
 				0:
 					if player.money >= 100:
 						player.money -= 100
+						if len(player.inventory) <= player.inventory_size:
+							player.inventory.append(items_in_shop[0])
+							item1.text = str(items_in_shop[0])
 				1:
 					if player.money >= 75:
 						player.money -= 75
+						if len(player.inventory) < player.inventory_size:
+							player.inventory.append(items_in_shop[1])
 				2:
 					if player.experience >= hp_cost:
 						player.max_health += 100
@@ -141,9 +164,10 @@ func _process(delta):
 		if !Global.pause:
 			spawn_time += 1
 			if Global.enemies_spawned < Global.wave:
-				if spawn_time % 60 == 1:
-					spawn(Global.wave)
-					Global.enemies_spawned += 1
+				if Global.wave % 4 != 0:
+					if spawn_time % 60 == 1:
+						spawn(Global.wave)
+						Global.enemies_spawned += 1
 			if Global.enemies_spawned <= Global.enemies_defeated && spawn_time % 60 > 10:
 				player.money += 100 * Global.wave
 				player.experience += Global.wave

@@ -16,6 +16,7 @@ height = 10.8897
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
+inventory = [null, null, null, null, null, null, null, null, null]
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
