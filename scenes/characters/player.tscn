@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
-[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="3_hrgne"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
 [ext_resource type="Texture2D" uid="uid://dwaqb1lctvbdf" path="res://src/textures/controller/Xbox_Left_Bumper.svg.png" id="5_lojhk"]
 
@@ -26,7 +26,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.10729, 0)
 script = ExtResource("2_0npem")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.41025, -0.0464048)
+transform = Transform3D(1, 0, 0, 0, 0.987846, 0.155435, 0, -0.155435, 0.987846, 0, 4.26215, -0.0464048)
 spring_length = 15.0
 margin = 0.2
 

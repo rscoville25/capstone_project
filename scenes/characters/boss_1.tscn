@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5jx0ewonsi2x"]
+
+[ext_resource type="Script" path="res://scripts/characters/boss_1.gd" id="1_sknxe"]
+[ext_resource type="PackedScene" uid="uid://db42jlrkwr41h" path="res://scenes/characters/bases/dancer.tscn" id="2_6he3u"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q1evk"]
+radius = 1.431
+height = 10.654
+
+[node name="Boss1" type="CharacterBody3D" groups=["enemies_g"]]
+script = ExtResource("1_sknxe")
+
+[node name="dancer" parent="." instance=ExtResource("2_6he3u")]
+
+[node name="LiveBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.197, 0)
+shape = SubResource("CapsuleShape3D_q1evk")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

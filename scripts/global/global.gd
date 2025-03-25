@@ -4,6 +4,7 @@ var stage : int = 1
 var wave : int = 1
 var enemies_spawned : int = 0
 var enemies_defeated : int = 0
+var boss_alive : bool = false
 
 var character_position : Vector3
 
