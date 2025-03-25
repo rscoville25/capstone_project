@@ -1,11 +1,13 @@
 extends Node3D
 
 @export var enemy : PackedScene
+@export var boss_dancer : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
 @onready var player_camera : Camera3D = $Player/SpringArmPivot/SpringArm3D/Camera3D
 @onready var spawner : Marker3D = $Spawner
+@onready var boss_spawner : Marker3D = $BossSpawner
 @onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
 @onready var door : MeshInstance3D = $PhysicalDoor
 @onready var ui_text : Label = $Label
@@ -30,10 +32,12 @@ extends Node3D
 @onready var item8 : Label = $PauseMenu/VBoxContainer/Item8
 @onready var item9 : Label = $PauseMenu/VBoxContainer/Item9
 @onready var item10 : Label = $PauseMenu/VBoxContainer/Item10
+@onready var inv_pointer : Label = $PauseMenu/Pointer
 
 
 var spawn_time = 0
 var shop_item = 0
+var inv_select = 0
 
 var items_in_shop = ["Health Restore", "Momentum Boost", "HP Up", "Attack Up", "Defense Up" ]
 var hp_cost = 1
@@ -52,7 +56,27 @@ func _ready():
 	
 	
 func _process(delta):
-		
+	if player.inventory[0] != null:
+		item1.text = player.inventory[0]
+	if player.inventory[1] != null:	
+		item2.text = player.inventory[1]
+	if player.inventory[2] != null:
+		item3.text = player.inventory[2]
+	if player.inventory[3] != null:
+		item4.text = player.inventory[3]
+	if player.inventory[4] != null:
+		item5.text = player.inventory[4]
+	if player.inventory[5] != null:
+		item6.text = player.inventory[5]
+	if player.inventory[6] != null:
+		item7.text = player.inventory[6]
+	if player.inventory[7] != null:
+		item8.text = player.inventory[7]
+	if player.inventory[8] != null:
+		item9.text = player.inventory[8]
+	if player.inventory[9] != null:
+		item10.text = player.inventory[9]
+	
 	if Input.is_action_just_pressed("start"):
 		if Global.pause:
 			Global.pause = false
@@ -63,11 +87,23 @@ func _process(delta):
 	
 	if Global.pause:
 		pause_text.visible = true
+		inv_pointer.global_position.y = 24 * (2 + inv_select)
 		
+		if Input.is_action_just_pressed("ui_up"):
+			if inv_select <= 0:
+				inv_select = player.inventory_filled - 1
+			else:
+				inv_select -= 1
 		
-	# enemy pathfinding
+		if Input.is_action_just_pressed("ui_down"):
+			if inv_select >= player.inventory_filled - 1:
+				inv_select = 0
+			else:
+				inv_select += 1
+				
 	else:			
 		pause_text.visible = false
+		# enemy pathfinding
 		get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 		
 	if Global.buying:
@@ -92,16 +128,17 @@ func _process(delta):
 		if Input.is_action_just_pressed("dodge"):
 			match shop_item:
 				0:
-					if player.money >= 100:
-						player.money -= 100
-						if len(player.inventory) <= player.inventory_size:
-							player.inventory.append(items_in_shop[0])
-							item1.text = str(items_in_shop[0])
+					if player.inventory_filled <= player.inventory_size:
+						if player.money >= 100:
+							player.money -= 100
+							player.inventory[player.inventory.find(null)] = items_in_shop[0]
+							player.inventory_filled += 1
 				1:
-					if player.money >= 75:
-						player.money -= 75
-						if len(player.inventory) < player.inventory_size:
-							player.inventory.append(items_in_shop[1])
+					if player.inventory_filled <= player.inventory_size:
+						if player.money >= 75:
+							player.money -= 75
+							player.inventory[player.inventory.find(null)] = items_in_shop[1]
+							player.inventory_filled += 1
 				2:
 					if player.experience >= hp_cost:
 						player.max_health += 100
@@ -163,11 +200,18 @@ func _process(delta):
 		# spawn a certain amount of enemies depending on the wave
 		if !Global.pause:
 			spawn_time += 1
+			if Global.wave % 4 == 0 && !Global.boss_alive:
+				if spawn_time % 60 == 1:
+					boss_spawn(Global.wave)
+					Global.enemies_spawned += 1
+					Global.boss_alive = true
 			if Global.enemies_spawned < Global.wave:
 				if Global.wave % 4 != 0:
 					if spawn_time % 60 == 1:
 						spawn(Global.wave)
 						Global.enemies_spawned += 1
+
+					
 			if Global.enemies_spawned <= Global.enemies_defeated && spawn_time % 60 > 10:
 				player.money += 100 * Global.wave
 				player.experience += Global.wave
@@ -181,6 +225,11 @@ func spawn(wave):
 		var enemy1 = enemy.instantiate()
 		enemy1.global_position = spawner.global_position
 		add_child(enemy1)
+
+func boss_spawn(wave):
+	if wave % 4 == 0:
+		var boss = boss_dancer.instantiate()
+		add_child(boss)
 		
 func _on_shop_area_area_entered(area: Area3D) -> void:
 	player.at_shop = true

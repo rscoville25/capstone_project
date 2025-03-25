@@ -32,7 +32,8 @@ var attacks = ["none", "light", "medium", "heavy"]
 var cur_attack = attacks[0]
 
 @export var inventory_size = 9
-@export var inventory = []
+@export var inventory_filled = 0
+@export var inventory = [null, null, null, null, null, null, null, null, null, null]
 # all stats (hp, attack, level, etc)
 @export var health = 1000
 @export var max_health = health

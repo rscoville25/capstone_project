@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
-[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/chara.tscn" id="3_hrgne"]
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="3_hrgne"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
 [ext_resource type="Texture2D" uid="uid://dwaqb1lctvbdf" path="res://src/textures/controller/Xbox_Left_Bumper.svg.png" id="5_lojhk"]
 
@@ -16,7 +16,6 @@ height = 10.8897
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
-inventory = [null, null, null, null, null, null, null, null, null]
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
