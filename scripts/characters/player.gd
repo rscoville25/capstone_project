@@ -39,7 +39,7 @@ var cur_attack = attacks[0]
 @export var max_health = health
 @export var att = 1
 @export var def = 1
-var heat = 0
+@export var heat = 0
 @export var money = 100
 @export var experience = 0
 
