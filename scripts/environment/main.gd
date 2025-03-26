@@ -34,6 +34,14 @@ extends Node3D
 @onready var item10 : Label = $PauseMenu/VBoxContainer/Item10
 @onready var inv_pointer : Label = $PauseMenu/Pointer
 
+# import all of the sounds used for music
+@onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
+@onready var theme_drums2 : AudioStreamPlayer = $DrumProgram
+@onready var theme_bass : AudioStreamPlayer = $Bass
+@onready var theme_ambience : AudioStreamPlayer = $Ambience
+@onready var theme_main : AudioStreamPlayer = $Melody
+@onready var theme_guitar : AudioStreamPlayer = $Guitar
+@onready var theme_arp : AudioStreamPlayer = $Arp
 
 var spawn_time = 0
 var shop_item = 0
@@ -53,9 +61,57 @@ func _ready():
 	input_prompt.visible = false
 	pause_text.visible = false
 	pause_menu.visible = false
+	# the initial volume for each instrument, based on how it should sound during shop time
+	theme_drums1.volume_db = -60
+	theme_ambience.volume_db = -60
+	theme_drums2.volume_db = 0
+	theme_bass.volume_db = 0
+	theme_main.volume_db = -60
+	theme_guitar.volume_db = -60
+	theme_arp.volume_db = 0
 	
 	
 func _process(delta):
+	# reactive musics
+	if !theme_drums1.playing:
+		theme_drums1.play()
+		theme_drums2.play()
+		theme_bass.play()
+		theme_ambience.play()
+		theme_main.play()
+		theme_guitar.play()
+		theme_arp.play()
+	if !Global.shop_time:
+		if Global.pause:
+			theme_drums1.volume_db = -60
+			theme_drums2.volume_db = -60
+			theme_ambience.volume_db = 0
+			theme_main.volume_db = -60
+			theme_guitar.volume_db = -60
+			theme_arp.volume_db = -60
+		else:
+			theme_guitar.volume_db = (player.heat * 0.6) - 69
+			theme_arp.volume_db = 0
+			if theme_drums1.volume_db <= -60 && theme_drums2.volume_db <= -60:
+				theme_drums1.volume_db = 0
+				theme_ambience.volume_db = -60
+				theme_main.volume_db = 0
+			else:
+				if theme_drums2.volume_db > -60:
+					theme_guitar.volume_db -= 1
+					theme_drums2.volume_db -= 1
+				if theme_drums1.volume_db < 0:
+					theme_main.volume_db += 1
+					theme_drums1.volume_db += 1
+	else:
+		theme_arp.volume_db = 0
+		theme_guitar.volume_db = (player.heat * 0.6) - 66
+		if theme_drums2.volume_db < 0:
+			theme_main.volume_db -= 1
+			theme_drums1.volume_db -= 1
+			theme_drums2.volume_db += 1
+	
+	
 	if player.inventory[0] != null:
 		item1.text = player.inventory[0]
 	if player.inventory[1] != null:	

@@ -1,0 +1,381 @@
+[gd_scene load_steps=38 format=3 uid="uid://cla4d7lh6kean"]
+
+[ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
+[ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
+[ext_resource type="PackedScene" uid="uid://f7ufx23utd22" path="res://scenes/characters/basicEnemy.tscn" id="2_6y3n2"]
+[ext_resource type="PackedScene" uid="uid://ut5dm2yd6t75" path="res://scenes/characters/boss_1.tscn" id="3_8drcn"]
+[ext_resource type="AudioStream" uid="uid://bp4qf5xgk31lu" path="res://src/sound/music/theme_drums1.wav" id="3_8ly2g"]
+[ext_resource type="Texture2D" uid="uid://nohf73haqycb" path="res://src/textures/kenney_prototype_textures/light/texture_13.png" id="3_g06kd"]
+[ext_resource type="AudioStream" uid="uid://bxvgfgg23swma" path="res://src/sound/music/theme_drums2.wav" id="4_c1b45"]
+[ext_resource type="Texture2D" uid="uid://cag1cen6l5gaj" path="res://src/textures/kenney_prototype_textures/dark/texture_01.png" id="4_vw2ur"]
+[ext_resource type="AudioStream" uid="uid://j2j87j4apjy2" path="res://src/sound/music/theme_bass.wav" id="5_mvrb8"]
+[ext_resource type="PackedScene" uid="uid://dbiwaevrtslup" path="res://scenes/characters/chara.tscn" id="6_734e5"]
+[ext_resource type="AudioStream" uid="uid://c52b5hipprnpi" path="res://src/sound/music/theme_ambience.wav" id="6_d6q64"]
+[ext_resource type="Texture2D" uid="uid://c6ic5x45cqt0u" path="res://src/textures/kenney_prototype_textures/green/texture_09.png" id="6_glhvr"]
+[ext_resource type="AudioStream" uid="uid://diyerjknhm3qk" path="res://src/sound/music/theme_main.wav" id="7_5wkhf"]
+[ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_llaf8"]
+vertices = PackedVector3Array(-99.275, 0.75, -99.275, -99.275, 0.75, 99.475, 99.475, 0.75, 99.475, 99.475, 0.75, -99.275)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+agent_height = 0.0
+agent_radius = 0.0
+agent_max_climb = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vcb78"]
+albedo_texture = ExtResource("3_g06kd")
+
+[sub_resource type="BoxMesh" id="BoxMesh_s3el7"]
+material = SubResource("StandardMaterial3D_vcb78")
+size = Vector3(200, 0.5, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hb38g"]
+size = Vector3(200, 0.5, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kathr"]
+albedo_texture = ExtResource("4_vw2ur")
+
+[sub_resource type="BoxMesh" id="BoxMesh_86yn5"]
+material = SubResource("StandardMaterial3D_kathr")
+size = Vector3(0.05, 100, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e5ns0"]
+size = Vector3(0.5, 100, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4do8t"]
+size = Vector3(1, 100, 75)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x1yaw"]
+size = Vector3(1, 100, 75)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wilp5"]
+size = Vector3(1, 50, 51)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ulm7k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0fywe"]
+size = Vector3(100, 0.5, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ff3vs"]
+size = Vector3(100, 0.5, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ck8pi"]
+size = Vector3(1, 50, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d62w0"]
+size = Vector3(1, 50, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_daod8"]
+size = Vector3(200, 100, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1sxu"]
+albedo_texture = ExtResource("4_vw2ur")
+
+[sub_resource type="BoxMesh" id="BoxMesh_iloob"]
+material = SubResource("StandardMaterial3D_g1sxu")
+size = Vector3(0.5, 100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ld56d"]
+size = Vector3(0.5, 100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i5kqj"]
+albedo_texture = ExtResource("6_glhvr")
+
+[sub_resource type="BoxMesh" id="BoxMesh_4kshd"]
+material = SubResource("StandardMaterial3D_i5kqj")
+size = Vector3(5, 4, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bqtd3"]
+size = Vector3(5, 4, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qk8vd"]
+size = Vector3(5, 100, 20)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_ldvck")
+enemy = ExtResource("2_6y3n2")
+boss_dancer = ExtResource("3_8drcn")
+
+[node name="DrumBreak" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8ly2g")
+bus = &"Drums1"
+
+[node name="DrumProgram" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_c1b45")
+bus = &"Drums2"
+
+[node name="Bass" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_mvrb8")
+bus = &"Bass"
+
+[node name="Ambience" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_d6q64")
+bus = &"Ambience"
+
+[node name="Melody" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_5wkhf")
+bus = &"Main"
+
+[node name="Guitar" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_0tfig")
+bus = &"Guitar"
+
+[node name="Player" parent="." instance=ExtResource("1_m5ix2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+
+[node name="Spawner" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.5674, 4.73092, -47.3653)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_llaf8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
+mesh = SubResource("BoxMesh_s3el7")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MeshInstance3D/StaticBody3D"]
+shape = SubResource("BoxShape3D_hb38g")
+
+[node name="Wall1" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 50, 0)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall1/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="Wall2" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, 100)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall2/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="Wall4" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, -100)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall4/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
+[node name="ShopWall1" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 50, 63)
+mesh = SubResource("BoxMesh_4do8t")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopWall1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopWall1/StaticBody3D"]
+shape = SubResource("BoxShape3D_x1yaw")
+
+[node name="ShopWall2" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 50, -63)
+mesh = SubResource("BoxMesh_4do8t")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopWall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopWall2/StaticBody3D"]
+shape = SubResource("BoxShape3D_x1yaw")
+
+[node name="ShopWallDoor" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 75, 0)
+mesh = SubResource("BoxMesh_wilp5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopWallDoor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopWallDoor/StaticBody3D"]
+shape = SubResource("BoxShape3D_ulm7k")
+
+[node name="ShopFloor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+mesh = SubResource("BoxMesh_0fywe")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ShopFloor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopFloor/StaticBody3D"]
+shape = SubResource("BoxShape3D_ff3vs")
+
+[node name="PhysicalDoor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 25, 0)
+mesh = SubResource("BoxMesh_ck8pi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PhysicalDoor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicalDoor/StaticBody3D"]
+shape = SubResource("BoxShape3D_d62w0")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 183.0
+offset_bottom = 24.0
+text = "Press Start to Continue"
+
+[node name="Arena" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("BoxShape3D_daod8")
+
+[node name="InShopWall1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 50, 0)
+visible = false
+mesh = SubResource("BoxMesh_iloob")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall1/StaticBody3D"]
+shape = SubResource("BoxShape3D_ld56d")
+
+[node name="InShopWall2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 150, 50, 50)
+mesh = SubResource("BoxMesh_iloob")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall2/StaticBody3D"]
+shape = SubResource("BoxShape3D_ld56d")
+
+[node name="InShopWall3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 150, 50, -50)
+mesh = SubResource("BoxMesh_iloob")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall3/StaticBody3D"]
+shape = SubResource("BoxShape3D_ld56d")
+
+[node name="ShopCounter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 0)
+mesh = SubResource("BoxMesh_4kshd")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopCounter/StaticBody3D"]
+shape = SubResource("BoxShape3D_bqtd3")
+
+[node name="Shopkeeper" parent="." instance=ExtResource("6_734e5")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Shopkeeper"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.317, 34.2228, 0)
+light_energy = 0.0
+light_indirect_energy = 0.0
+sky_mode = 1
+
+[node name="PauseText" type="Label" parent="."]
+offset_left = 471.0
+offset_top = 549.0
+offset_right = 599.0
+offset_bottom = 677.0
+scale = Vector2(4, 4)
+text = "- Pause -"
+
+[node name="ShopArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea"]
+shape = SubResource("BoxShape3D_qk8vd")
+
+[node name="ShopWindow" type="ColorRect" parent="."]
+offset_left = 685.0
+offset_top = 22.0
+offset_right = 725.0
+offset_bottom = 62.0
+scale = Vector2(9.92, 12.28)
+color = Color(0.733005, 0.733005, 0.733005, 1)
+
+[node name="ShopList" type="RichTextLabel" parent="."]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(350, 450)
+offset_left = 732.0
+offset_top = 29.0
+offset_right = 1082.0
+offset_bottom = 479.0
+text = "Health Restore: $100
+Momentum Boost: $75
+HP Up: 1xp
+Attack Up: 1xp
+Defense Up: 1xp"
+
+[node name="ShopSelect" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+offset_left = 705.0
+offset_top = 29.0
+offset_right = 745.0
+offset_bottom = 52.0
+text = "->"
+
+[node name="PauseMenu" type="ColorRect" parent="."]
+offset_left = 683.0
+offset_top = 21.0
+offset_right = 1083.0
+offset_bottom = 321.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 300.0
+
+[node name="Label" type="Label" parent="PauseMenu/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="Item1" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Item2" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item3" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item4" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item5" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item6" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item7" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item8" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item9" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Item10" type="Label" parent="PauseMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Pointer" type="Label" parent="PauseMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "->"
+
+[connection signal="area_entered" from="ShopArea" to="." method="_on_shop_area_area_entered"]
+[connection signal="area_exited" from="ShopArea" to="." method="_on_shop_area_area_exited"]

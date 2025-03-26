@@ -39,7 +39,7 @@ var cur_attack = attacks[0]
 @export var max_health = health
 @export var att = 1
 @export var def = 1
-var heat = 0
+@export var heat = 0
 @export var money = 100
 @export var experience = 0
 
@@ -62,7 +62,6 @@ func _ready():
 	at_shop = false
 	
 func _physics_process(delta):
-	print(at_shop)
 	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	ui_money.text = "$%s" % [str(money)]
@@ -142,7 +141,7 @@ func _physics_process(delta):
 							light_attack(att, heat)
 							
 					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
-						timer += 2
+						timer += 1
 						attacking = true
 						cur_attack = attacks[2]
 						if (timer % 62) == 34 || (timer % 62) == 35:
@@ -152,7 +151,7 @@ func _physics_process(delta):
 							medium_attack(att, heat)
 							
 					if Input.is_action_pressed("heavy_attack"):
-						timer += 3
+						timer += 1
 						attacking = true
 						cur_attack = attacks[3]
 						if (timer % 77) == 30 || (timer % 77) == 31:

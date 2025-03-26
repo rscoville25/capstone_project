@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5jx0ewonsi2x"]
+[gd_scene load_steps=5 format=3 uid="uid://ut5dm2yd6t75"]
 
 [ext_resource type="Script" path="res://scripts/characters/boss_1.gd" id="1_sknxe"]
 [ext_resource type="PackedScene" uid="uid://db42jlrkwr41h" path="res://scenes/characters/bases/dancer.tscn" id="2_6he3u"]
+[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="3_rp1ah"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q1evk"]
 radius = 1.431
@@ -11,11 +12,30 @@ height = 10.654
 script = ExtResource("1_sknxe")
 
 [node name="dancer" parent="." instance=ExtResource("2_6he3u")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.197, 0)
 shape = SubResource("CapsuleShape3D_q1evk")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+target_desired_distance = 16.1
+
+[node name="BossHealth" type="TextureProgressBar" parent="."]
+offset_left = 83.0
+offset_top = 581.0
+offset_right = 84.0
+offset_bottom = 582.0
+scale = Vector2(1000, 50)
+max_value = 5000.0
+value = 5000.0
+texture_progress = ExtResource("3_rp1ah")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 89.0
+offset_top = 557.0
+offset_right = 145.0
+offset_bottom = 580.0
+text = "Dancer"
 
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
