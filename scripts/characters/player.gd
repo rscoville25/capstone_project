@@ -62,7 +62,6 @@ func _ready():
 	at_shop = false
 	
 func _physics_process(delta):
-	print(at_shop)
 	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	ui_money.text = "$%s" % [str(money)]

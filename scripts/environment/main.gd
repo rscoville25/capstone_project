@@ -90,6 +90,7 @@ func _process(delta):
 			theme_guitar.volume_db = -60
 			theme_arp.volume_db = -60
 		else:
+			theme_guitar.volume_db = (player.heat * 0.6) - 69
 			theme_arp.volume_db = 0
 			if theme_drums1.volume_db <= -60 && theme_drums2.volume_db <= -60:
 				theme_drums1.volume_db = 0
@@ -104,7 +105,7 @@ func _process(delta):
 					theme_drums1.volume_db += 1
 	else:
 		theme_arp.volume_db = 0
-		theme_guitar.volume_db = (player.heat * 0.6) - 60
+		theme_guitar.volume_db = (player.heat * 0.6) - 66
 		if theme_drums2.volume_db < 0:
 			theme_main.volume_db -= 1
 			theme_drums1.volume_db -= 1
