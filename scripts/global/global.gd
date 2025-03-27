@@ -10,5 +10,8 @@ var character_position : Vector3
 
 var shop_time : bool = false
 
+var new_game : bool = true
+
+var tutorial_splash : bool = false
 var pause : bool = false
 var buying : bool = false

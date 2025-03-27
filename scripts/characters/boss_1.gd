@@ -13,6 +13,7 @@ const LERP_VALUE : float = 0.15
 @onready var name_label : Label = $Label
 @onready var particle_pivot : Marker3D = $dancer/ParticleMarker
 @onready var meialua_particles : GPUParticles3D = $dancer/ParticleMarker/MeiaLuaParticles
+@onready var hit_sound : AudioStreamPlayer3D = $HitSound
 
 var death_timer : int
 var attack_timer : int
@@ -87,6 +88,7 @@ func _physics_process(delta):
 	
 	
 func hit(dmg):
+	hit_sound.play()
 	death_timer = 0
 	is_hit = true
 	health -= dmg

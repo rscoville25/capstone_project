@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var anim_player : AnimationPlayer = $chara/AnimationPlayer
 @onready var spring_arm_pivot : Node3D = $SpringArmPivot
 @onready var ui_hp : TextureProgressBar = $HealthBar
+@onready var ui_saved : Label = $GameSaved
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
 @onready var hitbox_light : Area3D = $chara/HitboxLight
 @onready var hitbox_medium : Area3D = $chara/HitboxMedium
@@ -16,6 +17,8 @@ extends CharacterBody3D
 @onready var ui_heat : Label = $Momentum
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
+
+var save_path = "user://player.save"
 
 const LERP_VALUE : float = 0.15
 
@@ -36,7 +39,7 @@ var cur_attack = attacks[0]
 @export var inventory = [null, null, null, null, null, null, null, null, null, null]
 # all stats (hp, attack, level, etc)
 @export var health = 1000
-@export var max_health = 100
+@export var max_health = 1000
 @export var att = 1
 @export var def = 1
 @export var heat = 0
@@ -54,6 +57,16 @@ var is_hurt = false
 var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
 
 func _ready():
+	if Global.new_game:
+		Global.wave = 1
+		health = 1000
+		max_health = 1000
+		att = 1
+		def = 1
+		money = 100
+		experience = 0
+	else:
+		load_data()
 	kick_fx.emitting = false
 	kick_fx.one_shot = true
 	heat_fx.emitting = true
@@ -77,9 +90,12 @@ func _physics_process(delta):
 	heat_fx.amount_ratio = heat * 0.01
 	
 	if Global.buying:
+		save()
+		ui_saved.visible = true
 		ui_hp.visible = false
 		ui_heat.visible = false
 	else:
+		ui_saved.visible = false
 		ui_hp.visible = true
 		ui_heat.visible = true
 	
@@ -93,7 +109,7 @@ func _physics_process(delta):
 	# tells you when you're attacking and what attack is being used
 	attacking = false
 	cur_attack = attacks[0]
-	if Global.pause || Global.buying:
+	if Global.pause || Global.buying || Global.tutorial_splash:
 		anim_player.speed_scale = 0
 		heat_fx.speed_scale = 0
 		dodge_fx.speed_scale = 0
@@ -206,14 +222,18 @@ func _physics_process(delta):
 				if direction:
 					if speed == WALK:
 						_anim_tree["parameters/playback"].travel("Walking")
+						spring_arm_pivot.change_fov_on_run = false
 					elif speed == RUN:
 						_anim_tree["parameters/playback"].travel("Running")
+						spring_arm_pivot.change_fov_on_run = true
 					elif speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
+						spring_arm_pivot.change_fov_on_run = false
 					if speed != STANCE:
 						velocity.x = direction.x * speed
 						velocity.z = direction.z * speed
 				else:
+					spring_arm_pivot.change_fov_on_run = false
 					if speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
 					else:
@@ -236,7 +256,7 @@ func _physics_process(delta):
 						player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 
 					
-	move_and_slide()
+		move_and_slide()
 			
 func light_attack(power, bonus):
 	var enemies_hit = hitbox_light.get_overlapping_bodies()
@@ -282,3 +302,41 @@ func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
 	death_box.disabled = false
 	live_box.disabled = true
+	
+func save():
+	var file = FileAccess.open(save_path, FileAccess.WRITE)
+	file.store_var(Global.wave)
+	file.store_var(health)
+	file.store_var(max_health)
+	file.store_var(att)
+	file.store_var(def)
+	file.store_var(money)
+	file.store_var(experience)
+	
+func load_data():
+	if FileAccess.file_exists(save_path):
+		var file = FileAccess.open(save_path, FileAccess.READ)
+		if file.get_var(health) != null:
+			Global.wave = file.get_var(Global.wave)
+			health = file.get_var(health)
+			max_health = file.get_var(max_health)
+			att = file.get_var(att)
+			def = file.get_var(def)
+			money = file.get_var(money)
+			experience = file.get_var(experience)
+		else:
+			Global.wave = 1
+			health = 1000
+			max_health = 1000
+			att = 1
+			def = 1
+			money = 100
+			experience = 0
+	else:
+		Global.wave = 1
+		health = 1000
+		max_health = 1000
+		att = 1
+		def = 1
+		money = 100
+		experience = 0
