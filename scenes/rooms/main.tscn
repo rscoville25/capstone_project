@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=43 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -92,6 +92,19 @@ size = Vector3(5, 4, 20)
 [sub_resource type="BoxShape3D" id="BoxShape3D_qk8vd"]
 size = Vector3(5, 100, 20)
 
+[sub_resource type="SystemFont" id="SystemFont_wli0h"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_atdns"]
+font = SubResource("SystemFont_wli0h")
+font_size = 48
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b3kk4"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_miuc8"]
+font_color = Color(0, 0, 0, 1)
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ldvck")
 enemy = ExtResource("2_6y3n2")
@@ -99,31 +112,24 @@ boss_dancer = ExtResource("3_8drcn")
 
 [node name="DrumBreak" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_8ly2g")
-bus = &"Drums1"
 
 [node name="DrumProgram" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_c1b45")
-bus = &"Drums2"
 
 [node name="Bass" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_mvrb8")
-bus = &"Bass"
 
 [node name="Ambience" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_d6q64")
-bus = &"Ambience"
 
 [node name="Melody" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_5wkhf")
-bus = &"Main"
 
 [node name="Guitar" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_0tfig")
-bus = &"Guitar"
 
 [node name="Arp" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_extan")
-bus = &"Arp"
 
 [node name="Player" parent="." instance=ExtResource("1_m5ix2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
@@ -285,10 +291,9 @@ light_indirect_energy = 0.0
 sky_mode = 1
 
 [node name="PauseText" type="Label" parent="."]
-offset_left = 471.0
-offset_top = 549.0
-offset_right = 599.0
-offset_bottom = 677.0
+offset_top = 971.0
+offset_right = 128.0
+offset_bottom = 1099.0
 scale = Vector2(4, 4)
 text = "- Pause -"
 
@@ -299,87 +304,179 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0, 0)
 shape = SubResource("BoxShape3D_qk8vd")
 
 [node name="ShopWindow" type="ColorRect" parent="."]
-offset_left = 685.0
-offset_top = 22.0
-offset_right = 725.0
-offset_bottom = 62.0
-scale = Vector2(9.92, 12.28)
+offset_left = 1175.0
+offset_top = 101.0
+offset_right = 1825.0
+offset_bottom = 901.0
 color = Color(0.733005, 0.733005, 0.733005, 1)
 
-[node name="ShopList" type="RichTextLabel" parent="."]
-modulate = Color(0, 0, 0, 1)
-custom_minimum_size = Vector2(350, 450)
-offset_left = 732.0
-offset_top = 29.0
-offset_right = 1082.0
-offset_bottom = 479.0
-text = "Health Restore: $100
-Momentum Boost: $75
-HP Up: 1xp
-Attack Up: 1xp
-Defense Up: 1xp"
-
-[node name="ShopSelect" type="Label" parent="."]
-modulate = Color(0, 0, 0, 1)
-offset_left = 705.0
-offset_top = 29.0
-offset_right = 745.0
-offset_bottom = 52.0
-text = "->"
-
-[node name="PauseMenu" type="ColorRect" parent="."]
-offset_left = 683.0
+[node name="ShopItem1" type="Label" parent="ShopWindow"]
+layout_mode = 0
+offset_left = 96.0
 offset_top = 21.0
-offset_right = 1083.0
-offset_bottom = 321.0
+offset_right = 576.0
+offset_bottom = 88.0
+text = "Health Restore: $100"
+label_settings = SubResource("LabelSettings_atdns")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu"]
+[node name="ShopItem2" type="Label" parent="ShopWindow"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 81.0
+offset_right = 576.0
+offset_bottom = 148.0
+text = "Momentum Boost: $75"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem3" type="Label" parent="ShopWindow"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 141.0
+offset_right = 622.0
+offset_bottom = 208.0
+text = "HP Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem4" type="Label" parent="ShopWindow"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 201.0
+offset_right = 622.0
+offset_bottom = 268.0
+text = "Attack Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem5" type="Label" parent="ShopWindow"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 261.0
+offset_right = 622.0
+offset_bottom = 328.0
+text = "Defense Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopSelect" type="Label" parent="ShopWindow"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 31.0
+offset_top = 20.0
+offset_right = 74.0
+offset_bottom = 87.0
+text = "->"
+label_settings = SubResource("LabelSettings_b3kk4")
+
+[node name="PauseMenuInv" type="ColorRect" parent="."]
+offset_left = 25.0
+offset_top = 73.0
+offset_right = 425.0
+offset_bottom = 373.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenuInv"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 300.0
 
-[node name="Label" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Label" type="Label" parent="PauseMenuInv/VBoxContainer"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 text = "Inventory"
 horizontal_alignment = 1
 
-[node name="Item1" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item1" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="Item2" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item2" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item3" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item3" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item4" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item4" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item5" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item5" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item6" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item6" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item7" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item7" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item8" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item8" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item9" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item9" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Item10" type="Label" parent="PauseMenu/VBoxContainer"]
+[node name="Item10" type="Label" parent="PauseMenuInv/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+horizontal_alignment = 1
 
-[node name="Pointer" type="Label" parent="PauseMenu"]
+[node name="Pointer" type="Label" parent="PauseMenuInv"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 52.0
+offset_top = 25.0
+offset_right = 92.0
+offset_bottom = 48.0
 text = "->"
+label_settings = SubResource("LabelSettings_miuc8")
+
+[node name="PauseMenuStat" type="ColorRect" parent="."]
+offset_left = 25.0
+offset_top = 413.0
+offset_right = 425.0
+offset_bottom = 713.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenuStat"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 300.0
+
+[node name="Label" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "Stats"
+horizontal_alignment = 1
+
+[node name="Health" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="HealthMax" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Attack" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Defense" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+horizontal_alignment = 1
 
 [connection signal="area_entered" from="ShopArea" to="." method="_on_shop_area_area_entered"]
 [connection signal="area_exited" from="ShopArea" to="." method="_on_shop_area_area_exited"]

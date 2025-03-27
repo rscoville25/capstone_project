@@ -11,6 +11,8 @@ const LERP_VALUE : float = 0.15
 @onready var hitbox_meialua : Area3D = $dancer/HitboxMeiaLua
 @onready var heatlhbar : TextureProgressBar = $BossHealth
 @onready var name_label : Label = $Label
+@onready var particle_pivot : Marker3D = $dancer/ParticleMarker
+@onready var meialua_particles : GPUParticles3D = $dancer/ParticleMarker/MeiaLuaParticles
 
 var death_timer : int
 var attack_timer : int
@@ -23,12 +25,15 @@ var is_hit = false
 
 var att_type = 0
 
+var particle_rotate = 12
+
 func _ready():
 	death_timer = 0
 	attack_timer = 0
 	name_label.text = "Dancer"
 	heatlhbar.value = health
 	heatlhbar.max_value = max_health
+	meialua_particles.emitting = false
 
 func _physics_process(delta):
 	heatlhbar.value = health
@@ -60,6 +65,13 @@ func _physics_process(delta):
 					_anim_tree["parameters/playback"].travel("capoeira")
 					rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 					velocity = direction * 7.0
+				else:
+					if att_type == 2:
+						if attack_timer > 104 && attack_timer < 133:
+							meialua_particles.emitting = true
+							particle_pivot.rotate_y(delta * particle_rotate)
+					else:
+						meialua_particles.emitting = false
 		else:
 			death()
 			death_timer += 1
@@ -71,7 +83,7 @@ func _physics_process(delta):
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 	
-	move_and_slide()
+		move_and_slide()
 	
 	
 func hit(dmg):
@@ -134,6 +146,6 @@ func _on_navigation_agent_3d_target_reached() -> void:
 			2: # meia lua
 				_anim_tree["parameters/playback"].travel("meia lua")
 				if (attack_timer % 133) == 104 || (attack_timer % 133) == 105:
-					martelo_attack(200, 30)
+					meialua_attack(200, 30)
 				if attack_timer > 133:
 					attack_timer = 0

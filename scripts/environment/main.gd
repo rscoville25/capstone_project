@@ -19,20 +19,29 @@ extends Node3D
 @onready var shop_camera : Camera3D = $Shopkeeper/Camera3D
 @onready var shop_area : Area3D = $ShopArea
 @onready var shop_window : ColorRect = $ShopWindow
-@onready var shop_inventory : RichTextLabel = $ShopList
-@onready var shop_select : Label = $ShopSelect
-@onready var pause_menu : ColorRect = $PauseMenu
-@onready var item1 : Label = $PauseMenu/VBoxContainer/Item1
-@onready var item2 : Label = $PauseMenu/VBoxContainer/Item2
-@onready var item3 : Label = $PauseMenu/VBoxContainer/Item3
-@onready var item4 : Label = $PauseMenu/VBoxContainer/Item4
-@onready var item5 : Label = $PauseMenu/VBoxContainer/Item5
-@onready var item6 : Label = $PauseMenu/VBoxContainer/Item6
-@onready var item7 : Label = $PauseMenu/VBoxContainer/Item7
-@onready var item8 : Label = $PauseMenu/VBoxContainer/Item8
-@onready var item9 : Label = $PauseMenu/VBoxContainer/Item9
-@onready var item10 : Label = $PauseMenu/VBoxContainer/Item10
-@onready var inv_pointer : Label = $PauseMenu/Pointer
+@onready var shop_select : Label = $ShopWindow/ShopSelect
+@onready var shop_item1 : Label = $ShopWindow/ShopItem1
+@onready var shop_item2 : Label = $ShopWindow/ShopItem2
+@onready var shop_item3 : Label = $ShopWindow/ShopItem3
+@onready var shop_item4 : Label = $ShopWindow/ShopItem4
+@onready var shop_item5 : Label = $ShopWindow/ShopItem5
+@onready var pause_menu_inv : ColorRect = $PauseMenuInv
+@onready var item1 : Label = $PauseMenuInv/VBoxContainer/Item1
+@onready var item2 : Label = $PauseMenuInv/VBoxContainer/Item2
+@onready var item3 : Label = $PauseMenuInv/VBoxContainer/Item3
+@onready var item4 : Label = $PauseMenuInv/VBoxContainer/Item4
+@onready var item5 : Label = $PauseMenuInv/VBoxContainer/Item5
+@onready var item6 : Label = $PauseMenuInv/VBoxContainer/Item6
+@onready var item7 : Label = $PauseMenuInv/VBoxContainer/Item7
+@onready var item8 : Label = $PauseMenuInv/VBoxContainer/Item8
+@onready var item9 : Label = $PauseMenuInv/VBoxContainer/Item9
+@onready var item10 : Label = $PauseMenuInv/VBoxContainer/Item10
+@onready var inv_pointer : Label = $PauseMenuInv/Pointer
+@onready var pause_menu_stat : ColorRect = $PauseMenuStat
+@onready var ui_health : Label = $PauseMenuStat/VBoxContainer/Health
+@onready var ui_health_max : Label = $PauseMenuStat/VBoxContainer/HealthMax
+@onready var ui_attack : Label = $PauseMenuStat/VBoxContainer/Attack
+@onready var ui_defense : Label = $PauseMenuStat/VBoxContainer/Defense
 
 # import all of the sounds used for music
 @onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
@@ -60,7 +69,8 @@ func _ready():
 	shopkeeper_main.emitting = false
 	input_prompt.visible = false
 	pause_text.visible = false
-	pause_menu.visible = false
+	pause_menu_inv.visible = false
+	pause_menu_stat.visible = false
 	# the initial volume for each instrument, based on how it should sound during shop time
 	theme_drums1.volume_db = -60
 	theme_ambience.volume_db = -60
@@ -111,39 +121,65 @@ func _process(delta):
 			theme_drums1.volume_db -= 1
 			theme_drums2.volume_db += 1
 	
-	
+
 	if player.inventory[0] != null:
 		item1.text = player.inventory[0]
+	else:
+		item1.text = ""
 	if player.inventory[1] != null:	
 		item2.text = player.inventory[1]
+	else:
+		item2.text = ""
 	if player.inventory[2] != null:
 		item3.text = player.inventory[2]
+	else:
+		item3.text = ""
 	if player.inventory[3] != null:
 		item4.text = player.inventory[3]
+	else:
+		item4.text = ""
 	if player.inventory[4] != null:
 		item5.text = player.inventory[4]
+	else:
+		item5.text = ""
 	if player.inventory[5] != null:
 		item6.text = player.inventory[5]
+	else:
+		item6.text = ""
 	if player.inventory[6] != null:
 		item7.text = player.inventory[6]
+	else:
+		item7.text = ""
 	if player.inventory[7] != null:
 		item8.text = player.inventory[7]
+	else:
+		item8.text = ""
 	if player.inventory[8] != null:
 		item9.text = player.inventory[8]
+	else:
+		item9.text = ""
 	if player.inventory[9] != null:
 		item10.text = player.inventory[9]
-	
+	else:
+		item10.text = ""
+		
 	if Input.is_action_just_pressed("start"):
 		if Global.pause:
 			Global.pause = false
-			pause_menu.visible = false
+			pause_menu_inv.visible = false
+			pause_menu_stat.visible = false
 		elif !Global.pause && !Global.shop_time:
 			Global.pause = true
-			pause_menu.visible = true
+			pause_menu_inv.visible = true
+			pause_menu_stat.visible = true
 	
 	if Global.pause:
+		ui_health.text = "Current HP: %s" % [str(player.health)]
+		ui_health_max.text = "Max HP: %s" % [str(player.max_health)]
+		ui_attack.text = "Attack: %s" % [str(player.att)]
+		ui_defense.text = "Defense: %s" % [str(player.def)]
 		pause_text.visible = true
-		inv_pointer.global_position.y = 24 * (2 + inv_select)
+		inv_pointer.global_position.y = 24 * inv_select + 98
 		
 		if Input.is_action_just_pressed("ui_up"):
 			if inv_select <= 0:
@@ -156,6 +192,18 @@ func _process(delta):
 				inv_select = 0
 			else:
 				inv_select += 1
+		if Input.is_action_just_pressed("dodge"):
+			if player.inventory[inv_select] == "Health Restore":
+				if player.health <= player.max_health - 500:
+					player.health += 500
+				else:
+					player.health = player.max_health
+				player.inventory[inv_select] = null
+				player.inventory_filled -= 1
+			elif player.inventory[inv_select] == "Momentum Boost":
+				player.heat = 100
+				player.inventory[inv_select] = null
+				player.inventory_filled -= 1
 				
 	else:			
 		pause_text.visible = false
@@ -163,13 +211,14 @@ func _process(delta):
 		get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 		
 	if Global.buying:
+		shop_item3.text = "HP Up: %sxp" % [str(hp_cost)]
+		shop_item4.text = "Attack Up: %sxp" % [str(att_cost)]
+		shop_item5.text = "Defense Up: %sxp" % [str(def_cost)]
 		shop_camera.current = true
 		ui_text.visible = false
 		input_prompt.visible = false
 		shop_window.visible = true
-		shop_inventory.visible = true
-		shop_select.visible = true
-		shop_select.global_position.y = shop_item * 23 + 29
+		shop_select.global_position.y = shop_item * 60 + 121
 		if Input.is_action_just_pressed("ui_down"):
 			if shop_item != 4:
 				shop_item += 1
@@ -219,8 +268,6 @@ func _process(delta):
 	else:
 		player_camera.current = true
 		shop_window.visible = false
-		shop_inventory.visible = false
-		shop_select.visible = false
 	
 	# shop animation
 	shopkeeper["parameters/playback"].travel("Idle")

@@ -36,7 +36,7 @@ var cur_attack = attacks[0]
 @export var inventory = [null, null, null, null, null, null, null, null, null, null]
 # all stats (hp, attack, level, etc)
 @export var health = 1000
-@export var max_health = health
+@export var max_health = 100
 @export var att = 1
 @export var def = 1
 @export var heat = 0
