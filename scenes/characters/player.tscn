@@ -16,6 +16,7 @@ height = 10.8897
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
+max_health = 1000
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
@@ -68,17 +69,17 @@ scale = Vector2(0.05, 0.05)
 texture = ExtResource("5_lojhk")
 
 [node name="Money" type="Label" parent="."]
-offset_left = 1049.0
-offset_top = 1.0
-offset_right = 1147.0
-offset_bottom = 24.0
+offset_left = 1819.0
+offset_top = 6.0
+offset_right = 1917.0
+offset_bottom = 29.0
 text = "$100"
 horizontal_alignment = 2
 
 [node name="Experience" type="Label" parent="."]
-offset_left = 1108.0
-offset_top = 24.0
-offset_right = 1148.0
-offset_bottom = 47.0
+offset_left = 1878.0
+offset_top = 29.0
+offset_right = 1918.0
+offset_bottom = 52.0
 text = "0xp"
 horizontal_alignment = 2
