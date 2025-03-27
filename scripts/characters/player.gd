@@ -13,7 +13,7 @@ extends CharacterBody3D
 @onready var heat_fx : GPUParticles3D = $chara/HeatParticles
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
-@onready var death_box : CollisionShape3D = $DeathHit
+@onready var death_box : CollisionShape3D = $DeathBox
 @onready var ui_heat : Label = $Momentum
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
@@ -58,13 +58,15 @@ var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
 
 func _ready():
 	if Global.new_game:
-		Global.wave = 1
+		Global.wave = 0
 		health = 1000
 		max_health = 1000
 		att = 1
 		def = 1
 		money = 100
 		experience = 0
+		death_box.disabled = true
+		live_box.disabled = false
 	else:
 		load_data()
 	kick_fx.emitting = false
@@ -75,6 +77,18 @@ func _ready():
 	at_shop = false
 	
 func _physics_process(delta):
+	if Global.dead:
+		if Input.is_action_just_pressed("start"):
+			Global.wave = 1
+			health = 1000
+			max_health = 1000
+			att = 1
+			def = 1
+			money = 100
+			experience = 0
+			save()
+			
+	
 	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	ui_money.text = "$%s" % [str(money)]
@@ -123,7 +137,6 @@ func _physics_process(delta):
 		
 		if health <= 0:
 			death()
-		
 		else:
 			if is_hurt:
 				if !Input.is_action_pressed("fight_stance"):
@@ -146,7 +159,7 @@ func _physics_process(delta):
 					speed = WALK
 				if speed != STANCE:
 					# Inputs for the three attacks. Cannot do two attacks at once. Not elegant but it works
-					if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack") && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[1]
@@ -156,7 +169,7 @@ func _physics_process(delta):
 								heat = 100
 							light_attack(att, heat)
 							
-					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[2]
@@ -166,7 +179,7 @@ func _physics_process(delta):
 								heat = 100
 							medium_attack(att, heat)
 							
-					if Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[3]
@@ -302,7 +315,8 @@ func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
 	death_box.disabled = false
 	live_box.disabled = true
-	
+	Global.dead = true
+
 func save():
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_var(Global.wave)
@@ -325,7 +339,7 @@ func load_data():
 			money = file.get_var(money)
 			experience = file.get_var(experience)
 		else:
-			Global.wave = 1
+			Global.wave = 0
 			health = 1000
 			max_health = 1000
 			att = 1
@@ -333,7 +347,7 @@ func load_data():
 			money = 100
 			experience = 0
 	else:
-		Global.wave = 1
+		Global.wave = 0
 		health = 1000
 		max_health = 1000
 		att = 1

@@ -45,6 +45,7 @@ var save_path = "user://player.save"
 @onready var ui_health_max : Label = $PauseMenuStat/VBoxContainer/HealthMax
 @onready var ui_attack : Label = $PauseMenuStat/VBoxContainer/Attack
 @onready var ui_defense : Label = $PauseMenuStat/VBoxContainer/Defense
+@onready var death_text : Label = $DeathText
 
 # import all of the sounds used for music
 @onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
@@ -65,11 +66,14 @@ var att_cost = 1
 var def_cost = 1
 
 func _ready():
+	Global.pause = false
 	load_data()
 	if !Global.new_game:
 		Global.tutorial_splash = false
 	else:
 		Global.tutorial_splash = true
+		Global.enemies_defeated = 0
+		Global.enemies_spawned = 0
 	Global.shop_time = true
 	controller.visible = true
 	ui_text.visible = true
@@ -78,6 +82,7 @@ func _ready():
 	pause_text.visible = false
 	pause_menu_inv.visible = false
 	pause_menu_stat.visible = false
+	death_text.visible = false
 	
 	# the initial volume for each instrument, based on how it should sound during shop time
 	theme_drums1.volume_db = -60
@@ -90,6 +95,12 @@ func _ready():
 	
 	
 func _process(delta):
+	if Global.dead:
+		death_text.visible = true
+		if Input.is_action_just_pressed("start"):
+			Global.dead = false
+			get_tree().change_scene_to_file("res://scenes/rooms/title.tscn")
+	
 	# reactive musics
 	if !theme_drums1.playing:
 		theme_drums1.play()
@@ -171,7 +182,7 @@ func _process(delta):
 	else:
 		item10.text = ""
 		
-	if Input.is_action_just_pressed("start"):
+	if Input.is_action_just_pressed("start") && !Global.dead:
 		if Global.pause:
 			Global.pause = false
 			pause_menu_inv.visible = false
