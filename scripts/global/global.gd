@@ -1,10 +1,10 @@
 extends Node
 
 
-var stage : int = 1 # currently unused
-var wave : int = 1 # how many waves have occured
-var enemies_spawned : int = 0 # total number of enemies spawned
-var enemies_defeated : int = 0 # total enemies defeated
+var stage = 1 # currently unused
+var wave = 1 # how many waves have occured
+var enemies_spawned = 0 # total number of enemies spawned
+var enemies_defeated = 0 # total enemies defeated
 var boss_alive : bool = false # is the boss currently alive
 
 var character_position : Vector3 # the location of the character in a 3d space
@@ -18,3 +18,32 @@ var pause : bool = false # is the game paused
 var buying : bool = false # is the player buying from the shop
 
 var dead: bool = false # is the player dead
+
+var config = ConfigFile.new()
+
+func _process(delta: float) -> void:
+	if buying:
+		save()
+	
+	if dead:
+		stage = 1 
+		wave = 1 
+		enemies_spawned = 0 
+		enemies_defeated = 0
+		save()
+
+func save():
+	config.set_value("Global", "wave", wave)
+	config.set_value("Global", "enemies_spawned", enemies_spawned)
+	config.set_value("Global", "enemies_defeated", enemies_defeated)
+	
+	config.save("res://src/save/global.cfg")
+
+func load_data():
+	var load = config.load("res://src/save/global.cfg")
+	if load != OK:
+		return
+	
+	wave = config.get_value("Global", "wave", 1)
+	enemies_defeated = config.get_value("Global", "enemies_defeated", 0)
+	enemies_spawned = config.get_value("Global", "enemies_spawned", 0)
