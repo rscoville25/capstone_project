@@ -12,10 +12,8 @@ A 3d beat-em-up style game built in Godot
 - And of course, random Youtube tutorials helped me with any question I had regarding how certain thing worked 
 
 ## Known Bugs
-- Inconsistent boss hitboxes
 - Some animations playing when the're not supposed to
   - Player Character can get locked into the stun animation when not stunned
 - GUI quirks to iron out
-- I STILL haven't fixed the bug where holding the dodge button while attacking doubles attack speed
-- If player is running and the camera is directly behind them, it starts to zoom in for one frame and out for another
+- Loading a save gives $1000 no matter what and 1xp on top of what was saved
  
