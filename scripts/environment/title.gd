@@ -22,6 +22,7 @@ func _ready() -> void:
 	loading.visible = false
 	game_menu.visible = false
 	start_text.visible = true
+	Global.dead = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

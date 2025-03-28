@@ -104,7 +104,6 @@ func _process(delta):
 		att_cost = 1
 		def_cost = 1
 		if Input.is_action_just_pressed("start"):
-			Global.dead = false
 			get_tree().change_scene_to_file("res://scenes/rooms/title.tscn")
 	
 	# reactive musics
@@ -197,43 +196,43 @@ func _process(delta):
 			Global.pause = true
 			pause_menu_inv.visible = true
 			pause_menu_stat.visible = true
-	
-	if Global.pause:
-		ui_health.text = "Current HP: %s" % [str(player.health)]
-		ui_health_max.text = "Max HP: %s" % [str(player.max_health)]
-		ui_attack.text = "Attack: %s" % [str(player.att)]
-		ui_defense.text = "Defense: %s" % [str(player.def)]
-		pause_text.visible = true
-		inv_pointer.global_position.y = 24 * inv_select + 98
-		
-		if Input.is_action_just_pressed("ui_up"):
-			if inv_select <= 0:
-				inv_select = player.inventory_filled - 1
-			else:
-				inv_select -= 1
-		
-		if Input.is_action_just_pressed("ui_down"):
-			if inv_select >= player.inventory_filled - 1:
-				inv_select = 0
-			else:
-				inv_select += 1
-		if Input.is_action_just_pressed("dodge"):
-			if player.inventory[inv_select] == "Health Restore":
-				if player.health <= player.max_health - 500:
-					player.health += 500
+	if !Global.dead:
+		if Global.pause:
+			ui_health.text = "Current HP: %s" % [str(player.health)]
+			ui_health_max.text = "Max HP: %s" % [str(player.max_health)]
+			ui_attack.text = "Attack: %s" % [str(player.att)]
+			ui_defense.text = "Defense: %s" % [str(player.def)]
+			pause_text.visible = true
+			inv_pointer.global_position.y = 24 * inv_select + 98
+			
+			if Input.is_action_just_pressed("ui_up"):
+				if inv_select <= 0:
+					inv_select = player.inventory_filled - 1
 				else:
-					player.health = player.max_health
-				player.inventory[inv_select] = null
-				player.inventory_filled -= 1
-			elif player.inventory[inv_select] == "Momentum Boost":
-				player.heat = 100
-				player.inventory[inv_select] = null
-				player.inventory_filled -= 1
-				
-	else:			
-		pause_text.visible = false
-		# enemy pathfinding
-		get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
+					inv_select -= 1
+			
+			if Input.is_action_just_pressed("ui_down"):
+				if inv_select >= player.inventory_filled - 1:
+					inv_select = 0
+				else:
+					inv_select += 1
+			if Input.is_action_just_pressed("dodge"):
+				if player.inventory[inv_select] == "Health Restore":
+					if player.health <= player.max_health - 500:
+						player.health += 500
+					else:
+						player.health = player.max_health
+					player.inventory[inv_select] = null
+					player.inventory_filled -= 1
+				elif player.inventory[inv_select] == "Momentum Boost":
+					player.heat = 100
+					player.inventory[inv_select] = null
+					player.inventory_filled -= 1
+					
+		else:			
+			pause_text.visible = false
+			# enemy pathfinding
+			get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 		
 	if Global.buying:
 		save()
