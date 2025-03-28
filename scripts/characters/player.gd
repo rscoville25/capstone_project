@@ -203,8 +203,8 @@ func _physics_process(delta):
 				
 				# get direction of movement
 				var direction : Vector3 = Vector3.ZERO
-				direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-				direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+				direction.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+				direction.z = Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
 				direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 				
 				if Input.is_action_pressed("dodge"):
@@ -229,7 +229,7 @@ func _physics_process(delta):
 
 				# Get the input direction and handle the movement/deceleration.
 				# As good practice, you should replace UI actions with custom gameplay actions.
-				var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+				var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 				
 				# A lot of what comes next could be a match statement, but this works for now (even if it is very ugly)
 				if direction:
