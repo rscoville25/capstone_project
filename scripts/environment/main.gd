@@ -228,6 +228,8 @@ func _process(delta):
 					player.heat = 100
 					player.inventory[inv_select] = null
 					player.inventory_filled -= 1
+				player.inventory.remove_at(inv_select)
+				player.inventory.append(null)
 					
 		else:			
 			pause_text.visible = false
@@ -376,11 +378,11 @@ func save():
 	config.set_value("Shop", "attack_cost", att_cost)
 	config.set_value("Shop", "defense_cost", def_cost)
 	
-	config.save("res://src/save/main.cfg")
+	config.save("user://main.cfg")
 	
 func load_data():
 	Global.load_data()	
-	var load_main = config.load("res://src/save/main.cfg")
+	var load_main = config.load("user://main.cfg")
 	if load_main != OK:
 		return
 	

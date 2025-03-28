@@ -326,10 +326,10 @@ func save():
 	config.set_value("Stats", "money", money)
 	config.set_value("Stats", "exp", experience)
 
-	config.save("res://src/save/player.cfg")
+	config.save("user://player.cfg")
 	
 func load_data():
-	var load = config.load("res://src/save/player.cfg")
+	var load = config.load("user://player.cfg")
 	if load != OK:
 		return
 		
