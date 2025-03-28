@@ -1,5 +1,31 @@
 # Untitled Game
 A 3d beat-em-up style game built in Godot
+
+## Alpha Release
+Take it to the arena for an endless battle against hoards of enemies that want you dead.
+Features include
+- A basic inventory system
+- Two difffenet types of enemies
+  - One regular enemy and one boss
+- A shop for upgrades and items
+- A very basic (incomplete) save system
+This release is meant to set a foundation for future development. Fundamental aspects such as controls and the game's structure will mostly remain the same until the final release. Most of what will be changed in the future will be additive instead of replacements. More enemy types, textures, and a major GUI overhaul will be implemented by the beta.
+
+# Talk about these functions
+```
+func _on_shop_area_area_entered(area: Area3D) -> void:
+```
+```
+func _on_shop_area_area_exited(area: Area3D) -> void:
+```
+```
+func save():
+```
+```
+func load_data()
+```
+Google Slides Presentation: https://docs.google.com/presentation/d/1gsCbGgn-dhi5o6xcioAFhJ7TlpuEUn5qaVwtCk7jeM0/edit?usp=sharing
+
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
   - https://godotengine.org/
@@ -15,5 +41,3 @@ A 3d beat-em-up style game built in Godot
 - Some animations playing when the're not supposed to
   - Player Character can get locked into the stun animation when not stunned
 - GUI quirks to iron out
-- Loading a save gives $1000 no matter what and 1xp on top of what was saved
- 
