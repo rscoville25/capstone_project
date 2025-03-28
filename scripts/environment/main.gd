@@ -1,6 +1,6 @@
 extends Node3D
 
-var save_path = "user://player.save"
+var config = ConfigFile.new()
 
 @export var enemy : PackedScene
 @export var boss_dancer : PackedScene
@@ -67,8 +67,8 @@ var def_cost = 1
 
 func _ready():
 	Global.pause = false
-	load_data()
 	if !Global.new_game:
+		load_data()
 		Global.tutorial_splash = false
 	else:
 		Global.tutorial_splash = true
@@ -97,6 +97,12 @@ func _ready():
 func _process(delta):
 	if Global.dead:
 		death_text.visible = true
+		Global.wave = 1
+		Global.enemies_defeated = 0
+		Global.enemies_spawned = 0
+		hp_cost = 1
+		att_cost = 1
+		def_cost = 1
 		if Input.is_action_just_pressed("start"):
 			Global.dead = false
 			get_tree().change_scene_to_file("res://scenes/rooms/title.tscn")
@@ -367,24 +373,18 @@ func _on_shop_area_area_exited(area: Area3D) -> void:
 	player.at_shop = false
 	
 func save():
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
-	file.store_var(Global.enemies_spawned)
-	file.store_var(Global.enemies_defeated)
-	file.store_var(hp_cost)
-	file.store_var(att_cost)
-	file.store_var(def_cost)
+	config.set_value("Shop", "health_cost", hp_cost)
+	config.set_value("Shop", "attack_cost", att_cost)
+	config.set_value("Shop", "defense_cost", def_cost)
+	
+	config.save("res://src/save/main.cfg")
 	
 func load_data():
-	if FileAccess.file_exists(save_path):
-		var file = FileAccess.open(save_path, FileAccess.READ)
-		Global.enemies_spawned = file.get_var(Global.enemies_spawned)
-		Global.enemies_defeated = file.get_var(Global.enemies_defeated)
-		hp_cost = file.get_var(hp_cost)
-		att_cost = file.get_var(att_cost)
-		def_cost = file.get_var(def_cost)
-	elif !FileAccess.file_exists(save_path) || Global.new_game :
-		Global.enemies_defeated = 0
-		Global.enemies_spawned = 0
-		hp_cost = 1
-		att_cost = 1
-		def_cost = 1
+	Global.load_data()	
+	var load_main = config.load("res://src/save/main.cfg")
+	if load_main != OK:
+		return
+	
+	hp_cost = config.get_value("Shop", "health_cost")
+	att_cost = config.get_value("Shop", "attack_cost")
+	def_cost = config.get_value("Shop", "defense_cost")
