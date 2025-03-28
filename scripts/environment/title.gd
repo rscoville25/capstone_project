@@ -1,11 +1,15 @@
 extends Node3D
 
+var save_path = "res://src/save/player.save"
+
+
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
 @onready var music : AudioStreamPlayer = $Music
 @onready var loading : Label = $Loading
 @onready var start_text = $Label
 @onready var game_menu = $GameMenu
 @onready var pointer = $GameMenu/Pointer
+@onready var load : Label = $GameMenu/LoadGame
 
 var select_timer = 0
 var start_timer = false
@@ -32,21 +36,24 @@ func _process(delta: float) -> void:
 	if game_menu.visible:
 		pointer.global_position.y = 30 * game_picked
 		
-			
-		if Input.is_action_just_pressed("ui_up"):
-			if game_picked <= 0:
-				game_picked = 1
-				Global.new_game = false
-			else:
-				game_picked -= 1
-				Global.new_game = true
-		if Input.is_action_just_pressed("ui_down"):
-			if game_picked >= 1:
-				game_picked = 0
-				Global.new_game = true
-			else:
-				game_picked += 1
-				Global.new_game = false
+		if FileAccess.file_exists("user://player.cfg") || FileAccess.file_exists("user://main.cfg"):
+			if Input.is_action_just_pressed("ui_up"):
+				if game_picked <= 0:
+					game_picked = 1
+					Global.new_game = false
+				else:
+					game_picked -= 1
+					Global.new_game = true
+			if Input.is_action_just_pressed("ui_down"):
+				if game_picked >= 1:
+					game_picked = 0
+					Global.new_game = true
+				else:
+					game_picked += 1
+					Global.new_game = false
+		else:
+			Global.new_game = true
+			load.visible = false
 				
 		if Input.is_action_just_pressed("dodge"):
 			start_timer = true

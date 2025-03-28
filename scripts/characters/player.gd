@@ -18,7 +18,7 @@ extends CharacterBody3D
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
 
-var save_path = "user://player.save"
+var config = ConfigFile.new()
 
 const LERP_VALUE : float = 0.15
 
@@ -69,6 +69,7 @@ func _ready():
 		live_box.disabled = false
 	else:
 		load_data()
+		
 	kick_fx.emitting = false
 	kick_fx.one_shot = true
 	heat_fx.emitting = true
@@ -318,39 +319,23 @@ func death():
 	Global.dead = true
 
 func save():
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
-	file.store_var(Global.wave)
-	file.store_var(health)
-	file.store_var(max_health)
-	file.store_var(att)
-	file.store_var(def)
-	file.store_var(money)
-	file.store_var(experience)
+	config.set_value("Stats", "hp", health)
+	config.set_value("Stats", "max_hp", max_health)
+	config.set_value("Stats", "attack", att)
+	config.set_value("Stats", "defense", def)
+	config.set_value("Stats", "money", money)
+	config.set_value("Stats", "exp", experience)
+
+	config.save("res://src/save/player.cfg")
 	
 func load_data():
-	if FileAccess.file_exists(save_path):
-		var file = FileAccess.open(save_path, FileAccess.READ)
-		if file.get_var(health) != null:
-			Global.wave = file.get_var(Global.wave)
-			health = file.get_var(health)
-			max_health = file.get_var(max_health)
-			att = file.get_var(att)
-			def = file.get_var(def)
-			money = file.get_var(money)
-			experience = file.get_var(experience)
-		else:
-			Global.wave = 0
-			health = 1000
-			max_health = 1000
-			att = 1
-			def = 1
-			money = 100
-			experience = 0
-	else:
-		Global.wave = 0
-		health = 1000
-		max_health = 1000
-		att = 1
-		def = 1
-		money = 100
-		experience = 0
+	var load = config.load("res://src/save/player.cfg")
+	if load != OK:
+		return
+		
+	health = config.get_value("Stats", "hp")
+	max_health = config.get_value("Stats", "max_hp")
+	att = config.get_value("Stats", "attack")
+	def = config.get_value("Stats", "defense")
+	money = config.get_value("Stats", "money")
+	experience = config.get_value("Stats", "exp")
