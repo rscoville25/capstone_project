@@ -15,5 +15,3 @@ A 3d beat-em-up style game built in Godot
 - Some animations playing when the're not supposed to
   - Player Character can get locked into the stun animation when not stunned
 - GUI quirks to iron out
-- Loading a save gives $1000 no matter what and 1xp on top of what was saved
- 
