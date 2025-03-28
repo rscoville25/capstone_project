@@ -24,6 +24,7 @@ func save():
 ```
 func load_data()
 ```
+Google Slides Presentation: https://docs.google.com/presentation/d/1gsCbGgn-dhi5o6xcioAFhJ7TlpuEUn5qaVwtCk7jeM0/edit?usp=sharing
 
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
