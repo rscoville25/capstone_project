@@ -38,4 +38,6 @@ offset_right = 145.0
 offset_bottom = 580.0
 text = "Dancer"
 
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=7 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
@@ -10,36 +10,29 @@
 radius = 1.81226
 height = 10.3736
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3a30n"]
-radius = 0.579973
-height = 10.8897
-
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
-max_health = 1000
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
 shape = SubResource("CapsuleShape3D_3ec55")
 
+[node name="DeathBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5.20198, 0)
+shape = SubResource("CapsuleShape3D_3ec55")
+
 [node name="SpringArmPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.10729, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 7.31316, 0)
 script = ExtResource("2_0npem")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.987846, 0.155435, 0, -0.155435, 0.987846, 0, 4.26215, -0.0464048)
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 4.26215, -0.0464048)
 spring_length = 15.0
-margin = 0.2
 
 [node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 0.991687, 0.128674, 0, -0.128674, 0.991687, 0, 0.386555, -0.733664)
 
 [node name="chara" parent="." instance=ExtResource("3_hrgne")]
-
-[node name="DeathHit" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.0132117, 0.999913, 0, -0.999913, -0.0132117, 0, 5.0359, 0)
-shape = SubResource("CapsuleShape3D_3a30n")
-disabled = true
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 anchors_preset = -1
@@ -83,3 +76,10 @@ offset_right = 1918.0
 offset_bottom = 52.0
 text = "0xp"
 horizontal_alignment = 2
+
+[node name="GameSaved" type="Label" parent="."]
+offset_left = 7.0
+offset_top = 62.0
+offset_right = 107.0
+offset_bottom = 85.0
+text = "Game Saved!"

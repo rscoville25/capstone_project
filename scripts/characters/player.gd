@@ -4,6 +4,7 @@ extends CharacterBody3D
 @onready var anim_player : AnimationPlayer = $chara/AnimationPlayer
 @onready var spring_arm_pivot : Node3D = $SpringArmPivot
 @onready var ui_hp : TextureProgressBar = $HealthBar
+@onready var ui_saved : Label = $GameSaved
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
 @onready var hitbox_light : Area3D = $chara/HitboxLight
 @onready var hitbox_medium : Area3D = $chara/HitboxMedium
@@ -12,10 +13,12 @@ extends CharacterBody3D
 @onready var heat_fx : GPUParticles3D = $chara/HeatParticles
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
-@onready var death_box : CollisionShape3D = $DeathHit
+@onready var death_box : CollisionShape3D = $DeathBox
 @onready var ui_heat : Label = $Momentum
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
+
+var save_path = "user://player.save"
 
 const LERP_VALUE : float = 0.15
 
@@ -36,7 +39,7 @@ var cur_attack = attacks[0]
 @export var inventory = [null, null, null, null, null, null, null, null, null, null]
 # all stats (hp, attack, level, etc)
 @export var health = 1000
-@export var max_health = 100
+@export var max_health = 1000
 @export var att = 1
 @export var def = 1
 @export var heat = 0
@@ -54,6 +57,18 @@ var is_hurt = false
 var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
 
 func _ready():
+	if Global.new_game:
+		Global.wave = 0
+		health = 1000
+		max_health = 1000
+		att = 1
+		def = 1
+		money = 100
+		experience = 0
+		death_box.disabled = true
+		live_box.disabled = false
+	else:
+		load_data()
 	kick_fx.emitting = false
 	kick_fx.one_shot = true
 	heat_fx.emitting = true
@@ -62,6 +77,18 @@ func _ready():
 	at_shop = false
 	
 func _physics_process(delta):
+	if Global.dead:
+		if Input.is_action_just_pressed("start"):
+			Global.wave = 1
+			health = 1000
+			max_health = 1000
+			att = 1
+			def = 1
+			money = 100
+			experience = 0
+			save()
+			
+	
 	# display momentum amount
 	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
 	ui_money.text = "$%s" % [str(money)]
@@ -77,9 +104,12 @@ func _physics_process(delta):
 	heat_fx.amount_ratio = heat * 0.01
 	
 	if Global.buying:
+		save()
+		ui_saved.visible = true
 		ui_hp.visible = false
 		ui_heat.visible = false
 	else:
+		ui_saved.visible = false
 		ui_hp.visible = true
 		ui_heat.visible = true
 	
@@ -93,7 +123,7 @@ func _physics_process(delta):
 	# tells you when you're attacking and what attack is being used
 	attacking = false
 	cur_attack = attacks[0]
-	if Global.pause || Global.buying:
+	if Global.pause || Global.buying || Global.tutorial_splash:
 		anim_player.speed_scale = 0
 		heat_fx.speed_scale = 0
 		dodge_fx.speed_scale = 0
@@ -107,7 +137,6 @@ func _physics_process(delta):
 		
 		if health <= 0:
 			death()
-		
 		else:
 			if is_hurt:
 				if !Input.is_action_pressed("fight_stance"):
@@ -130,7 +159,7 @@ func _physics_process(delta):
 					speed = WALK
 				if speed != STANCE:
 					# Inputs for the three attacks. Cannot do two attacks at once. Not elegant but it works
-					if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("light_attack") && !Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack") && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[1]
@@ -140,7 +169,7 @@ func _physics_process(delta):
 								heat = 100
 							light_attack(att, heat)
 							
-					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[2]
@@ -150,7 +179,7 @@ func _physics_process(delta):
 								heat = 100
 							medium_attack(att, heat)
 							
-					if Input.is_action_pressed("heavy_attack"):
+					if Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[3]
@@ -174,8 +203,8 @@ func _physics_process(delta):
 				
 				# get direction of movement
 				var direction : Vector3 = Vector3.ZERO
-				direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-				direction.z = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+				direction.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+				direction.z = Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
 				direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 				
 				if Input.is_action_pressed("dodge"):
@@ -200,20 +229,24 @@ func _physics_process(delta):
 
 				# Get the input direction and handle the movement/deceleration.
 				# As good practice, you should replace UI actions with custom gameplay actions.
-				var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+				var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 				
 				# A lot of what comes next could be a match statement, but this works for now (even if it is very ugly)
 				if direction:
 					if speed == WALK:
 						_anim_tree["parameters/playback"].travel("Walking")
+						spring_arm_pivot.change_fov_on_run = false
 					elif speed == RUN:
 						_anim_tree["parameters/playback"].travel("Running")
+						spring_arm_pivot.change_fov_on_run = true
 					elif speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
+						spring_arm_pivot.change_fov_on_run = false
 					if speed != STANCE:
 						velocity.x = direction.x * speed
 						velocity.z = direction.z * speed
 				else:
+					spring_arm_pivot.change_fov_on_run = false
 					if speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
 					else:
@@ -236,7 +269,7 @@ func _physics_process(delta):
 						player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 
 					
-	move_and_slide()
+		move_and_slide()
 			
 func light_attack(power, bonus):
 	var enemies_hit = hitbox_light.get_overlapping_bodies()
@@ -282,3 +315,42 @@ func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
 	death_box.disabled = false
 	live_box.disabled = true
+	Global.dead = true
+
+func save():
+	var file = FileAccess.open(save_path, FileAccess.WRITE)
+	file.store_var(Global.wave)
+	file.store_var(health)
+	file.store_var(max_health)
+	file.store_var(att)
+	file.store_var(def)
+	file.store_var(money)
+	file.store_var(experience)
+	
+func load_data():
+	if FileAccess.file_exists(save_path):
+		var file = FileAccess.open(save_path, FileAccess.READ)
+		if file.get_var(health) != null:
+			Global.wave = file.get_var(Global.wave)
+			health = file.get_var(health)
+			max_health = file.get_var(max_health)
+			att = file.get_var(att)
+			def = file.get_var(def)
+			money = file.get_var(money)
+			experience = file.get_var(experience)
+		else:
+			Global.wave = 0
+			health = 1000
+			max_health = 1000
+			att = 1
+			def = 1
+			money = 100
+			experience = 0
+	else:
+		Global.wave = 0
+		health = 1000
+		max_health = 1000
+		att = 1
+		def = 1
+		money = 100
+		experience = 0

@@ -11,6 +11,8 @@ const CAMERA_BLEND : float = 0.05
 @onready var camera : Camera3D = $SpringArm3D/Camera3D
 
 func _ready():
+	camera.fov = normal_fov
+	change_fov_on_run = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 func _unhandled_input(event):

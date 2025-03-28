@@ -1,5 +1,7 @@
 extends Node3D
 
+var save_path = "user://player.save"
+
 @export var enemy : PackedScene
 @export var boss_dancer : PackedScene
 
@@ -36,12 +38,14 @@ extends Node3D
 @onready var item8 : Label = $PauseMenuInv/VBoxContainer/Item8
 @onready var item9 : Label = $PauseMenuInv/VBoxContainer/Item9
 @onready var item10 : Label = $PauseMenuInv/VBoxContainer/Item10
+@onready var controller : ColorRect = $TutorialWindow
 @onready var inv_pointer : Label = $PauseMenuInv/Pointer
 @onready var pause_menu_stat : ColorRect = $PauseMenuStat
 @onready var ui_health : Label = $PauseMenuStat/VBoxContainer/Health
 @onready var ui_health_max : Label = $PauseMenuStat/VBoxContainer/HealthMax
 @onready var ui_attack : Label = $PauseMenuStat/VBoxContainer/Attack
 @onready var ui_defense : Label = $PauseMenuStat/VBoxContainer/Defense
+@onready var death_text : Label = $DeathText
 
 # import all of the sounds used for music
 @onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
@@ -62,15 +66,24 @@ var att_cost = 1
 var def_cost = 1
 
 func _ready():
-	Global.wave = 0
-	Global.enemies_spawned = 0
+	Global.pause = false
+	load_data()
+	if !Global.new_game:
+		Global.tutorial_splash = false
+	else:
+		Global.tutorial_splash = true
+		Global.enemies_defeated = 0
+		Global.enemies_spawned = 0
 	Global.shop_time = true
+	controller.visible = true
 	ui_text.visible = true
 	shopkeeper_main.emitting = false
 	input_prompt.visible = false
 	pause_text.visible = false
 	pause_menu_inv.visible = false
 	pause_menu_stat.visible = false
+	death_text.visible = false
+	
 	# the initial volume for each instrument, based on how it should sound during shop time
 	theme_drums1.volume_db = -60
 	theme_ambience.volume_db = -60
@@ -82,6 +95,12 @@ func _ready():
 	
 	
 func _process(delta):
+	if Global.dead:
+		death_text.visible = true
+		if Input.is_action_just_pressed("start"):
+			Global.dead = false
+			get_tree().change_scene_to_file("res://scenes/rooms/title.tscn")
+	
 	# reactive musics
 	if !theme_drums1.playing:
 		theme_drums1.play()
@@ -163,7 +182,7 @@ func _process(delta):
 	else:
 		item10.text = ""
 		
-	if Input.is_action_just_pressed("start"):
+	if Input.is_action_just_pressed("start") && !Global.dead:
 		if Global.pause:
 			Global.pause = false
 			pause_menu_inv.visible = false
@@ -211,6 +230,7 @@ func _process(delta):
 		get_tree().call_group("enemies_g", "update_target_pos", player.global_transform.origin)
 		
 	if Global.buying:
+		save()
 		shop_item3.text = "HP Up: %sxp" % [str(hp_cost)]
 		shop_item4.text = "Attack Up: %sxp" % [str(att_cost)]
 		shop_item5.text = "Defense Up: %sxp" % [str(def_cost)]
@@ -272,55 +292,61 @@ func _process(delta):
 	# shop animation
 	shopkeeper["parameters/playback"].travel("Idle")
 	
-	# detects if player is inside the arena. If true, press start to begin the wave
-	if Global.shop_time == true:
-		if !Global.buying:
-			ui_text.visible = true
-		ui_text.text = "Go To Arena"
-		if player.is_in_arena:
-			ui_text.text = "Press Start to Begin"
-			if Input.is_action_just_pressed("start"):
-				spawn_time = 0
-				Global.wave += 1
-				Global.shop_time = false
-		# shop door open during shop time
-		door.global_transform.origin.y = -25
-		if player.at_shop:
-			input_prompt.visible = true
-			if Input.is_action_just_pressed("interact"):
-				if !Global.buying:
-					Global.buying = true
-				else:
-					Global.buying = false
-		else:
-			input_prompt.visible = false
-		
+	if Global.tutorial_splash:
+		if Input.is_action_just_pressed("dodge"):
+			controller.visible = false
+			Global.tutorial_splash = false
 	else:
-		# shop door closed during fight time
-		door.global_transform.origin.y = 25
-		ui_text.visible = false
-		
-		# spawn a certain amount of enemies depending on the wave
-		if !Global.pause:
-			spawn_time += 1
-			if Global.wave % 4 == 0 && !Global.boss_alive:
-				if spawn_time % 60 == 1:
-					boss_spawn(Global.wave)
-					Global.enemies_spawned += 1
-					Global.boss_alive = true
-			if Global.enemies_spawned < Global.wave:
-				if Global.wave % 4 != 0:
+		controller.visible = false
+	# detects if player is inside the arena. If true, press start to begin the wave
+		if Global.shop_time == true:
+			if !Global.buying:
+				ui_text.visible = true
+			ui_text.text = "Go To Arena"
+			if player.is_in_arena:
+				ui_text.text = "Press Start to Begin"
+				if Input.is_action_just_pressed("start"):
+					spawn_time = 0
+					Global.wave += 1
+					Global.shop_time = false
+			# shop door open during shop time
+			door.global_transform.origin.y = -25
+			if player.at_shop:
+				input_prompt.visible = true
+				if Input.is_action_just_pressed("interact"):
+					if !Global.buying:
+						Global.buying = true
+					else:
+						Global.buying = false
+			else:
+				input_prompt.visible = false
+			
+		else:
+			# shop door closed during fight time
+			door.global_transform.origin.y = 25
+			ui_text.visible = false
+			
+			# spawn a certain amount of enemies depending on the wave
+			if !Global.pause:
+				spawn_time += 1
+				if Global.wave % 4 == 0 && !Global.boss_alive:
 					if spawn_time % 60 == 1:
-						spawn(Global.wave)
+						boss_spawn(Global.wave)
 						Global.enemies_spawned += 1
+						Global.boss_alive = true
+				if Global.enemies_spawned < Global.wave:
+					if Global.wave % 4 != 0:
+						if spawn_time % 60 == 1:
+							spawn(Global.wave)
+							Global.enemies_spawned += 1
 
-					
-			if Global.enemies_spawned <= Global.enemies_defeated && spawn_time % 60 > 10:
-				player.money += 100 * Global.wave
-				player.experience += Global.wave
-				Global.enemies_spawned = 0
-				Global.enemies_defeated = 0
-				Global.shop_time = true
+						
+				if Global.enemies_spawned <= Global.enemies_defeated && spawn_time % 60 > 10:
+					player.money += 100 * Global.wave
+					player.experience += Global.wave
+					Global.enemies_spawned = 0
+					Global.enemies_defeated = 0
+					Global.shop_time = true
 
 # function that spawns the enemies
 func spawn(wave):
@@ -339,3 +365,26 @@ func _on_shop_area_area_entered(area: Area3D) -> void:
 
 func _on_shop_area_area_exited(area: Area3D) -> void:
 	player.at_shop = false
+	
+func save():
+	var file = FileAccess.open(save_path, FileAccess.WRITE)
+	file.store_var(Global.enemies_spawned)
+	file.store_var(Global.enemies_defeated)
+	file.store_var(hp_cost)
+	file.store_var(att_cost)
+	file.store_var(def_cost)
+	
+func load_data():
+	if FileAccess.file_exists(save_path):
+		var file = FileAccess.open(save_path, FileAccess.READ)
+		Global.enemies_spawned = file.get_var(Global.enemies_spawned)
+		Global.enemies_defeated = file.get_var(Global.enemies_defeated)
+		hp_cost = file.get_var(hp_cost)
+		att_cost = file.get_var(att_cost)
+		def_cost = file.get_var(def_cost)
+	elif !FileAccess.file_exists(save_path) || Global.new_game :
+		Global.enemies_defeated = 0
+		Global.enemies_spawned = 0
+		hp_cost = 1
+		att_cost = 1
+		def_cost = 1
