@@ -8,7 +8,22 @@ Features include
 - Two difffenet types of enemies
   - One regular enemy and one boss
 - A shop for upgrades and items
-This release is meant to set a foundation for future development. Fundamental aspects such as controls and the game's structure will mostly remain the same until the final release. Most of what will be changed in the future will be additive instead of replacements. More enemy types, textures, and a major GUI overhaul will be implemented by the beta
+- A very basic (incomplete) save system
+This release is meant to set a foundation for future development. Fundamental aspects such as controls and the game's structure will mostly remain the same until the final release. Most of what will be changed in the future will be additive instead of replacements. More enemy types, textures, and a major GUI overhaul will be implemented by the beta.
+
+# Talk about these functions
+```
+func _on_shop_area_area_entered(area: Area3D) -> void:
+```
+```
+func _on_shop_area_area_exited(area: Area3D) -> void:
+```
+```
+func save():
+```
+```
+func load_data()
+```
 
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
