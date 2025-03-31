@@ -19,7 +19,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.197, 0)
 shape = SubResource("CapsuleShape3D_q1evk")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-target_desired_distance = 16.1
+target_desired_distance = 10.0
 
 [node name="BossHealth" type="TextureProgressBar" parent="."]
 anchors_preset = 7

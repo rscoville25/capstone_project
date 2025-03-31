@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=8 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
@@ -9,6 +9,9 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
 radius = 1.81226
 height = 10.3736
+
+[sub_resource type="LabelSettings" id="LabelSettings_hsl1y"]
+font_size = 32
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
@@ -83,3 +86,36 @@ offset_top = 62.0
 offset_right = 107.0
 offset_bottom = 85.0
 text = "Game Saved!"
+
+[node name="Stage" type="Label" parent="."]
+offset_left = 1738.0
+offset_top = 31.0
+offset_right = 1781.0
+offset_bottom = 54.0
+text = "Stage"
+
+[node name="Number" type="Label" parent="Stage"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = -32.0
+offset_right = 50.0
+offset_bottom = 13.0
+text = "1"
+label_settings = SubResource("LabelSettings_hsl1y")
+
+[node name="Wave" type="Label" parent="."]
+offset_left = 1813.0
+offset_top = 31.0
+offset_right = 1856.0
+offset_bottom = 54.0
+text = "Wave
+"
+
+[node name="Number" type="Label" parent="Wave"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = -32.0
+offset_right = 50.0
+offset_bottom = 13.0
+text = "1"
+label_settings = SubResource("LabelSettings_hsl1y")

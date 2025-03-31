@@ -4,6 +4,8 @@ var config = ConfigFile.new()
 
 @export var enemy : PackedScene
 @export var boss_dancer : PackedScene
+@export var gun_enemy : PackedScene
+@export var boss_mirror : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -104,6 +106,7 @@ func _process(delta):
 		att_cost = 1
 		def_cost = 1
 		if Input.is_action_just_pressed("start"):
+			save()
 			get_tree().change_scene_to_file("res://scenes/rooms/title.tscn")
 	
 	# reactive musics
@@ -344,7 +347,7 @@ func _process(delta):
 				if Global.enemies_spawned < Global.wave:
 					if Global.wave % 4 != 0:
 						if spawn_time % 60 == 1:
-							spawn(Global.wave)
+							spawn(Global.wave, Global.stage)
 							Global.enemies_spawned += 1
 
 						
@@ -356,17 +359,33 @@ func _process(delta):
 					Global.shop_time = true
 
 # function that spawns the enemies
-func spawn(wave):
-	if wave >= 1:
+func spawn(wave, stage):
+	var rng_spawn = randi_range(0, 9)
+	if wave >= 1 && stage <= 1:
 		var enemy1 = enemy.instantiate()
 		enemy1.global_position = spawner.global_position
 		add_child(enemy1)
+	if stage > 1:
+		if rng_spawn < 9:
+			var enemy1 = enemy.instantiate()
+			enemy1.global_position = spawner.global_position
+			add_child(enemy1)
+		else:
+			var gun = gun_enemy.instantiate()
+			gun.global_position = spawner.global_position
+			add_child(gun)
 
 func boss_spawn(wave):
 	if wave % 4 == 0:
-		var boss = boss_dancer.instantiate()
-		add_child(boss)
-		
+		var rng_boss = randi_range(0, 1)
+		match rng_boss:
+			0:
+				var boss = boss_mirror.instantiate()
+				add_child(boss)
+			1:
+				var boss = boss_dancer.instantiate()
+				add_child(boss)
+
 func _on_shop_area_area_entered(area: Area3D) -> void:
 	player.at_shop = true
 

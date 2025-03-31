@@ -1,7 +1,7 @@
 extends Node
 
 
-var stage = 1 # currently unused
+var stage = 1 # increases after boss is defeated. Unlocks new enemy types
 var wave = 1 # how many waves have occured
 var enemies_spawned = 0 # total number of enemies spawned
 var enemies_defeated = 0 # total enemies defeated
@@ -33,17 +33,18 @@ func _process(delta: float) -> void:
 		save()
 
 func save():
+	config.set_value("Global", "stage", stage)
 	config.set_value("Global", "wave", wave)
 	config.set_value("Global", "enemies_spawned", enemies_spawned)
 	config.set_value("Global", "enemies_defeated", enemies_defeated)
 	
-	config.save("res://src/save/global.cfg")
+	config.save("user://global.cfg")
 
 func load_data():
-	var load = config.load("res://src/save/global.cfg")
+	var load = config.load("user://global.cfg")
 	if load != OK:
 		return
-	
-	wave = config.get_value("Global", "wave", 1)
+	stage = config.get_value("Global", "stage", 1)
+	wave = config.get_value("Global", "wave", 0)
 	enemies_defeated = config.get_value("Global", "enemies_defeated", 0)
 	enemies_spawned = config.get_value("Global", "enemies_spawned", 0)

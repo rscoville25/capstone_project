@@ -1,11 +1,10 @@
 extends CharacterBody3D
 
-@onready var player_mesh : Node3D = $chara
-@onready var anim_player : AnimationPlayer = $chara/AnimationPlayer
-@onready var spring_arm_pivot : Node3D = $SpringArmPivot
-@onready var ui_hp : TextureProgressBar = $HealthBar
-@onready var ui_saved : Label = $GameSaved
+const LERP_VALUE : float = 0.15
+
+@onready var mirror_mesh : Node3D = $chara
 @onready var _anim_tree : AnimationTree = $chara/AnimationTree
+@onready var healthbar : TextureProgressBar = $Healthbar
 @onready var hitbox_light : Area3D = $chara/HitboxLight
 @onready var hitbox_medium : Area3D = $chara/HitboxMedium
 @onready var hitbox_heavy : Area3D = $chara/HitboxHeavy
@@ -14,134 +13,59 @@ extends CharacterBody3D
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var death_box : CollisionShape3D = $DeathBox
-@onready var ui_heat : Label = $Momentum
-@onready var ui_money : Label = $Money
-@onready var ui_exp : Label = $Experience
-@onready var ui_stage : Label = $Stage/Number
-@onready var ui_wave : Label = $Wave/Number
 
-var config = ConfigFile.new()
-
-const LERP_VALUE : float = 0.15
-
-# three speeds for walking, running, and taking a stance
 const WALK = 15.0
 const RUN = 30.0
 const STANCE = 7.0
 const DODGE = 50.0
 var speed = WALK
 
-# attacking state and a list of what attacks are available
 var attacking = false
 var attacks = ["none", "light", "medium", "heavy"]
 var cur_attack = attacks[0]
 
-@export var inventory_size = 9
-@export var inventory_filled = 0
-@export var inventory = [null, null, null, null, null, null, null, null, null, null]
-# all stats (hp, attack, level, etc)
-@export var health = 1000
-@export var max_health = 1000
-@export var att = 1
-@export var def = 1
-@export var heat = 0
-@export var money = 100
-@export var experience = 0
-
-# timer for stuff, as well as stun value and dodge count
 var timer = 0
-var stun = 0
+var death_timer = 0
 var dge_count = 0
 
 var is_hurt = false
-@export var is_in_arena = true
-@export var at_shop = false
-var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
+var stun = 0
+
+@export var health = 1000 * Global.stage + (Global.wave * 50)
+var attack = Global.stage
+var max_health = health
 
 func _ready():
-	if Global.new_game:
-		Global.wave = 0
-		health = 1000
-		max_health = 1000
-		att = 1
-		def = 1
-		money = 100
-		experience = 0
-		death_box.disabled = true
-		live_box.disabled = false
-	else:
-		load_data()
-		
+	healthbar.max_value = max_health
 	kick_fx.emitting = false
+	heat_fx.emitting = false
 	kick_fx.one_shot = true
-	heat_fx.emitting = true
-	heat_fx.speed_scale = 3
-	heat_fx.amount_ratio = 0
-	at_shop = false
+	death_box.disabled = true
+	live_box.disabled = false
 	
-func _physics_process(delta):
-	ui_stage.text = str(Global.stage)
-	ui_wave.text = str(Global.wave)
-	if Global.dead:
-		if Input.is_action_just_pressed("start"):
-			Global.wave = 1
-			health = 1000
-			max_health = 1000
-			att = 1
-			def = 1
-			money = 100
-			experience = 0
-			save()
-			
-	
-	# display momentum amount
-	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
-	ui_money.text = "$%s" % [str(money)]
-	ui_exp.text = "%sxp" % [str(experience)]
-	
-	# default to being in the arena as false
-	is_in_arena = false
-	
-	# bounds to be considered in the arena
-	if global_transform.origin.x <= 100:
-		is_in_arena = true
-	
-	heat_fx.amount_ratio = heat * 0.01
-	
-	if Global.buying:
-		save()
-		ui_saved.visible = true
-		ui_hp.visible = false
-		ui_heat.visible = false
-	else:
-		ui_saved.visible = false
-		ui_hp.visible = true
-		ui_heat.visible = true
+func _physics_process(delta: float) -> void:
+	healthbar.value = health
 	
 	_anim_tree["parameters/playback"].travel("Idle")
 	dodge_fx.emitting = false
-	
-	# UI business
-	ui_hp.value = health
-	ui_hp.max_value = max_health
-	
-	# tells you when you're attacking and what attack is being used
+
 	attacking = false
 	cur_attack = attacks[0]
 	if Global.pause || Global.buying || Global.tutorial_splash:
-		anim_player.speed_scale = 0
-		heat_fx.speed_scale = 0
 		dodge_fx.speed_scale = 0
 		kick_fx.speed_scale = 0
 		velocity.x = 0
 		velocity.z = 0
 	else:
-		heat_fx.speed_scale = 2.8
 		dodge_fx.speed_scale = 1
 		kick_fx.speed_scale = 1
 		
 		if health <= 0:
 			death()
+			death_timer += 1
+			if death_timer >= 65:
+				Global.enemies_defeated += 1
+				queue_free()
 		else:
 			if is_hurt:
 				if !Input.is_action_pressed("fight_stance"):
@@ -168,30 +92,21 @@ func _physics_process(delta):
 						attacking = true
 						cur_attack = attacks[1]
 						if (timer % 33) == 17 || (timer % 33) == 18:
-							heat += 1
-							if heat > 100:
-								heat = 100
-							light_attack(att, heat)
+							light_attack(attack)
 							
 					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[2]
 						if (timer % 62) == 34 || (timer % 62) == 35:
-							heat += 2
-							if heat > 100:
-								heat = 100
-							medium_attack(att, heat)
+							medium_attack(attack)
 							
 					if Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
 						attacking = true
 						cur_attack = attacks[3]
 						if (timer % 77) == 30 || (timer % 77) == 31:
-							heat += 3					
-							if heat > 100:
-								heat = 100
-							heavy_attack(att, heat)
+							heavy_attack(attack)
 						if (timer % 77) >= 30 && (timer % 77) <= 38:
 							kick_fx.emitting = true
 
@@ -204,12 +119,10 @@ func _physics_process(delta):
 				if Input.is_action_just_released("light_attack"):
 					timer = 0
 
-				
-				# get direction of movement
+
 				var direction : Vector3 = Vector3.ZERO
 				direction.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 				direction.z = Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
-				direction = direction.rotated(Vector3.UP, spring_arm_pivot.rotation.y)
 				
 				if Input.is_action_pressed("dodge"):
 					timer += 1
@@ -231,26 +144,19 @@ func _physics_process(delta):
 				if not is_on_floor():
 					velocity += get_gravity() * delta
 
-				# Get the input direction and handle the movement/deceleration.
-				# As good practice, you should replace UI actions with custom gameplay actions.
 				var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-				
-				# A lot of what comes next could be a match statement, but this works for now (even if it is very ugly)
+
 				if direction:
 					if speed == WALK:
 						_anim_tree["parameters/playback"].travel("Walking")
-						spring_arm_pivot.change_fov_on_run = false
 					elif speed == RUN:
 						_anim_tree["parameters/playback"].travel("Running")
-						spring_arm_pivot.change_fov_on_run = true
 					elif speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
-						spring_arm_pivot.change_fov_on_run = false
 					if speed != STANCE:
 						velocity.x = direction.x * speed
 						velocity.z = direction.z * speed
 				else:
-					spring_arm_pivot.change_fov_on_run = false
 					if speed == STANCE:
 						_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
 					else:
@@ -270,78 +176,42 @@ func _physics_process(delta):
 
 				else:
 					if direction && !Input.is_action_pressed("fight_stance"):
-						player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
+						mirror_mesh.rotation.y = lerp_angle(mirror_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 
 					
 		move_and_slide()
-			
-func light_attack(power, bonus):
-	var enemies_hit = hitbox_light.get_overlapping_bodies()
-	var damage = power * 25 + (bonus * 0.5)
-	
-	for e in enemies_hit:
-		if e.has_method("hit"):
-			e.hit(damage)
-			
-func medium_attack(power, bonus):
-	var enemies_hit = hitbox_medium.get_overlapping_bodies()
-	var damage = power * 33 + (bonus * 0.5)
-	
-	for e in enemies_hit:
-		if e.has_method("hit"):
-			e.hit(damage)
-			
-func heavy_attack(power, bonus):
-	var enemies_hit = hitbox_heavy.get_overlapping_bodies()
-	var damage = power * 50 + (bonus * 0.5)
-	
-	for e in enemies_hit:
-		if e.has_method("hit"):
-			e.hit(damage)
-	
-func hurt(dmg, stn):
+
+func hit(dmg):
 	is_hurt = true
 	if !Input.is_action_pressed("fight_stance"):
-		health -= dmg - ((def - 1) * 1.5)
-		if heat <= 0:
-			heat = 0
-		else:
-			heat -= 20
-		stun = stn
-	else:
-		health -= 1
-		if heat <= 0:
-			heat = 0
-		else:	
-			heat -= 1
+		health -= dmg
+		stun += 15
+		
+func light_attack(power):
+	var enemies_hit = hitbox_light.get_overlapping_bodies()
+	var damage = power * 25
+	
+	for e in enemies_hit:
+		if e.has_method("hurt"):
+			e.hurt(damage, 15)
+			
+func medium_attack(power):
+	var enemies_hit = hitbox_medium.get_overlapping_bodies()
+	var damage = power * 33
+	
+	for e in enemies_hit:
+		if e.has_method("hurt"):
+			e.hurt(damage, 15)
+			
+func heavy_attack(power):
+	var enemies_hit = hitbox_heavy.get_overlapping_bodies()
+	var damage = power * 50
+	
+	for e in enemies_hit:
+		if e.has_method("hurt"):
+			e.hurt(damage, 15)
 
 func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
 	death_box.disabled = false
 	live_box.disabled = true
-	Global.dead = true
-
-func save():
-	config.set_value("Inventory", "inventory", inventory)
-	config.set_value("Inventory", "inventory_filled", inventory_filled)
-	config.set_value("Stats", "hp", health)
-	config.set_value("Stats", "max_hp", max_health)
-	config.set_value("Stats", "attack", att)
-	config.set_value("Stats", "defense", def)
-	config.set_value("Stats", "money", money)
-	config.set_value("Stats", "exp", experience)
-
-	config.save("user://player.cfg")
-	
-func load_data():
-	var load = config.load("user://player.cfg")
-	if load != OK:
-		return
-	inventory = config.get_value("Inventory", "inventory")
-	inventory_filled = config.get_value("Inventory", "inventory_filled")
-	health = config.get_value("Stats", "hp")
-	max_health = config.get_value("Stats", "max_hp")
-	att = config.get_value("Stats", "attack")
-	def = config.get_value("Stats", "defense")
-	money = config.get_value("Stats", "money")
-	experience = config.get_value("Stats", "exp")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=52 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -7,14 +7,18 @@
 [ext_resource type="AudioStream" uid="uid://bp4qf5xgk31lu" path="res://src/sound/music/theme_drums1.wav" id="3_8ly2g"]
 [ext_resource type="Texture2D" uid="uid://nohf73haqycb" path="res://src/textures/kenney_prototype_textures/light/texture_13.png" id="3_g06kd"]
 [ext_resource type="AudioStream" uid="uid://bxvgfgg23swma" path="res://src/sound/music/theme_drums2.wav" id="4_c1b45"]
+[ext_resource type="PackedScene" uid="uid://cy8dcpnnxd80a" path="res://scenes/characters/shooter_enemy.tscn" id="4_fk7vl"]
 [ext_resource type="Texture2D" uid="uid://cag1cen6l5gaj" path="res://src/textures/kenney_prototype_textures/dark/texture_01.png" id="4_vw2ur"]
 [ext_resource type="AudioStream" uid="uid://j2j87j4apjy2" path="res://src/sound/music/theme_bass.wav" id="5_mvrb8"]
+[ext_resource type="PackedScene" uid="uid://cju0ugp7p5m45" path="res://scenes/characters/mirror.tscn" id="5_pjdhp"]
 [ext_resource type="PackedScene" uid="uid://dbiwaevrtslup" path="res://scenes/characters/chara.tscn" id="6_734e5"]
 [ext_resource type="AudioStream" uid="uid://c52b5hipprnpi" path="res://src/sound/music/theme_ambience.wav" id="6_d6q64"]
 [ext_resource type="Texture2D" uid="uid://c6ic5x45cqt0u" path="res://src/textures/kenney_prototype_textures/green/texture_09.png" id="6_glhvr"]
 [ext_resource type="AudioStream" uid="uid://diyerjknhm3qk" path="res://src/sound/music/theme_main.wav" id="7_5wkhf"]
 [ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
 [ext_resource type="AudioStream" uid="uid://dq3nk5ikvbriv" path="res://src/sound/music/theme_arp.wav" id="10_extan"]
+[ext_resource type="Script" path="res://scripts/environment/minimap.gd" id="14_v5rn7"]
+[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="15_b31mj"]
 [ext_resource type="Texture2D" uid="uid://cecqsmllysdtt" path="res://src/textures/controller/xbox-5162428_1280.png" id="16_y5ubg"]
 [ext_resource type="Texture2D" uid="uid://66jv03m0vt7m" path="res://src/textures/controller/Xbox_button_A.svg.png" id="17_dmm5l"]
 
@@ -120,6 +124,8 @@ font_size = 48
 script = ExtResource("1_ldvck")
 enemy = ExtResource("2_6y3n2")
 boss_dancer = ExtResource("3_8drcn")
+gun_enemy = ExtResource("4_fk7vl")
+boss_mirror = ExtResource("5_pjdhp")
 
 [node name="DrumBreak" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_8ly2g")
@@ -145,7 +151,52 @@ stream = ExtResource("10_extan")
 [node name="Player" parent="." instance=ExtResource("1_m5ix2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
 
+[node name="Minimap" type="ColorRect" parent="Player"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -296.0
+offset_top = -296.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+script = ExtResource("14_v5rn7")
+target = NodePath("..")
+camera_dist = 90.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Player/Minimap"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -256.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="SubViewport" type="SubViewport" parent="Player/Minimap/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(250, 256)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Player/Minimap/SubViewportContainer/SubViewport"]
+transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 150, 65, 0)
+
+[node name="PlayerPoint" type="TextureRect" parent="Player/Minimap/SubViewportContainer/SubViewport"]
+offset_left = 117.0
+offset_top = 120.0
+offset_right = 133.0
+offset_bottom = 136.0
+texture = ExtResource("15_b31mj")
+
 [node name="Spawner" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.0296, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
@@ -314,6 +365,7 @@ scale = Vector2(4, 4)
 text = "- Pause -"
 
 [node name="ShopWindow" type="ColorRect" parent="."]
+visible = false
 offset_left = 1175.0
 offset_top = 101.0
 offset_right = 1825.0
@@ -489,6 +541,7 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="TutorialWindow" type="ColorRect" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
