@@ -99,7 +99,6 @@ func _on_navigation_agent_3d_target_reached() -> void:
 		if attack_timer % 300 >= 220 && attack_timer % 300 <= 290:
 			_anim_tree["parameters/playback"].travel("Shooting")
 			if attack_timer % 300 == 281 || attack_timer % 300 == 282:
-				rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 				gun_fx.emitting = true
 				enemy_attack(250, 15)
 

@@ -112,6 +112,7 @@ text = "Wave
 "
 
 [node name="Number" type="Label" parent="Wave"]
+layout_mode = 0
 offset_left = 10.0
 offset_top = -32.0
 offset_right = 50.0

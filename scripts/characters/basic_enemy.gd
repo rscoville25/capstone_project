@@ -58,7 +58,7 @@ func _physics_process(delta):
 					attack_timer = 0
 					_anim_tree["parameters/playback"].travel("Bouncing Fight Idle")
 					velocity = direction * 7.0
-				rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
+					rotation.y = lerp_angle(rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 
 		else:
 			death()

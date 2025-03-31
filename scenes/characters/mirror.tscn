@@ -1,5 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cju0ugp7p5m45"]
+[gd_scene load_steps=5 format=3 uid="uid://cju0ugp7p5m45"]
 
+[ext_resource type="Script" path="res://scripts/characters/mirror.gd" id="1_std0e"]
+[ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="3_a4ph1"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="3_waub5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
@@ -7,7 +9,8 @@ radius = 1.81226
 height = 10.3736
 
 [node name="Mirror" type="CharacterBody3D"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+script = ExtResource("1_std0e")
 
 [node name="LiveBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
@@ -18,3 +21,20 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5.2
 shape = SubResource("CapsuleShape3D_3ec55")
 
 [node name="chara" parent="." instance=ExtResource("3_waub5")]
+
+[node name="Healthbar" type="TextureProgressBar" parent="."]
+offset_left = 479.75
+offset_top = 951.0
+offset_right = 480.75
+offset_bottom = 952.0
+scale = Vector2(1000, 50)
+max_value = 1000.0
+value = 1000.0
+texture_progress = ExtResource("3_a4ph1")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 492.0
+offset_top = 925.0
+offset_right = 542.0
+offset_bottom = 948.0
+text = "Mirror"
