@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cju0ugp7p5m45"]
+
+[ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="3_waub5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
+radius = 1.81226
+height = 10.3736
+
+[node name="Mirror" type="CharacterBody3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="LiveBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(-0.871231, 0, 0.490873, 0, 1, 0, -0.490873, 0, -0.871231, 0, 5.20198, 0)
+shape = SubResource("CapsuleShape3D_3ec55")
+
+[node name="DeathBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5.20198, 0)
+shape = SubResource("CapsuleShape3D_3ec55")
+
+[node name="chara" parent="." instance=ExtResource("3_waub5")]

@@ -17,6 +17,8 @@ extends CharacterBody3D
 @onready var ui_heat : Label = $Momentum
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
+@onready var ui_stage : Label = $Stage/Number
+@onready var ui_wave : Label = $Wave/Number
 
 var config = ConfigFile.new()
 
@@ -78,6 +80,8 @@ func _ready():
 	at_shop = false
 	
 func _physics_process(delta):
+	ui_stage.text = str(Global.stage)
+	ui_wave.text = str(Global.wave)
 	if Global.dead:
 		if Input.is_action_just_pressed("start"):
 			Global.wave = 1

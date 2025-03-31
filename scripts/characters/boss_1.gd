@@ -79,6 +79,7 @@ func _physics_process(delta):
 			if death_timer >= 65:
 				Global.boss_alive = false
 				Global.enemies_defeated += 1
+				Global.stage += 1
 				queue_free()
 				
 		if not is_on_floor():
