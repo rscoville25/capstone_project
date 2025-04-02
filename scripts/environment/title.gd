@@ -40,24 +40,29 @@ func _process(delta: float) -> void:
 		if FileAccess.file_exists("user://player.cfg") || FileAccess.file_exists("user://main.cfg"):
 			if Input.is_action_just_pressed("ui_up"):
 				if game_picked <= 0:
-					game_picked = 1
-					Global.new_game = false
+					game_picked = 3
 				else:
 					game_picked -= 1
-					Global.new_game = true
 			if Input.is_action_just_pressed("ui_down"):
-				if game_picked >= 1:
+				if game_picked >= 3:
 					game_picked = 0
 					Global.new_game = true
 				else:
 					game_picked += 1
-					Global.new_game = false
 		else:
 			Global.new_game = true
 			load.visible = false
 				
 		if Input.is_action_just_pressed("dodge"):
-			start_timer = true
+			match game_picked:
+				0:
+					Global.new_game = true
+					start_timer = true
+				1:
+					Global.new_game = false
+					start_timer = true
+				2:
+					get_tree().change_scene_to_file("res://scenes/rooms/music.tscn")
 	
 	if start_timer:
 		select_timer += 1

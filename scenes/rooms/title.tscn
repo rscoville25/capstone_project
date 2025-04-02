@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwpjk6jwpr8g6"]
+[gd_scene load_steps=8 format=3 uid="uid://cwpjk6jwpr8g6"]
 
 [ext_resource type="Script" path="res://scripts/environment/title.gd" id="1_pngot"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="2_errse"]
@@ -8,6 +8,12 @@
 font_size = 128
 
 [sub_resource type="LabelSettings" id="LabelSettings_0ynbm"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_edkhe"]
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_up16p"]
 font_size = 24
 
 [node name="Title" type="Node3D"]
@@ -68,9 +74,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 8.0
+offset_left = 10.0
 offset_top = 30.0
-offset_right = 139.0
+offset_right = 141.0
 offset_bottom = 64.0
 grow_horizontal = 2
 text = "Load Game"
@@ -87,3 +93,21 @@ offset_bottom = 34.0
 grow_horizontal = 2
 text = "New Game"
 label_settings = SubResource("LabelSettings_0ynbm")
+
+[node name="MusicPlayer" type="Label" parent="GameMenu"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 60.0
+offset_right = 176.0
+offset_bottom = 94.0
+text = "Music Player"
+label_settings = SubResource("LabelSettings_edkhe")
+
+[node name="Options" type="Label" parent="GameMenu"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 92.0
+offset_bottom = 113.0
+text = "Options"
+label_settings = SubResource("LabelSettings_up16p")
