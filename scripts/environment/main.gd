@@ -361,20 +361,22 @@ func _process(delta):
 
 # function that spawns the enemies
 func spawn(wave, stage):
-	var rng_spawn = randi_range(0, 9)
+	var rng_spawn = randi_range(0, 100)
 	if wave >= 1 && stage <= 1:
-		var enemy1 = enemy.instantiate()
-		enemy1.global_position = spawner.global_position
-		add_child(enemy1)
-	if stage > 1:
-		if rng_spawn < 9:
-			var enemy1 = enemy.instantiate()
-			enemy1.global_position = spawner.global_position
-			add_child(enemy1)
-		else:
-			var gun = gun_enemy.instantiate()
-			gun.global_position = spawner.global_position
-			add_child(gun)
+		match stage:
+			1:
+				var enemy1 = enemy.instantiate()
+				enemy1.global_position = spawner.global_position
+				add_child(enemy1)
+			2:
+				if rng_spawn <= 90:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				else:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
 
 func boss_spawn(wave):
 	if wave % 4 == 0:

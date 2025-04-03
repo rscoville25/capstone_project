@@ -74,6 +74,7 @@ func _physics_process(delta):
 					else:
 						meialua_particles.emitting = false
 		else:
+
 			death()
 			death_timer += 1
 			if death_timer >= 65:
