@@ -2,7 +2,7 @@ extends Node
 
 
 var stage = 1 # increases after boss is defeated. Unlocks new enemy types
-var wave = 1 # how many waves have occured
+var wave = 0 # how many waves have occured
 var enemies_spawned = 0 # total number of enemies spawned
 var enemies_defeated = 0 # total enemies defeated
 var boss_alive : bool = false # is the boss currently alive
@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 	
 	if dead:
 		stage = 1 
-		wave = 1 
+		wave = 0
 		enemies_spawned = 0 
 		enemies_defeated = 0
 		save()

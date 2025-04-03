@@ -6,6 +6,7 @@ var config = ConfigFile.new()
 @export var boss_dancer : PackedScene
 @export var gun_enemy : PackedScene
 @export var boss_mirror : PackedScene
+@export var boss_runner : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -377,13 +378,16 @@ func spawn(wave, stage):
 
 func boss_spawn(wave):
 	if wave % 4 == 0:
-		var rng_boss = randi_range(0, 1)
+		var rng_boss = randi_range(0, 2)
 		match rng_boss:
 			0:
 				var boss = boss_mirror.instantiate()
 				add_child(boss)
 			1:
 				var boss = boss_dancer.instantiate()
+				add_child(boss)
+			2:
+				var boss = boss_runner.instantiate()
 				add_child(boss)
 
 func _on_shop_area_area_entered(area: Area3D) -> void:

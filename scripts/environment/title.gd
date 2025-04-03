@@ -37,21 +37,16 @@ func _process(delta: float) -> void:
 	if game_menu.visible:
 		pointer.global_position.y = 30 * game_picked
 		
-		if FileAccess.file_exists("user://player.cfg") || FileAccess.file_exists("user://main.cfg"):
-			if Input.is_action_just_pressed("ui_up"):
-				if game_picked <= 0:
-					game_picked = 3
-				else:
-					game_picked -= 1
-			if Input.is_action_just_pressed("ui_down"):
-				if game_picked >= 3:
-					game_picked = 0
-					Global.new_game = true
-				else:
-					game_picked += 1
-		else:
-			Global.new_game = true
-			load.visible = false
+		if Input.is_action_just_pressed("ui_up"):
+			if game_picked <= 0:
+				game_picked = 3
+			else:
+				game_picked -= 1
+		if Input.is_action_just_pressed("ui_down"):
+			if game_picked >= 3:
+				game_picked = 0
+			else:
+				game_picked += 1
 				
 		if Input.is_action_just_pressed("dodge"):
 			match game_picked:

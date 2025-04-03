@@ -31,7 +31,7 @@ var dge_count = 0
 var is_hurt = false
 var stun = 0
 
-@export var health = 1000 * Global.stage + (Global.wave * 50)
+@export var health = 4000 * Global.stage + (Global.wave * 50)
 var attack = Global.stage
 var max_health = health
 
