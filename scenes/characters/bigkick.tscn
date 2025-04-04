@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dxmdm1a33kluw"]
 
 [ext_resource type="PackedScene" uid="uid://drmc1c8uavavl" path="res://scenes/characters/bases/bigkicker.tscn" id="1_37qsn"]
-[ext_resource type="Script" path="res://scenes/characters/bigkick.gd" id="1_ng1di"]
+[ext_resource type="Script" path="res://scripts/characters/bigkick.gd" id="1_ng1di"]
 [ext_resource type="AudioStream" uid="uid://g5edwu8xbrdx" path="res://src/sound/punch-41105.mp3" id="2_rb3od"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f5a8b"]

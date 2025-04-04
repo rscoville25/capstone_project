@@ -66,6 +66,7 @@ func _physics_process(delta: float) -> void:
 			if death_timer >= 65:
 				Global.enemies_defeated += 1
 				Global.stage += 1
+				Global.boss_alive = false
 				queue_free()
 		else:
 			if is_hurt:
