@@ -12,7 +12,7 @@ height = 10.6538
 radius = 0.579973
 height = 10.8897
 
-[node name="Bigkick" type="CharacterBody3D"]
+[node name="Bigkick" type="CharacterBody3D" groups=["enemies_g"]]
 script = ExtResource("1_ng1di")
 
 [node name="bigkicker" parent="." instance=ExtResource("1_37qsn")]
@@ -30,6 +30,9 @@ disabled = true
 stream = ExtResource("2_rb3od")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." groups=["enemies_g"]]
+target_desired_distance = 11.0
+avoidance_enabled = true
+radius = 10.0
 
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
 [connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
