@@ -7,6 +7,7 @@ var config = ConfigFile.new()
 @export var gun_enemy : PackedScene
 @export var boss_mirror : PackedScene
 @export var boss_runner : PackedScene
+@export var kick_enemy : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -362,7 +363,7 @@ func _process(delta):
 # function that spawns the enemies
 func spawn(wave, stage):
 	var rng_spawn = randi_range(0, 100)
-	if wave >= 1 && stage <= 1:
+	if wave >= 1:
 		match stage:
 			1:
 				var enemy1 = enemy.instantiate()
@@ -377,6 +378,33 @@ func spawn(wave, stage):
 					var gun = gun_enemy.instantiate()
 					gun.global_position = spawner.global_position
 					add_child(gun)
+			3:
+				if rng_spawn <= 80:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				else:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+		if stage > 3:
+			if rng_spawn <= 80:
+				var enemy1 = enemy.instantiate()
+				enemy1.global_position = spawner.global_position
+				add_child(enemy1)
+			elif rng_spawn > 80 && rng_spawn <= 90:
+				var gun = gun_enemy.instantiate()
+				gun.global_position = spawner.global_position
+				add_child(gun)
+			else:
+				var kick = kick_enemy.instantiate()
+				kick.global_position = spawner.global_position
+				add_child(kick)
+
 
 func boss_spawn(wave):
 	if wave % 4 == 0:

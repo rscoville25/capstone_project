@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dxmdm1a33kluw"]
+
+[ext_resource type="PackedScene" uid="uid://drmc1c8uavavl" path="res://scenes/characters/bases/bigkicker.tscn" id="1_37qsn"]
+[ext_resource type="Script" path="res://scenes/characters/bigkick.gd" id="1_ng1di"]
+[ext_resource type="AudioStream" uid="uid://g5edwu8xbrdx" path="res://src/sound/punch-41105.mp3" id="2_rb3od"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f5a8b"]
+radius = 1.43052
+height = 10.6538
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8236w"]
+radius = 0.579973
+height = 10.8897
+
+[node name="Bigkick" type="CharacterBody3D"]
+script = ExtResource("1_ng1di")
+
+[node name="bigkicker" parent="." instance=ExtResource("1_37qsn")]
+
+[node name="LiveBox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.19741, 0)
+shape = SubResource("CapsuleShape3D_f5a8b")
+
+[node name="DeathHit" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.0359, 0)
+shape = SubResource("CapsuleShape3D_8236w")
+disabled = true
+
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_rb3od")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." groups=["enemies_g"]]
+
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]

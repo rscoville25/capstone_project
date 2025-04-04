@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=54 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://c6ic5x45cqt0u" path="res://src/textures/kenney_prototype_textures/green/texture_09.png" id="6_glhvr"]
 [ext_resource type="PackedScene" uid="uid://da33fnhnpyj6p" path="res://scenes/characters/Runner.tscn" id="6_q7ucr"]
 [ext_resource type="AudioStream" uid="uid://diyerjknhm3qk" path="res://src/sound/music/theme_main.wav" id="7_5wkhf"]
+[ext_resource type="PackedScene" uid="uid://dxmdm1a33kluw" path="res://scenes/characters/bigkick.tscn" id="7_ipmdw"]
 [ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
 [ext_resource type="AudioStream" uid="uid://dq3nk5ikvbriv" path="res://src/sound/music/theme_arp.wav" id="10_extan"]
 [ext_resource type="Script" path="res://scripts/environment/minimap.gd" id="14_v5rn7"]
@@ -128,6 +129,7 @@ boss_dancer = ExtResource("3_8drcn")
 gun_enemy = ExtResource("4_fk7vl")
 boss_mirror = ExtResource("5_pjdhp")
 boss_runner = ExtResource("6_q7ucr")
+kick_enemy = ExtResource("7_ipmdw")
 
 [node name="DrumBreak" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_8ly2g")

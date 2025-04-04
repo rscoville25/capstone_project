@@ -19,6 +19,8 @@ var buying : bool = false # is the player buying from the shop
 
 var dead: bool = false # is the player dead
 
+var fullscreen: bool
+
 var config = ConfigFile.new()
 
 func _process(delta: float) -> void:
@@ -33,6 +35,7 @@ func _process(delta: float) -> void:
 		save()
 
 func save():
+	config.set_value("Settings", "fullscreen", fullscreen)
 	config.set_value("Global", "stage", stage)
 	config.set_value("Global", "wave", wave)
 	config.set_value("Global", "enemies_spawned", enemies_spawned)
@@ -44,6 +47,7 @@ func load_data():
 	var load = config.load("user://global.cfg")
 	if load != OK:
 		return
+	fullscreen = config.get_value("Settings", "fullscreen", false)
 	stage = config.get_value("Global", "stage", 1)
 	wave = config.get_value("Global", "wave", 0)
 	enemies_defeated = config.get_value("Global", "enemies_defeated", 0)

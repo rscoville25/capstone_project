@@ -1,0 +1,101 @@
+[gd_scene load_steps=13 format=3 uid="uid://drmc1c8uavavl"]
+
+[ext_resource type="PackedScene" uid="uid://baamtkqe6jwn4" path="res://src/models/bigkicker.gltf" id="1_indlr"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cs4kp"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ehej"]
+animation = &"Kicking"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rfphq"]
+animation = &"Stunned"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bl7mp"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nu010"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lirda"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_66ldt"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aieyj"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fs6xy"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_rhp7t"]
+states/Idle/node = SubResource("AnimationNodeAnimation_cs4kp")
+states/Idle/position = Vector2(574, 57)
+states/Kicking/node = SubResource("AnimationNodeAnimation_6ehej")
+states/Kicking/position = Vector2(495, 155)
+states/Stunned/node = SubResource("AnimationNodeAnimation_rfphq")
+states/Stunned/position = Vector2(646, 155)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_bl7mp"), "Idle", "End", SubResource("AnimationNodeStateMachineTransition_nu010"), "Idle", "Kicking", SubResource("AnimationNodeStateMachineTransition_lirda"), "Kicking", "Idle", SubResource("AnimationNodeStateMachineTransition_66ldt"), "Idle", "Stunned", SubResource("AnimationNodeStateMachineTransition_aieyj"), "Stunned", "Idle", SubResource("AnimationNodeStateMachineTransition_fs6xy")]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t6e3x"]
+size = Vector3(3.25616, 9.22607, 5.34765)
+
+[node name="bigkicker" instance=ExtResource("1_indlr")]
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(-1.61855, -0.0210423, -562.118)
+bones/0/rotation = Quaternion(-0.620106, -0.463566, 0.369745, 0.513677)
+bones/1/rotation = Quaternion(0.0316335, 0.0282055, -0.00953014, 0.999056)
+bones/2/rotation = Quaternion(0.0586892, 0.045148, 0.0244081, 0.996956)
+bones/3/rotation = Quaternion(0.0591787, 0.0444984, 0.0244214, 0.996956)
+bones/4/rotation = Quaternion(0.0819261, 0.0601705, -0.06821, 0.992479)
+bones/5/rotation = Quaternion(-0.0394994, 0.309663, -0.0279565, 0.949614)
+bones/7/rotation = Quaternion(0.635659, 0.347605, -0.59289, 0.351554)
+bones/8/rotation = Quaternion(0.084869, -0.199994, -0.0389639, 0.975337)
+bones/9/rotation = Quaternion(-0.00825339, -0.000181624, 0.741984, 0.670367)
+bones/10/rotation = Quaternion(0.0664813, -0.244727, -0.128536, 0.958732)
+bones/11/rotation = Quaternion(0.120096, 0.103031, 0.153538, 0.975391)
+bones/13/rotation = Quaternion(-0.102254, 0.0587039, -0.182476, 0.976115)
+bones/15/rotation = Quaternion(0.695153, 0.122874, -0.128872, 0.69646)
+bones/17/rotation = Quaternion(0.651489, -0.00057504, -0.0620592, 0.756115)
+bones/19/rotation = Quaternion(0.75371, 0.0717738, -0.0794352, 0.648429)
+bones/20/rotation = Quaternion(0.77616, 5.21015e-05, -0.075611, 0.625987)
+bones/23/rotation = Quaternion(0.737602, 0.0269825, -0.0391316, 0.673561)
+bones/24/rotation = Quaternion(0.833573, 0.000369417, -0.0814854, 0.546367)
+bones/25/rotation = Quaternion(0.510579, -0.000295338, -0.0495451, 0.858402)
+bones/27/rotation = Quaternion(0.734561, -0.0311278, 0.0166529, 0.677624)
+bones/28/rotation = Quaternion(0.778784, 0.000982966, -0.0755417, 0.622726)
+bones/29/rotation = Quaternion(0.765405, -0.000692388, -0.0725612, 0.639445)
+bones/31/rotation = Quaternion(0.630207, -0.360889, 0.593651, 0.346664)
+bones/32/rotation = Quaternion(0.169051, 0.0701798, -0.556775, 0.810246)
+bones/33/rotation = Quaternion(-0.00469154, 0.000108117, -0.818526, 0.57445)
+bones/34/rotation = Quaternion(-0.0857009, 0.202955, 0.0410683, 0.974566)
+bones/36/rotation = Quaternion(0.212689, 0.0842879, 0.21349, 0.949779)
+bones/37/rotation = Quaternion(-0.0946604, -0.0624821, 0.205197, 0.972126)
+bones/40/rotation = Quaternion(0.796725, -0.000164964, 0.0557418, 0.601766)
+bones/43/rotation = Quaternion(0.75143, -0.0703092, 0.0589312, 0.653404)
+bones/44/rotation = Quaternion(0.777957, -7.99342e-05, 0.0542249, 0.625973)
+bones/47/rotation = Quaternion(0.73399, -0.025702, 0.0184382, 0.678423)
+bones/48/rotation = Quaternion(0.83554, -3.88028e-05, 0.0582237, 0.546335)
+bones/49/rotation = Quaternion(0.511785, 2.28988e-05, 0.0356052, 0.858376)
+bones/51/rotation = Quaternion(0.729263, 0.0322327, -0.0375574, 0.682441)
+bones/52/rotation = Quaternion(0.780578, -4.71948e-05, 0.053735, 0.622744)
+bones/53/rotation = Quaternion(0.767173, -1.01117e-05, 0.0526572, 0.639275)
+bones/55/rotation = Quaternion(0.223108, 0.0124702, 0.961237, -0.161526)
+bones/56/rotation = Quaternion(-0.276233, 0.0786216, -0.0350068, 0.95723)
+bones/57/rotation = Quaternion(0.438116, 0.0562418, -0.0410365, 0.896218)
+bones/58/rotation = Quaternion(0.279498, -0.0140822, 0.00384938, 0.960035)
+bones/60/rotation = Quaternion(-0.111606, -0.0751254, 0.984863, 0.109297)
+bones/61/rotation = Quaternion(-0.14983, -0.0839987, 0.0231668, 0.984865)
+bones/62/rotation = Quaternion(0.380453, 0.0270404, 0.0709382, 0.921679)
+bones/63/rotation = Quaternion(0.40234, 0.0152018, -0.00295208, 0.915359)
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+root_motion_track = NodePath("Armature/Skeleton3D:Spine")
+tree_root = SubResource("AnimationNodeStateMachine_rhp7t")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="Hitbox" type="Area3D" parent="." index="3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.250031, 4.11304, 3.67762)
+shape = SubResource("BoxShape3D_t6e3x")

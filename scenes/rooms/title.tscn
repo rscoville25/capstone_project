@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cwpjk6jwpr8g6"]
+[gd_scene load_steps=11 format=3 uid="uid://cwpjk6jwpr8g6"]
 
 [ext_resource type="Script" path="res://scripts/environment/title.gd" id="1_pngot"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="2_errse"]
@@ -15,6 +15,18 @@ font_size = 24
 
 [sub_resource type="LabelSettings" id="LabelSettings_up16p"]
 font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_gd6ot"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_etvkv"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1o2v1"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
 
 [node name="Title" type="Node3D"]
 script = ExtResource("1_pngot")
@@ -111,3 +123,46 @@ offset_right = 92.0
 offset_bottom = 113.0
 text = "Options"
 label_settings = SubResource("LabelSettings_up16p")
+
+[node name="Options" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -240.0
+offset_right = 320.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pointer" type="Label" parent="Options"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 236.0
+offset_bottom = 34.0
+text = "-> "
+label_settings = SubResource("LabelSettings_gd6ot")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Options"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 34.0
+alignment = 1
+
+[node name="Option" type="VBoxContainer" parent="Options/HBoxContainer"]
+layout_mode = 2
+
+[node name="Fullscreen" type="Label" parent="Options/HBoxContainer/Option"]
+layout_mode = 2
+text = "Fullscreen:"
+label_settings = SubResource("LabelSettings_etvkv")
+
+[node name="OnOff" type="VBoxContainer" parent="Options/HBoxContainer"]
+layout_mode = 2
+
+[node name="Fullscreen" type="Label" parent="Options/HBoxContainer/OnOff"]
+layout_mode = 2
+text = " Off"
+label_settings = SubResource("LabelSettings_1o2v1")
