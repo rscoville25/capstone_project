@@ -38,6 +38,7 @@ transform = Transform3D(1, 0, 0, 0, 0.991687, 0.128674, 0, -0.128674, 0.991687, 
 [node name="chara" parent="." instance=ExtResource("3_hrgne")]
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
+modulate = Color(100, 33.513, 0, 1)
 anchors_preset = -1
 anchor_right = 0.001
 anchor_bottom = 0.122
@@ -49,12 +50,17 @@ scale = Vector2(502.788, 10.9956)
 value = 100.0
 texture_progress = ExtResource("4_kwek8")
 
-[node name="Momentum" type="Label" parent="."]
-offset_left = 6.0
+[node name="MomentumBar" type="TextureProgressBar" parent="."]
+anchors_preset = -1
+anchor_right = 0.001
+anchor_bottom = 0.122
+offset_left = 1.0
 offset_top = 36.0
-offset_right = 157.0
-offset_bottom = 59.0
-text = "Momentum: 0 / 100"
+offset_right = 62.848
+offset_bottom = 51.944
+scale = Vector2(502.788, 10.9956)
+value = 100.0
+texture_progress = ExtResource("4_kwek8")
 
 [node name="InputPrompt" type="TextureRect" parent="."]
 offset_left = 518.0

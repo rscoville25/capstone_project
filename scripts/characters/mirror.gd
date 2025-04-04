@@ -31,7 +31,7 @@ var dge_count = 0
 var is_hurt = false
 var stun = 0
 
-@export var health = 1000 * Global.stage + (Global.wave * 50)
+@export var health = 4000 * Global.stage + (Global.wave * 50)
 var attack = Global.stage
 var max_health = health
 
@@ -65,6 +65,7 @@ func _physics_process(delta: float) -> void:
 			death_timer += 1
 			if death_timer >= 65:
 				Global.enemies_defeated += 1
+				Global.stage += 1
 				queue_free()
 		else:
 			if is_hurt:

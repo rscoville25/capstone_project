@@ -6,6 +6,8 @@ var config = ConfigFile.new()
 @export var boss_dancer : PackedScene
 @export var gun_enemy : PackedScene
 @export var boss_mirror : PackedScene
+@export var boss_runner : PackedScene
+@export var kick_enemy : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -360,30 +362,62 @@ func _process(delta):
 
 # function that spawns the enemies
 func spawn(wave, stage):
-	var rng_spawn = randi_range(0, 9)
-	if wave >= 1 && stage <= 1:
-		var enemy1 = enemy.instantiate()
-		enemy1.global_position = spawner.global_position
-		add_child(enemy1)
-	if stage > 1:
-		if rng_spawn < 9:
-			var enemy1 = enemy.instantiate()
-			enemy1.global_position = spawner.global_position
-			add_child(enemy1)
-		else:
-			var gun = gun_enemy.instantiate()
-			gun.global_position = spawner.global_position
-			add_child(gun)
+	var rng_spawn = randi_range(0, 100)
+	if wave >= 1:
+		match stage:
+			1:
+				var enemy1 = enemy.instantiate()
+				enemy1.global_position = spawner.global_position
+				add_child(enemy1)
+			2:
+				if rng_spawn <= 90:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				else:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+			3:
+				if rng_spawn <= 80:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				else:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+		if stage > 3:
+			if rng_spawn <= 80:
+				var enemy1 = enemy.instantiate()
+				enemy1.global_position = spawner.global_position
+				add_child(enemy1)
+			elif rng_spawn > 80 && rng_spawn <= 90:
+				var gun = gun_enemy.instantiate()
+				gun.global_position = spawner.global_position
+				add_child(gun)
+			else:
+				var kick = kick_enemy.instantiate()
+				kick.global_position = spawner.global_position
+				add_child(kick)
+
 
 func boss_spawn(wave):
 	if wave % 4 == 0:
-		var rng_boss = randi_range(0, 1)
+		var rng_boss = randi_range(0, 2)
 		match rng_boss:
 			0:
 				var boss = boss_mirror.instantiate()
 				add_child(boss)
 			1:
 				var boss = boss_dancer.instantiate()
+				add_child(boss)
+			2:
+				var boss = boss_runner.instantiate()
 				add_child(boss)
 
 func _on_shop_area_area_entered(area: Area3D) -> void:

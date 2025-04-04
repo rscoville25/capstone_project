@@ -14,11 +14,11 @@ extends CharacterBody3D
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var death_box : CollisionShape3D = $DeathBox
-@onready var ui_heat : Label = $Momentum
 @onready var ui_money : Label = $Money
 @onready var ui_exp : Label = $Experience
 @onready var ui_stage : Label = $Stage/Number
 @onready var ui_wave : Label = $Wave/Number
+@onready var heatbar : TextureProgressBar = $MomentumBar
 
 var config = ConfigFile.new()
 
@@ -95,7 +95,7 @@ func _physics_process(delta):
 			
 	
 	# display momentum amount
-	ui_heat.text = "Momentum: %s / 100" % [str(heat)]
+	heatbar.value = heat
 	ui_money.text = "$%s" % [str(money)]
 	ui_exp.text = "%sxp" % [str(experience)]
 	
@@ -112,11 +112,11 @@ func _physics_process(delta):
 		save()
 		ui_saved.visible = true
 		ui_hp.visible = false
-		ui_heat.visible = false
+
 	else:
 		ui_saved.visible = false
 		ui_hp.visible = true
-		ui_heat.visible = true
+
 	
 	_anim_tree["parameters/playback"].travel("Idle")
 	dodge_fx.emitting = false
