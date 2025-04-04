@@ -41,6 +41,8 @@ The beta release is mostly an improved version of the alpha. No major changes in
 Creating more enemy types was harder than I orginally thought it would be. The structure of the scripts were almost exactly the same, but what goes on inside it is extremely different between. This was tedious, even with the egregious amount of copy/pasting that was done.
 The UI was a lot less headache inducing, as the copy/pasting I did with the scripts is pretty much all I needed to do
 
+Presentation: https://docs.google.com/presentation/d/1PacxHIfX7yGOFtNrbNkDDFRxle_-2seZQ9nFBgyuNDE/edit?usp=sharing
+
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
   - https://godotengine.org/
