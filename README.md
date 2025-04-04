@@ -26,6 +26,21 @@ func load_data()
 ```
 Google Slides Presentation: https://docs.google.com/presentation/d/1gsCbGgn-dhi5o6xcioAFhJ7TlpuEUn5qaVwtCk7jeM0/edit?usp=sharing
 
+## Beta Release
+The work I did for the beta release was adding more variety in the fights.
+- More types of enemies
+  - Total of 3 regular enemies and 3 bosses (looking to at least double this by full release)
+- Updated textures for the character and the bosses
+- Redesigned UI with a minimap (still needs some work)
+- Expanded title screen menu
+  - Now has a music player
+  - Began work on an options menu. Currently can toggle fullscreen.
+- Updated enemy AI
+
+The beta release is mostly an improved version of the alpha. No major changes in the way it plays, only expansions of ideas that I had already implemented.
+Creating more enemy types was harder than I orginally thought it would be. The structure of the scripts were almost exactly the same, but what goes on inside it is extremely different between. This was tedious, even with the egregious amount of copy/pasting that was done.
+The UI was a lot less headache inducing, as the copy/pasting I did with the scripts is pretty much all I needed to do
+
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
   - https://godotengine.org/
