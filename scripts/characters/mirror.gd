@@ -13,6 +13,8 @@ const LERP_VALUE : float = 0.15
 @onready var dodge_fx : GPUParticles3D = $chara/DodgeHaze
 @onready var live_box : CollisionShape3D = $LiveBox
 @onready var death_box : CollisionShape3D = $DeathBox
+@onready var poison_fx : GPUParticles3D = $PoisonFX
+@onready var poison_snd : AudioStreamPlayer3D = $PoisonSound
 
 const WALK = 15.0
 const RUN = 30.0
@@ -28,6 +30,9 @@ var timer = 0
 var death_timer = 0
 var dge_count = 0
 
+var poisoned = false
+var poison_tic = 0
+
 var is_hurt = false
 var stun = 0
 
@@ -42,7 +47,8 @@ func _ready():
 	kick_fx.one_shot = true
 	death_box.disabled = true
 	live_box.disabled = false
-	
+	poison_fx.emitting = false
+
 func _physics_process(delta: float) -> void:
 	healthbar.value = health
 	
@@ -180,7 +186,12 @@ func _physics_process(delta: float) -> void:
 					if direction && !Input.is_action_pressed("fight_stance"):
 						mirror_mesh.rotation.y = lerp_angle(mirror_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
 
-					
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				poison_snd.play()
+				health -= 50
 		move_and_slide()
 
 func hit(dmg):
@@ -189,6 +200,9 @@ func hit(dmg):
 		health -= dmg
 		stun += 15
 		
+func poison():
+	poisoned = true
+
 func light_attack(power):
 	var enemies_hit = hitbox_light.get_overlapping_bodies()
 	var damage = power * 25

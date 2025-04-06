@@ -9,6 +9,8 @@ const LERP_VALUE : float = 0.15
 @onready var _anim_tree : AnimationTree = $runnner/AnimationTree
 @onready var healthbar : TextureProgressBar = $BossHealth
 @onready var name_label : Label = $Label
+@onready var poison_fx : GPUParticles3D = $PoisonFX
+@onready var poison_snd : AudioStreamPlayer3D = $PoisonSound
 
 var death_timer = 0
 var is_hit : bool
@@ -18,6 +20,9 @@ var dmg_inc_threshold = 1000
 
 var running : bool
 var attacking : bool
+
+var poisoned = false
+var poison_tic = 0
 
 var attack_timer : int
 var run_timer = 0
@@ -31,7 +36,7 @@ func _ready() -> void:
 	running = true
 	is_hit = false
 	attacking = false
-	
+	poison_fx.emitting = false
 
 func _physics_process(delta: float) -> void:
 	attacking = false
@@ -76,7 +81,14 @@ func _physics_process(delta: float) -> void:
 				Global.enemies_defeated += 1
 				Global.stage += 1
 				queue_free()
-				
+
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				poison_snd.play()
+				health -= 50
+		
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 	
@@ -99,6 +111,9 @@ func hit(dmg):
 	if 5000 - health >= dmg_inc_threshold:
 		dmg_mod += 1
 		dmg_inc_threshold += 1000
+
+func poison():
+	poisoned = true
 
 func death():
 	live_box.disabled = true
