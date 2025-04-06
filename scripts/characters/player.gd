@@ -79,7 +79,7 @@ func _ready():
 		max_health = 1000
 		att = 1
 		def = 1
-		money = 1000
+		money = 100
 		experience = 0
 		death_box.disabled = true
 		live_box.disabled = false
