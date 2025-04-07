@@ -403,6 +403,7 @@ func death():
 func save():
 	config.set_value("Inventory", "inventory", inventory)
 	config.set_value("Inventory", "inventory_filled", inventory_filled)
+	config.set_value("Inventory", "cur_active", cur_active)
 	config.set_value("Stats", "hp", health)
 	config.set_value("Stats", "max_hp", max_health)
 	config.set_value("Stats", "attack", att)
@@ -417,10 +418,11 @@ func load_data():
 	if load != OK:
 		return
 	inventory = config.get_value("Inventory", "inventory")
-	inventory_filled = config.get_value("Inventory", "inventory_filled")
-	health = config.get_value("Stats", "hp")
-	max_health = config.get_value("Stats", "max_hp")
-	att = config.get_value("Stats", "attack")
-	def = config.get_value("Stats", "defense")
-	money = config.get_value("Stats", "money")
-	experience = config.get_value("Stats", "exp")
+	inventory_filled = config.get_value("Inventory", "inventory_filled", 0)
+	cur_active = config.get_value("Inventory", "cur_active", 0)
+	health = config.get_value("Stats", "hp", 1000)
+	max_health = config.get_value("Stats", "max_hp", 1000)
+	att = config.get_value("Stats", "attack", 1)
+	def = config.get_value("Stats", "defense", 1)
+	money = config.get_value("Stats", "money", 1)
+	experience = config.get_value("Stats", "exp", 0)

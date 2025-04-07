@@ -9,6 +9,7 @@ var config = ConfigFile.new()
 @export var boss_runner : PackedScene
 @export var kick_enemy : PackedScene
 @export var poison_enemy : PackedScene
+@export var boss_giant : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -29,12 +30,9 @@ var config = ConfigFile.new()
 @onready var upgrade_shop : Control = $ShopWindow/ItemsUpgrade
 @onready var actives_shop : Control = $ShopWindow/Actives
 @onready var shop_select : Label = $ShopWindow/ShopSelect
-@onready var shop_item1 : Label = $ShopWindow/ItemsUpgrade/ShopItem1
-@onready var shop_item2 : Label = $ShopWindow/ItemsUpgrade/ShopItem2
 @onready var shop_item3 : Label = $ShopWindow/ItemsUpgrade/ShopItem3
 @onready var shop_item4 : Label = $ShopWindow/ItemsUpgrade/ShopItem4
 @onready var shop_item5 : Label = $ShopWindow/ItemsUpgrade/ShopItem5
-@onready var shop_item6 : Label = $ShopWindow/ItemsUpgrade/ShopItem6
 @onready var active1 : Label = $ShopWindow/Actives/Active1
 @onready var active2 : Label = $ShopWindow/Actives/Active2
 @onready var active3 : Label = $ShopWindow/Actives/Active3
@@ -488,16 +486,19 @@ func spawn(wave, stage):
 
 func boss_spawn(wave):
 	if wave % 4 == 0:
-		var rng_boss = randi_range(0, 2)
+		var rng_boss = randi_range(0, 3)
 		match rng_boss:
 			0:
-				var boss = boss_mirror.instantiate()
+				var boss = boss_dancer.instantiate()
 				add_child(boss)
 			1:
-				var boss = boss_dancer.instantiate()
+				var boss = boss_mirror.instantiate()
 				add_child(boss)
 			2:
 				var boss = boss_runner.instantiate()
+				add_child(boss)
+			3:
+				var boss = boss_giant.instantiate()
 				add_child(boss)
 
 func _on_shop_area_area_entered(area: Area3D) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=59 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://d2w8ttetf1x5j" path="res://scenes/characters/poison_enemy.tscn" id="8_13ttr"]
 [ext_resource type="AudioStream" uid="uid://f1ky1tyybcr4" path="res://src/sound/sfx/purchase.mp3" id="8_p8crk"]
 [ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
+[ext_resource type="PackedScene" uid="uid://c6wx1xx0xpjud" path="res://scenes/characters/boss_giant.tscn" id="9_xefnk"]
 [ext_resource type="AudioStream" uid="uid://dq3nk5ikvbriv" path="res://src/sound/music/theme_arp.wav" id="10_extan"]
 [ext_resource type="Script" path="res://scripts/environment/minimap.gd" id="14_v5rn7"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="15_b31mj"]
@@ -140,6 +141,7 @@ boss_mirror = ExtResource("5_pjdhp")
 boss_runner = ExtResource("6_q7ucr")
 kick_enemy = ExtResource("7_ipmdw")
 poison_enemy = ExtResource("8_13ttr")
+boss_giant = ExtResource("9_xefnk")
 
 [node name="Purchase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_p8crk")
