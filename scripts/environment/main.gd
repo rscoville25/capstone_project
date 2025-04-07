@@ -8,6 +8,7 @@ var config = ConfigFile.new()
 @export var boss_mirror : PackedScene
 @export var boss_runner : PackedScene
 @export var kick_enemy : PackedScene
+@export var poison_enemy : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -33,6 +34,7 @@ var config = ConfigFile.new()
 @onready var shop_item3 : Label = $ShopWindow/ItemsUpgrade/ShopItem3
 @onready var shop_item4 : Label = $ShopWindow/ItemsUpgrade/ShopItem4
 @onready var shop_item5 : Label = $ShopWindow/ItemsUpgrade/ShopItem5
+@onready var shop_item6 : Label = $ShopWindow/ItemsUpgrade/ShopItem6
 @onready var active1 : Label = $ShopWindow/Actives/Active1
 @onready var active2 : Label = $ShopWindow/Actives/Active2
 @onready var active3 : Label = $ShopWindow/Actives/Active3
@@ -73,7 +75,7 @@ var active_item = 0
 var inv_select = 0
 var has_active = false
 
-var items_in_shop = ["Health Restore", "Momentum Boost", "HP Up", "Attack Up", "Defense Up" ]
+var items_in_shop = ["Health Restore", "Momentum Boost", "Poison Cure", "HP Up", "Attack Up", "Defense Up" ]
 var actives = ["None", "Burst", "Poison Cloud", "Touch of Death"]
 var hp_cost = 1
 var att_cost = 1
@@ -247,6 +249,11 @@ func _process(delta):
 					player.heat = 100
 					player.inventory[inv_select] = null
 					player.inventory_filled -= 1
+				else:
+					player.poisoned = false
+					player.inventory[inv_select] = null
+					player.inventory_filled -= 1
+					
 				player.inventory.remove_at(inv_select)
 				player.inventory.append(null)
 					
@@ -267,7 +274,7 @@ func _process(delta):
 		if player.at_item_shop:
 			shop_select.global_position.y = shop_item * 60 + 121
 			if Input.is_action_just_pressed("ui_down"):
-				if shop_item != 4:
+				if shop_item != 5:
 					shop_item += 1
 				else:
 					shop_item = 0
@@ -275,7 +282,7 @@ func _process(delta):
 				if shop_item != 0:
 					shop_item -= 1
 				else:
-					shop_item = 4
+					shop_item = 5
 		
 			if Input.is_action_just_pressed("dodge"):
 				match shop_item:
@@ -294,20 +301,25 @@ func _process(delta):
 								player.inventory_filled += 1
 								purchase_snd.play()
 					2:
+						if player.inventory_filled <= player.inventory_size:
+							if player.money >= 50:
+								player.money -= 50
+								player.inventory[player.inventory.find(null)] = items_in_shop[2]
+								player.inventory_filled += 1
+								purchase_snd.play()
+					3:
 						if player.experience >= hp_cost:
 							player.max_health += 100
 							player.health = player.max_health
 							player.experience -= hp_cost
 							hp_cost *= 2
-
-					3:
+					4:
 						if player.experience >= att_cost:
 							player.att += 1
 							player.health = player.max_health
 							player.experience -= att_cost
 							att_cost *= 2
-
-					4:
+					5:
 						if player.experience >= def_cost:
 							player.def += 1
 							player.health = player.max_health
@@ -438,19 +450,40 @@ func spawn(wave, stage):
 					var kick = kick_enemy.instantiate()
 					kick.global_position = spawner.global_position
 					add_child(kick)
-		if stage > 3:
-			if rng_spawn <= 80:
-				var enemy1 = enemy.instantiate()
-				enemy1.global_position = spawner.global_position
-				add_child(enemy1)
-			elif rng_spawn > 80 && rng_spawn <= 90:
-				var gun = gun_enemy.instantiate()
-				gun.global_position = spawner.global_position
-				add_child(gun)
-			else:
-				var kick = kick_enemy.instantiate()
-				kick.global_position = spawner.global_position
-				add_child(kick)
+			3:
+				if rng_spawn <= 70:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 70 && rng_spawn <= 80:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+				else:
+					var psn = poison_enemy.instantiate()
+					psn.global_positiion = spawner.global_position
+					add_child(psn)
+		if stage > 4:
+				if rng_spawn <= 70:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 70 && rng_spawn <= 80:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+				else:
+					var psn = poison_enemy.instantiate()
+					psn.global_positiion = spawner.global_position
+					add_child(psn)
 
 
 func boss_spawn(wave):

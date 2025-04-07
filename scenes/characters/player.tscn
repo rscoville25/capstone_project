@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=16 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
@@ -26,6 +26,18 @@ albedo_color = Color(0.860337, 0.325215, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_n2qll"]
 material = SubResource("StandardMaterial3D_u6m57")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n6ifl"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+gravity = Vector3(0, 9.8, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uragk"]
+albedo_color = Color(0.675978, 0.459498, 0.881928, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_o84sq"]
+material = SubResource("StandardMaterial3D_uragk")
+radius = 0.01
 
 [sub_resource type="LabelSettings" id="LabelSettings_hsl1y"]
 font_size = 32
@@ -69,6 +81,13 @@ process_material = SubResource("ParticleProcessMaterial_mmspi")
 draw_pass_1 = SubResource("SphereMesh_n2qll")
 
 [node name="chara" parent="." instance=ExtResource("3_hrgne")]
+
+[node name="PoisonFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.93997, 0)
+amount = 256
+speed_scale = 0.25
+process_material = SubResource("ParticleProcessMaterial_n6ifl")
+draw_pass_1 = SubResource("SphereMesh_o84sq")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 modulate = Color(100, 33.513, 0, 1)

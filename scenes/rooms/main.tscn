@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=58 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://da33fnhnpyj6p" path="res://scenes/characters/Runner.tscn" id="6_q7ucr"]
 [ext_resource type="AudioStream" uid="uid://diyerjknhm3qk" path="res://src/sound/music/theme_main.wav" id="7_5wkhf"]
 [ext_resource type="PackedScene" uid="uid://dxmdm1a33kluw" path="res://scenes/characters/bigkick.tscn" id="7_ipmdw"]
+[ext_resource type="PackedScene" uid="uid://d2w8ttetf1x5j" path="res://scenes/characters/poison_enemy.tscn" id="8_13ttr"]
 [ext_resource type="AudioStream" uid="uid://f1ky1tyybcr4" path="res://src/sound/sfx/purchase.mp3" id="8_p8crk"]
 [ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
 [ext_resource type="AudioStream" uid="uid://dq3nk5ikvbriv" path="res://src/sound/music/theme_arp.wav" id="10_extan"]
@@ -138,6 +139,7 @@ gun_enemy = ExtResource("4_fk7vl")
 boss_mirror = ExtResource("5_pjdhp")
 boss_runner = ExtResource("6_q7ucr")
 kick_enemy = ExtResource("7_ipmdw")
+poison_enemy = ExtResource("8_13ttr")
 
 [node name="Purchase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_p8crk")
@@ -339,7 +341,7 @@ mesh = SubResource("BoxMesh_iloob")
 shape = SubResource("BoxShape3D_ld56d")
 
 [node name="ShopCounter" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, -25)
 mesh = SubResource("BoxMesh_4kshd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter"]
@@ -348,7 +350,7 @@ mesh = SubResource("BoxMesh_4kshd")
 shape = SubResource("BoxShape3D_bqtd3")
 
 [node name="Shopkeeper" parent="." instance=ExtResource("6_734e5")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, -13)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, -25)
 
 [node name="Camera3D" type="Camera3D" parent="Shopkeeper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
@@ -360,14 +362,14 @@ light_indirect_energy = 0.0
 sky_mode = 1
 
 [node name="ShopArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.27, 0, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.27, 0, -25)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("BoxShape3D_qk8vd")
 
 [node name="ShopCounter2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 25)
 mesh = SubResource("BoxMesh_4kshd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter2"]
@@ -376,13 +378,13 @@ mesh = SubResource("BoxMesh_4kshd")
 shape = SubResource("BoxShape3D_bqtd3")
 
 [node name="Shopkeeper2" parent="." instance=ExtResource("6_734e5")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 13)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 25)
 
 [node name="Camera3D" type="Camera3D" parent="Shopkeeper2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
 
 [node name="ShopArea2" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.741, 0, 13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.741, 0, 25)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
@@ -442,34 +444,44 @@ offset_bottom = 148.0
 text = "Momentum Boost: $75"
 label_settings = SubResource("LabelSettings_atdns")
 
-[node name="ShopItem3" type="Label" parent="ShopWindow/ItemsUpgrade"]
+[node name="ShopItem6" type="Label" parent="ShopWindow/ItemsUpgrade"]
 layout_mode = 0
 offset_left = 96.0
 offset_top = 141.0
 offset_right = 622.0
 offset_bottom = 208.0
+text = "Poison Cure: $50"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem3" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 201.0
+offset_right = 622.0
+offset_bottom = 268.0
 text = "HP Up: 1xp"
 label_settings = SubResource("LabelSettings_atdns")
 
 [node name="ShopItem4" type="Label" parent="ShopWindow/ItemsUpgrade"]
 layout_mode = 0
 offset_left = 96.0
-offset_top = 201.0
+offset_top = 261.0
 offset_right = 622.0
-offset_bottom = 268.0
+offset_bottom = 328.0
 text = "Attack Up: 1xp"
 label_settings = SubResource("LabelSettings_atdns")
 
 [node name="ShopItem5" type="Label" parent="ShopWindow/ItemsUpgrade"]
 layout_mode = 0
 offset_left = 96.0
-offset_top = 261.0
+offset_top = 321.0
 offset_right = 622.0
-offset_bottom = 328.0
+offset_bottom = 388.0
 text = "Defense Up: 1xp"
 label_settings = SubResource("LabelSettings_atdns")
 
 [node name="Actives" type="Control" parent="ShopWindow"]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0

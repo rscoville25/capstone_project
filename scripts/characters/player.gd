@@ -22,6 +22,7 @@ extends CharacterBody3D
 @onready var activebar : TextureProgressBar = $ActiveCooldown
 @onready var active_box : Area3D = $ActiveBox
 @onready var active_particles : GPUParticles3D = $ActiveParticles
+@onready var poison_fx : GPUParticles3D = $PoisonFX
 
 
 var config = ConfigFile.new()
@@ -63,6 +64,8 @@ var timer = 0
 var stun = 0
 @export var downtime = 3600
 @export var cooldown = 0
+@export var poisoned = false
+var poison_tic = 0
 
 var dge_count = 0
 
@@ -91,6 +94,7 @@ func _ready():
 	heat_fx.emitting = true
 	heat_fx.speed_scale = 3
 	heat_fx.amount_ratio = 0
+	poison_fx.emitting = false
 	at_item_shop = false
 	at_actives_shop = false
 	active_particles.emitting = false
@@ -315,7 +319,13 @@ func _physics_process(delta):
 				else:
 					if direction && !Input.is_action_pressed("fight_stance"):
 						player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
-
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				health -= 10
+		else:
+			poison_fx.emitting = false
 					
 		move_and_slide()
 			
@@ -379,6 +389,10 @@ func hurt(dmg, stn):
 			heat = 0
 		else:	
 			heat -= 1
+			
+func poisoning():
+	if !Input.is_action_pressed("fight_stance"):
+		poisoned = true
 
 func death():
 	_anim_tree["parameters/playback"].travel("Stunned")

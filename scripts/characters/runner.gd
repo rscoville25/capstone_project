@@ -55,7 +55,7 @@ func _physics_process(delta: float) -> void:
 		
 	if Global.pause:
 		velocity.x = 0
-		velocity.y = 0
+		velocity.z = 0
 	else:
 		if health >= 0:
 			if is_hit:
