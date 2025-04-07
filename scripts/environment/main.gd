@@ -56,6 +56,7 @@ var config = ConfigFile.new()
 @onready var ui_defense : Label = $PauseMenuStat/VBoxContainer/Defense
 @onready var ui_ability : Label = $PauseMenuStat/VBoxContainer/Ability
 @onready var death_text : Label = $DeathText
+@onready var purchase_snd : AudioStreamPlayer = $Purchase
 
 # import all of the sounds used for music
 @onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
@@ -284,12 +285,14 @@ func _process(delta):
 								player.money -= 100
 								player.inventory[player.inventory.find(null)] = items_in_shop[0]
 								player.inventory_filled += 1
+								purchase_snd.play()
 					1:
 						if player.inventory_filled <= player.inventory_size:
 							if player.money >= 75:
 								player.money -= 75
 								player.inventory[player.inventory.find(null)] = items_in_shop[1]
 								player.inventory_filled += 1
+								purchase_snd.play()
 					2:
 						if player.experience >= hp_cost:
 							player.max_health += 100
@@ -326,18 +329,21 @@ func _process(delta):
 							player.cur_active = 1
 							player.has_active = true
 							player.cooldown = player.downtime
+							purchase_snd.play()
 					1:
 						if player.money >= 700:
 							player.money -= 700
 							player.cur_active = 2
 							player.has_active = true
 							player.cooldown = player.downtime
+							purchase_snd.play()
 					2:
 						if player.money >= 2000:
 							player.money -= 2000
 							player.cur_active = 3
 							player.has_active = true
 							player.cooldown = player.downtime
+							purchase_snd.play()
 	else:
 		player_camera.current = true
 		shop_window.visible = false
