@@ -14,6 +14,8 @@ const LERP_VALUE : float = 0.15
 @onready var particle_pivot : Marker3D = $dancer/ParticleMarker
 @onready var meialua_particles : GPUParticles3D = $dancer/ParticleMarker/MeiaLuaParticles
 @onready var hit_sound : AudioStreamPlayer3D = $HitSound
+@onready var poison_fx : GPUParticles3D = $PoisonFX
+@onready var poison_snd : AudioStreamPlayer3D = $PoisonSound
 
 var death_timer : int
 var attack_timer : int
@@ -23,6 +25,9 @@ var max_health = health
 var attacking = false
 var rnd_delay = 0
 var is_hit = false
+
+var poisoned = false
+var poison_tic = 0
 
 var att_type = 0
 
@@ -35,6 +40,7 @@ func _ready():
 	heatlhbar.value = health
 	heatlhbar.max_value = max_health
 	meialua_particles.emitting = false
+	poison_fx.emitting = false
 
 func _physics_process(delta):
 	heatlhbar.value = health
@@ -45,11 +51,10 @@ func _physics_process(delta):
 	var local_destination = destination - cur_location
 	var direction = local_destination.normalized()
 	
-
 	
 	if Global.pause:
 		velocity.x = 0
-		velocity.y = 0
+		velocity.z = 0
 	else:
 		if health >= 0:
 			if is_hit:
@@ -74,7 +79,6 @@ func _physics_process(delta):
 					else:
 						meialua_particles.emitting = false
 		else:
-
 			death()
 			death_timer += 1
 			if death_timer >= 65:
@@ -82,6 +86,13 @@ func _physics_process(delta):
 				Global.enemies_defeated += 1
 				Global.stage += 1
 				queue_free()
+		
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				poison_snd.play()
+				health -= 50
 				
 		if not is_on_floor():
 			velocity += get_gravity() * delta
@@ -94,7 +105,10 @@ func hit(dmg):
 	death_timer = 0
 	is_hit = true
 	health -= dmg
-	
+
+func poison():
+	poisoned = true
+
 func death():
 	live_box.disabled = true
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=16 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
@@ -10,8 +10,40 @@
 radius = 1.81226
 height = 10.3736
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_he2j2"]
+radius = 15.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mmspi"]
+emission_shape = 1
+emission_sphere_radius = 15.0
+direction = Vector3(1, 90, 0)
+spread = 84.036
+initial_velocity_max = 17.24
+gravity = Vector3(0, 9.8, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u6m57"]
+albedo_color = Color(0.860337, 0.325215, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_n2qll"]
+material = SubResource("StandardMaterial3D_u6m57")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n6ifl"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+gravity = Vector3(0, 9.8, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uragk"]
+albedo_color = Color(0.675978, 0.459498, 0.881928, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_o84sq"]
+material = SubResource("StandardMaterial3D_uragk")
+radius = 0.01
+
 [sub_resource type="LabelSettings" id="LabelSettings_hsl1y"]
 font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_0jrv4"]
+font_size = 24
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_c7bmg")
@@ -24,6 +56,11 @@ shape = SubResource("CapsuleShape3D_3ec55")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5.20198, 0)
 shape = SubResource("CapsuleShape3D_3ec55")
 
+[node name="ActiveBox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ActiveBox"]
+shape = SubResource("SphereShape3D_he2j2")
+
 [node name="SpringArmPivot" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 7.31316, 0)
 script = ExtResource("2_0npem")
@@ -35,7 +72,22 @@ spring_length = 15.0
 [node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 0.991687, 0.128674, 0, -0.128674, 0.991687, 0, 0.386555, -0.733664)
 
+[node name="ActiveParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1080
+lifetime = 0.64
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_mmspi")
+draw_pass_1 = SubResource("SphereMesh_n2qll")
+
 [node name="chara" parent="." instance=ExtResource("3_hrgne")]
+
+[node name="PoisonFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.93997, 0)
+amount = 256
+speed_scale = 0.25
+process_material = SubResource("ParticleProcessMaterial_n6ifl")
+draw_pass_1 = SubResource("SphereMesh_o84sq")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 modulate = Color(100, 33.513, 0, 1)
@@ -125,3 +177,26 @@ offset_right = 50.0
 offset_bottom = 13.0
 text = "1"
 label_settings = SubResource("LabelSettings_hsl1y")
+
+[node name="ActiveCooldown" type="TextureProgressBar" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -177.0
+offset_right = 49.0
+offset_bottom = -176.0
+grow_vertical = 0
+scale = Vector2(64, 128)
+max_value = 3600.0
+fill_mode = 3
+texture_progress = ExtResource("4_kwek8")
+
+[node name="Label" type="Label" parent="ActiveCooldown"]
+layout_mode = 0
+offset_top = 1.0
+offset_right = 86.0
+offset_bottom = 35.0
+scale = Vector2(0.016, 0.008)
+text = "Ability"
+label_settings = SubResource("LabelSettings_0jrv4")

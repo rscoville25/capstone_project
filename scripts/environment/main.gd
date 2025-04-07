@@ -8,6 +8,8 @@ var config = ConfigFile.new()
 @export var boss_mirror : PackedScene
 @export var boss_runner : PackedScene
 @export var kick_enemy : PackedScene
+@export var poison_enemy : PackedScene
+@export var boss_giant : PackedScene
 
 @onready var player : CharacterBody3D = $Player
 @onready var input_prompt : TextureRect = $Player/InputPrompt
@@ -25,12 +27,15 @@ var config = ConfigFile.new()
 @onready var shop_camera : Camera3D = $Shopkeeper/Camera3D
 @onready var shop_area : Area3D = $ShopArea
 @onready var shop_window : ColorRect = $ShopWindow
+@onready var upgrade_shop : Control = $ShopWindow/ItemsUpgrade
+@onready var actives_shop : Control = $ShopWindow/Actives
 @onready var shop_select : Label = $ShopWindow/ShopSelect
-@onready var shop_item1 : Label = $ShopWindow/ShopItem1
-@onready var shop_item2 : Label = $ShopWindow/ShopItem2
-@onready var shop_item3 : Label = $ShopWindow/ShopItem3
-@onready var shop_item4 : Label = $ShopWindow/ShopItem4
-@onready var shop_item5 : Label = $ShopWindow/ShopItem5
+@onready var shop_item3 : Label = $ShopWindow/ItemsUpgrade/ShopItem3
+@onready var shop_item4 : Label = $ShopWindow/ItemsUpgrade/ShopItem4
+@onready var shop_item5 : Label = $ShopWindow/ItemsUpgrade/ShopItem5
+@onready var active1 : Label = $ShopWindow/Actives/Active1
+@onready var active2 : Label = $ShopWindow/Actives/Active2
+@onready var active3 : Label = $ShopWindow/Actives/Active3
 @onready var pause_menu_inv : ColorRect = $PauseMenuInv
 @onready var item1 : Label = $PauseMenuInv/VBoxContainer/Item1
 @onready var item2 : Label = $PauseMenuInv/VBoxContainer/Item2
@@ -49,7 +54,9 @@ var config = ConfigFile.new()
 @onready var ui_health_max : Label = $PauseMenuStat/VBoxContainer/HealthMax
 @onready var ui_attack : Label = $PauseMenuStat/VBoxContainer/Attack
 @onready var ui_defense : Label = $PauseMenuStat/VBoxContainer/Defense
+@onready var ui_ability : Label = $PauseMenuStat/VBoxContainer/Ability
 @onready var death_text : Label = $DeathText
+@onready var purchase_snd : AudioStreamPlayer = $Purchase
 
 # import all of the sounds used for music
 @onready var theme_drums1 : AudioStreamPlayer = $DrumBreak
@@ -62,9 +69,12 @@ var config = ConfigFile.new()
 
 var spawn_time = 0
 var shop_item = 0
+var active_item = 0
 var inv_select = 0
+var has_active = false
 
-var items_in_shop = ["Health Restore", "Momentum Boost", "HP Up", "Attack Up", "Defense Up" ]
+var items_in_shop = ["Health Restore", "Momentum Boost", "Poison Cure", "HP Up", "Attack Up", "Defense Up" ]
+var actives = ["None", "Burst", "Poison Cloud", "Touch of Death"]
 var hp_cost = 1
 var att_cost = 1
 var def_cost = 1
@@ -76,6 +86,7 @@ func _ready():
 		Global.tutorial_splash = false
 	else:
 		Global.tutorial_splash = true
+		Global.stage = 1
 		Global.enemies_defeated = 0
 		Global.enemies_spawned = 0
 	Global.shop_time = true
@@ -87,6 +98,8 @@ func _ready():
 	pause_menu_inv.visible = false
 	pause_menu_stat.visible = false
 	death_text.visible = false
+	upgrade_shop.visible = false
+	actives_shop.visible = false
 	
 	# the initial volume for each instrument, based on how it should sound during shop time
 	theme_drums1.volume_db = -60
@@ -207,6 +220,7 @@ func _process(delta):
 			ui_health_max.text = "Max HP: %s" % [str(player.max_health)]
 			ui_attack.text = "Attack: %s" % [str(player.att)]
 			ui_defense.text = "Defense: %s" % [str(player.def)]
+			ui_ability.text = "Ability: %s" % [actives[player.cur_active % 3]]
 			pause_text.visible = true
 			inv_pointer.global_position.y = 24 * inv_select + 98
 			
@@ -233,6 +247,11 @@ func _process(delta):
 					player.heat = 100
 					player.inventory[inv_select] = null
 					player.inventory_filled -= 1
+				else:
+					player.poisoned = false
+					player.inventory[inv_select] = null
+					player.inventory_filled -= 1
+					
 				player.inventory.remove_at(inv_select)
 				player.inventory.append(null)
 					
@@ -250,53 +269,91 @@ func _process(delta):
 		ui_text.visible = false
 		input_prompt.visible = false
 		shop_window.visible = true
-		shop_select.global_position.y = shop_item * 60 + 121
-		if Input.is_action_just_pressed("ui_down"):
-			if shop_item != 4:
-				shop_item += 1
-			else:
-				shop_item = 0
-		if Input.is_action_just_pressed("ui_up"):
-			if shop_item != 0:
-				shop_item -= 1
-			else:
-				shop_item = 4
+		if player.at_item_shop:
+			shop_select.global_position.y = shop_item * 60 + 121
+			if Input.is_action_just_pressed("ui_down"):
+				if shop_item != 5:
+					shop_item += 1
+				else:
+					shop_item = 0
+			if Input.is_action_just_pressed("ui_up"):
+				if shop_item != 0:
+					shop_item -= 1
+				else:
+					shop_item = 5
 		
-		if Input.is_action_just_pressed("dodge"):
-			match shop_item:
-				0:
-					if player.inventory_filled <= player.inventory_size:
-						if player.money >= 100:
-							player.money -= 100
-							player.inventory[player.inventory.find(null)] = items_in_shop[0]
-							player.inventory_filled += 1
-				1:
-					if player.inventory_filled <= player.inventory_size:
-						if player.money >= 75:
-							player.money -= 75
-							player.inventory[player.inventory.find(null)] = items_in_shop[1]
-							player.inventory_filled += 1
-				2:
-					if player.experience >= hp_cost:
-						player.max_health += 100
-						player.health = player.max_health
-						player.experience -= hp_cost
-						hp_cost *= 2
+			if Input.is_action_just_pressed("dodge"):
+				match shop_item:
+					0:
+						if player.inventory_filled <= player.inventory_size:
+							if player.money >= 100:
+								player.money -= 100
+								player.inventory[player.inventory.find(null)] = items_in_shop[0]
+								player.inventory_filled += 1
+								purchase_snd.play()
+					1:
+						if player.inventory_filled <= player.inventory_size:
+							if player.money >= 75:
+								player.money -= 75
+								player.inventory[player.inventory.find(null)] = items_in_shop[1]
+								player.inventory_filled += 1
+								purchase_snd.play()
+					2:
+						if player.inventory_filled <= player.inventory_size:
+							if player.money >= 50:
+								player.money -= 50
+								player.inventory[player.inventory.find(null)] = items_in_shop[2]
+								player.inventory_filled += 1
+								purchase_snd.play()
+					3:
+						if player.experience >= hp_cost:
+							player.max_health += 100
+							player.health = player.max_health
+							player.experience -= hp_cost
+							hp_cost *= 2
+					4:
+						if player.experience >= att_cost:
+							player.att += 1
+							player.health = player.max_health
+							player.experience -= att_cost
+							att_cost *= 2
+					5:
+						if player.experience >= def_cost:
+							player.def += 1
+							player.health = player.max_health
+							player.experience -= def_cost
+							def_cost *= 2
 
-				3:
-					if player.experience >= att_cost:
-						player.att += 1
-						player.health = player.max_health
-						player.experience -= att_cost
-						att_cost *= 2
-
-				4:
-					if player.experience >= def_cost:
-						player.def += 1
-						player.health = player.max_health
-						player.experience -= def_cost
-						def_cost *= 2
-
+		if player.at_actives_shop:
+			shop_select.global_position.y = (active_item % 3) * 60 + 121
+			if Input.is_action_just_pressed("ui_down"):
+				active_item += 1
+			if Input.is_action_just_pressed("ui_up"):
+				active_item -= 1
+						
+			if Input.is_action_just_pressed("dodge"):
+				match active_item % 3:
+					0:
+						if player.money >= 1000:
+							player.money -= 1000
+							player.cur_active = 1
+							player.has_active = true
+							player.cooldown = player.downtime
+							purchase_snd.play()
+					1:
+						if player.money >= 700:
+							player.money -= 700
+							player.cur_active = 2
+							player.has_active = true
+							player.cooldown = player.downtime
+							purchase_snd.play()
+					2:
+						if player.money >= 2000:
+							player.money -= 2000
+							player.cur_active = 3
+							player.has_active = true
+							player.cooldown = player.downtime
+							purchase_snd.play()
 	else:
 		player_camera.current = true
 		shop_window.visible = false
@@ -323,7 +380,7 @@ func _process(delta):
 					Global.shop_time = false
 			# shop door open during shop time
 			door.global_transform.origin.y = -25
-			if player.at_shop:
+			if player.at_item_shop || player.at_actives_shop:
 				input_prompt.visible = true
 				if Input.is_action_just_pressed("interact"):
 					if !Global.buying:
@@ -391,41 +448,76 @@ func spawn(wave, stage):
 					var kick = kick_enemy.instantiate()
 					kick.global_position = spawner.global_position
 					add_child(kick)
-		if stage > 3:
-			if rng_spawn <= 80:
-				var enemy1 = enemy.instantiate()
-				enemy1.global_position = spawner.global_position
-				add_child(enemy1)
-			elif rng_spawn > 80 && rng_spawn <= 90:
-				var gun = gun_enemy.instantiate()
-				gun.global_position = spawner.global_position
-				add_child(gun)
-			else:
-				var kick = kick_enemy.instantiate()
-				kick.global_position = spawner.global_position
-				add_child(kick)
+			3:
+				if rng_spawn <= 70:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 70 && rng_spawn <= 80:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+				else:
+					var psn = poison_enemy.instantiate()
+					psn.global_positiion = spawner.global_position
+					add_child(psn)
+		if stage > 4:
+				if rng_spawn <= 70:
+					var enemy1 = enemy.instantiate()
+					enemy1.global_position = spawner.global_position
+					add_child(enemy1)
+				elif rng_spawn > 70 && rng_spawn <= 80:
+					var gun = gun_enemy.instantiate()
+					gun.global_position = spawner.global_position
+					add_child(gun)
+				elif rng_spawn > 80 && rng_spawn <= 90:
+					var kick = kick_enemy.instantiate()
+					kick.global_position = spawner.global_position
+					add_child(kick)
+				else:
+					var psn = poison_enemy.instantiate()
+					psn.global_positiion = spawner.global_position
+					add_child(psn)
 
 
 func boss_spawn(wave):
 	if wave % 4 == 0:
-		var rng_boss = randi_range(0, 2)
+		var rng_boss = randi_range(0, 3)
 		match rng_boss:
 			0:
-				var boss = boss_mirror.instantiate()
+				var boss = boss_dancer.instantiate()
 				add_child(boss)
 			1:
-				var boss = boss_dancer.instantiate()
+				var boss = boss_mirror.instantiate()
 				add_child(boss)
 			2:
 				var boss = boss_runner.instantiate()
 				add_child(boss)
+			3:
+				var boss = boss_giant.instantiate()
+				add_child(boss)
 
 func _on_shop_area_area_entered(area: Area3D) -> void:
-	player.at_shop = true
+	player.at_item_shop = true
+	upgrade_shop.visible = true
 
 func _on_shop_area_area_exited(area: Area3D) -> void:
-	player.at_shop = false
-	
+	player.at_item_shop = false
+	upgrade_shop.visible = false
+
+func _on_shop_area_2_area_entered(area: Area3D) -> void:
+	player.at_actives_shop = true
+	actives_shop.visible = true
+
+func _on_shop_area_2_area_exited(area: Area3D) -> void:
+	player.at_actives_shop = false
+	actives_shop.visible = false
+
+
 func save():
 	config.set_value("Shop", "health_cost", hp_cost)
 	config.set_value("Shop", "attack_cost", att_cost)

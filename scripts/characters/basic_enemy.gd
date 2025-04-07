@@ -11,6 +11,8 @@ const LERP_VALUE : float = 0.15
 @onready var hitbox : Area3D = $chara/HitboxLight
 @onready var heat_fx : GPUParticles3D = $chara/HeatParticles
 @onready var anim_player: AnimationPlayer = $chara/AnimationPlayer
+@onready var poison_fx : GPUParticles3D = $PoisonFX
+@onready var poison_snd : AudioStreamPlayer3D = $PoisonSound
 
 var death_timer : int
 var attack_timer : int
@@ -21,6 +23,9 @@ var attacking = false
 var rnd_delay = 0
 var is_hit = false
 
+var poisoned = false
+var poison_tic = 0
+
 
 func _ready():
 	death_box.disabled = true
@@ -28,6 +33,7 @@ func _ready():
 	death_timer = 0
 	attack_timer = 0
 	heat_fx.emitting = false
+	poison_fx.emitting = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):	
@@ -41,7 +47,7 @@ func _physics_process(delta):
 		
 	if Global.pause:
 		velocity.x = 0
-		velocity.y = 0
+		velocity.z = 0
 	else:
 		if health >= 0:
 			if is_hit:
@@ -67,6 +73,13 @@ func _physics_process(delta):
 				Global.enemies_defeated += 1
 				queue_free()
 		
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				poison_snd.play()
+				health -= 50
+		
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 
@@ -77,7 +90,10 @@ func hit(dmg):
 	death_timer = 0
 	is_hit = true
 	health -= dmg
-	
+
+func poison():
+	poisoned = true
+
 func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
 	death_box.disabled = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cla4d7lh6kean"]
+[gd_scene load_steps=59 format=3 uid="uid://cla4d7lh6kean"]
 
 [ext_resource type="Script" path="res://scripts/environment/main.gd" id="1_ldvck"]
 [ext_resource type="PackedScene" uid="uid://bnysjrldq7hr4" path="res://scenes/characters/player.tscn" id="1_m5ix2"]
@@ -17,7 +17,10 @@
 [ext_resource type="PackedScene" uid="uid://da33fnhnpyj6p" path="res://scenes/characters/Runner.tscn" id="6_q7ucr"]
 [ext_resource type="AudioStream" uid="uid://diyerjknhm3qk" path="res://src/sound/music/theme_main.wav" id="7_5wkhf"]
 [ext_resource type="PackedScene" uid="uid://dxmdm1a33kluw" path="res://scenes/characters/bigkick.tscn" id="7_ipmdw"]
+[ext_resource type="PackedScene" uid="uid://d2w8ttetf1x5j" path="res://scenes/characters/poison_enemy.tscn" id="8_13ttr"]
+[ext_resource type="AudioStream" uid="uid://f1ky1tyybcr4" path="res://src/sound/sfx/purchase.mp3" id="8_p8crk"]
 [ext_resource type="AudioStream" uid="uid://iurs226wrmte" path="res://src/sound/music/theme_guitar.wav" id="9_0tfig"]
+[ext_resource type="PackedScene" uid="uid://c6wx1xx0xpjud" path="res://scenes/characters/boss_giant.tscn" id="9_xefnk"]
 [ext_resource type="AudioStream" uid="uid://dq3nk5ikvbriv" path="res://src/sound/music/theme_arp.wav" id="10_extan"]
 [ext_resource type="Script" path="res://scripts/environment/minimap.gd" id="14_v5rn7"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="15_b31mj"]
@@ -98,7 +101,13 @@ size = Vector3(5, 4, 20)
 size = Vector3(5, 4, 20)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qk8vd"]
-size = Vector3(5, 100, 20)
+size = Vector3(5, 100, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wfsj6"]
+size = Vector3(5, 100, 15)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b3kk4"]
+font_size = 48
 
 [sub_resource type="SystemFont" id="SystemFont_wli0h"]
 
@@ -107,8 +116,9 @@ font = SubResource("SystemFont_wli0h")
 font_size = 48
 font_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_b3kk4"]
+[sub_resource type="LabelSettings" id="LabelSettings_81pmp"]
 font_size = 48
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_miuc8"]
 font_color = Color(0, 0, 0, 1)
@@ -130,6 +140,11 @@ gun_enemy = ExtResource("4_fk7vl")
 boss_mirror = ExtResource("5_pjdhp")
 boss_runner = ExtResource("6_q7ucr")
 kick_enemy = ExtResource("7_ipmdw")
+poison_enemy = ExtResource("8_13ttr")
+boss_giant = ExtResource("9_xefnk")
+
+[node name="Purchase" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_p8crk")
 
 [node name="DrumBreak" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_8ly2g")
@@ -328,7 +343,7 @@ mesh = SubResource("BoxMesh_iloob")
 shape = SubResource("BoxShape3D_ld56d")
 
 [node name="ShopCounter" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, -25)
 mesh = SubResource("BoxMesh_4kshd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter"]
@@ -337,7 +352,7 @@ mesh = SubResource("BoxMesh_4kshd")
 shape = SubResource("BoxShape3D_bqtd3")
 
 [node name="Shopkeeper" parent="." instance=ExtResource("6_734e5")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, -25)
 
 [node name="Camera3D" type="Camera3D" parent="Shopkeeper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
@@ -349,10 +364,33 @@ light_indirect_energy = 0.0
 sky_mode = 1
 
 [node name="ShopArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.27, 0, -25)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("BoxShape3D_qk8vd")
+
+[node name="ShopCounter2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 25)
+mesh = SubResource("BoxMesh_4kshd")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopCounter2/StaticBody3D"]
+shape = SubResource("BoxShape3D_bqtd3")
+
+[node name="Shopkeeper2" parent="." instance=ExtResource("6_734e5")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 25)
+
+[node name="Camera3D" type="Camera3D" parent="Shopkeeper2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
+
+[node name="ShopArea2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.741, 0, 25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
+shape = SubResource("BoxShape3D_wfsj6")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 4.0
@@ -369,57 +407,11 @@ scale = Vector2(4, 4)
 text = "- Pause -"
 
 [node name="ShopWindow" type="ColorRect" parent="."]
-visible = false
 offset_left = 1175.0
 offset_top = 101.0
 offset_right = 1825.0
 offset_bottom = 901.0
 color = Color(0.733005, 0.733005, 0.733005, 1)
-
-[node name="ShopItem1" type="Label" parent="ShopWindow"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 21.0
-offset_right = 576.0
-offset_bottom = 88.0
-text = "Health Restore: $100"
-label_settings = SubResource("LabelSettings_atdns")
-
-[node name="ShopItem2" type="Label" parent="ShopWindow"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 81.0
-offset_right = 576.0
-offset_bottom = 148.0
-text = "Momentum Boost: $75"
-label_settings = SubResource("LabelSettings_atdns")
-
-[node name="ShopItem3" type="Label" parent="ShopWindow"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 141.0
-offset_right = 622.0
-offset_bottom = 208.0
-text = "HP Up: 1xp"
-label_settings = SubResource("LabelSettings_atdns")
-
-[node name="ShopItem4" type="Label" parent="ShopWindow"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 201.0
-offset_right = 622.0
-offset_bottom = 268.0
-text = "Attack Up: 1xp"
-label_settings = SubResource("LabelSettings_atdns")
-
-[node name="ShopItem5" type="Label" parent="ShopWindow"]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 261.0
-offset_right = 622.0
-offset_bottom = 328.0
-text = "Defense Up: 1xp"
-label_settings = SubResource("LabelSettings_atdns")
 
 [node name="ShopSelect" type="Label" parent="ShopWindow"]
 modulate = Color(0, 0, 0, 1)
@@ -430,6 +422,92 @@ offset_right = 74.0
 offset_bottom = 87.0
 text = "->"
 label_settings = SubResource("LabelSettings_b3kk4")
+
+[node name="ItemsUpgrade" type="Control" parent="ShopWindow"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ShopItem1" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 21.0
+offset_right = 576.0
+offset_bottom = 88.0
+text = "Health Restore: $100"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem2" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 81.0
+offset_right = 622.0
+offset_bottom = 148.0
+text = "Momentum Boost: $75"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem6" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 141.0
+offset_right = 622.0
+offset_bottom = 208.0
+text = "Poison Cure: $50"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem3" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 201.0
+offset_right = 622.0
+offset_bottom = 268.0
+text = "HP Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem4" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 261.0
+offset_right = 622.0
+offset_bottom = 328.0
+text = "Attack Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="ShopItem5" type="Label" parent="ShopWindow/ItemsUpgrade"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 321.0
+offset_right = 622.0
+offset_bottom = 388.0
+text = "Defense Up: 1xp"
+label_settings = SubResource("LabelSettings_atdns")
+
+[node name="Actives" type="Control" parent="ShopWindow"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Active1" type="Label" parent="ShopWindow/Actives"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 21.0
+offset_right = 611.0
+offset_bottom = 228.0
+text = "Burst: $1000
+Poison: $700
+Touch of Death: $2000"
+label_settings = SubResource("LabelSettings_81pmp")
+
+[node name="Active2" type="Label" parent="ShopWindow/Actives"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Active3" type="Label" parent="ShopWindow/Actives"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="PauseMenuInv" type="ColorRect" parent="."]
 offset_left = 25.0
@@ -540,6 +618,11 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="Defense" type="Label" parent="PauseMenuStat/VBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Ability" type="Label" parent="PauseMenuStat/VBoxContainer"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 horizontal_alignment = 1
@@ -731,3 +814,5 @@ horizontal_alignment = 1
 
 [connection signal="area_entered" from="ShopArea" to="." method="_on_shop_area_area_entered"]
 [connection signal="area_exited" from="ShopArea" to="." method="_on_shop_area_area_exited"]
+[connection signal="area_entered" from="ShopArea2" to="." method="_on_shop_area_2_area_entered"]
+[connection signal="area_exited" from="ShopArea2" to="." method="_on_shop_area_2_area_exited"]

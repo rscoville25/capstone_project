@@ -1,12 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://ut5dm2yd6t75"]
+[gd_scene load_steps=10 format=3 uid="uid://ut5dm2yd6t75"]
 
 [ext_resource type="Script" path="res://scripts/characters/boss_1.gd" id="1_sknxe"]
 [ext_resource type="PackedScene" uid="uid://db42jlrkwr41h" path="res://scenes/characters/bases/dancer.tscn" id="2_6he3u"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="3_rp1ah"]
+[ext_resource type="AudioStream" uid="uid://g5edwu8xbrdx" path="res://src/sound/sfx/punch-41105.mp3" id="4_7ndkt"]
+[ext_resource type="AudioStream" uid="uid://dujd7f8hakkv1" path="res://src/sound/sfx/poison_proc.wav" id="5_gl568"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q1evk"]
 radius = 1.431
 height = 10.654
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wqqul"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+gravity = Vector3(0, 9.8, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lhl07"]
+albedo_color = Color(0.675978, 0.459498, 0.881928, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_t2laj"]
+material = SubResource("StandardMaterial3D_lhl07")
+radius = 0.01
 
 [node name="Boss1" type="CharacterBody3D" groups=["enemies_g"]]
 script = ExtResource("1_sknxe")
@@ -37,6 +51,7 @@ scale = Vector2(1000, 50)
 max_value = 5000.0
 value = 5000.0
 texture_progress = ExtResource("3_rp1ah")
+metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="."]
 offset_left = 492.0
@@ -44,7 +59,20 @@ offset_top = 925.0
 offset_right = 548.0
 offset_bottom = 948.0
 text = "Dancer"
+metadata/_edit_use_anchors_ = true
 
 [node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_7ndkt")
+
+[node name="PoisonFX" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.93997, 0)
+amount = 256
+speed_scale = 0.25
+process_material = SubResource("ParticleProcessMaterial_wqqul")
+draw_pass_1 = SubResource("SphereMesh_t2laj")
+
+[node name="PoisonSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_gl568")
+volume_db = 5.0
 
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

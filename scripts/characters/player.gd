@@ -19,6 +19,11 @@ extends CharacterBody3D
 @onready var ui_stage : Label = $Stage/Number
 @onready var ui_wave : Label = $Wave/Number
 @onready var heatbar : TextureProgressBar = $MomentumBar
+@onready var activebar : TextureProgressBar = $ActiveCooldown
+@onready var active_box : Area3D = $ActiveBox
+@onready var active_particles : GPUParticles3D = $ActiveParticles
+@onready var poison_fx : GPUParticles3D = $PoisonFX
+
 
 var config = ConfigFile.new()
 
@@ -36,6 +41,12 @@ var attacking = false
 var attacks = ["none", "light", "medium", "heavy"]
 var cur_attack = attacks[0]
 
+@export var has_active = false
+var actives = ["None", "Burst", "Poison Cloud", "Touch of Death"]
+var tod_len = 600
+var tod_active = false
+@export var cur_active = 0
+
 @export var inventory_size = 9
 @export var inventory_filled = 0
 @export var inventory = [null, null, null, null, null, null, null, null, null, null]
@@ -51,11 +62,17 @@ var cur_attack = attacks[0]
 # timer for stuff, as well as stun value and dodge count
 var timer = 0
 var stun = 0
+@export var downtime = 3600
+@export var cooldown = 0
+@export var poisoned = false
+var poison_tic = 0
+
 var dge_count = 0
 
 var is_hurt = false
 @export var is_in_arena = true
-@export var at_shop = false
+@export var at_item_shop = false
+@export var at_actives_shop = false
 var move_target : Vector3 = Vector3(0.0, 0.0, 0.0)
 
 func _ready():
@@ -77,9 +94,13 @@ func _ready():
 	heat_fx.emitting = true
 	heat_fx.speed_scale = 3
 	heat_fx.amount_ratio = 0
-	at_shop = false
+	poison_fx.emitting = false
+	at_item_shop = false
+	at_actives_shop = false
+	active_particles.emitting = false
 	
 func _physics_process(delta):
+	print(at_actives_shop)
 	ui_stage.text = str(Global.stage)
 	ui_wave.text = str(Global.wave)
 	if Global.dead:
@@ -112,14 +133,27 @@ func _physics_process(delta):
 		save()
 		ui_saved.visible = true
 		ui_hp.visible = false
+		heatbar.visible = false
 
 	else:
 		ui_saved.visible = false
 		ui_hp.visible = true
-
+		heatbar.visible = true
 	
 	_anim_tree["parameters/playback"].travel("Idle")
 	dodge_fx.emitting = false
+	
+	if !has_active:
+		activebar.visible = false
+	else:
+		activebar.visible = true
+		activebar.value = cooldown
+		activebar.max_value = downtime
+		if cooldown < downtime && !Global.shop_time:
+			cooldown += 1
+		if cooldown >= downtime:
+			if Input.is_action_just_pressed("interact") && !Global.shop_time:
+				use_ability(cur_active)
 	
 	# UI business
 	ui_hp.value = health
@@ -136,6 +170,11 @@ func _physics_process(delta):
 		velocity.x = 0
 		velocity.z = 0
 	else:
+		if tod_active:
+			tod_len -= 1
+			if tod_len <= 0:
+				tod_active = false
+		
 		heat_fx.speed_scale = 2.8
 		dodge_fx.speed_scale = 1
 		kick_fx.speed_scale = 1
@@ -171,7 +210,10 @@ func _physics_process(delta):
 							heat += 1
 							if heat > 100:
 								heat = 100
-							light_attack(att, heat)
+							if !tod_active:
+								light_attack(att, heat)
+							else:
+								light_attack(100, heat)
 							
 					if Input.is_action_pressed("medium_attack") && !Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
@@ -181,7 +223,10 @@ func _physics_process(delta):
 							heat += 2
 							if heat > 100:
 								heat = 100
-							medium_attack(att, heat)
+							if !tod_active:
+								medium_attack(att, heat)
+							else:
+								medium_attack(100, heat)
 							
 					if Input.is_action_pressed("heavy_attack")  && !Input.is_action_pressed("dodge"):
 						timer += 1
@@ -191,7 +236,10 @@ func _physics_process(delta):
 							heat += 3					
 							if heat > 100:
 								heat = 100
-							heavy_attack(att, heat)
+							if !tod_active:
+								heavy_attack(att, heat)
+							else:
+								heavy_attack(100, heat)
 						if (timer % 77) >= 30 && (timer % 77) <= 38:
 							kick_fx.emitting = true
 
@@ -271,7 +319,13 @@ func _physics_process(delta):
 				else:
 					if direction && !Input.is_action_pressed("fight_stance"):
 						player_mesh.rotation.y = lerp_angle(player_mesh.rotation.y, atan2(velocity.x, velocity.z), LERP_VALUE)
-
+		if poisoned:
+			poison_fx.emitting = true
+			poison_tic += 1
+			if poison_tic % 60 == 0:
+				health -= 10
+		else:
+			poison_fx.emitting = false
 					
 		move_and_slide()
 			
@@ -298,7 +352,28 @@ func heavy_attack(power, bonus):
 	for e in enemies_hit:
 		if e.has_method("hit"):
 			e.hit(damage)
-	
+
+func use_ability(current: int):
+	match current:
+		1:
+			var enemies_hit = active_box.get_overlapping_bodies()
+			var damage = 1000
+			active_particles.emitting = true
+			for e in enemies_hit:
+				if e.has_method("hit"):
+					e.hit(damage)
+		2:
+			var enemies_hit = active_box.get_overlapping_bodies()
+			active_particles.emitting = true
+			for e in enemies_hit:
+				if e.has_method("poison"):
+					e.poison()
+		3:
+			tod_active = true
+			tod_len = 600
+			
+	cooldown = 0
+
 func hurt(dmg, stn):
 	is_hurt = true
 	if !Input.is_action_pressed("fight_stance"):
@@ -314,6 +389,10 @@ func hurt(dmg, stn):
 			heat = 0
 		else:	
 			heat -= 1
+			
+func poisoning():
+	if !Input.is_action_pressed("fight_stance"):
+		poisoned = true
 
 func death():
 	_anim_tree["parameters/playback"].travel("Stunned")
@@ -324,6 +403,7 @@ func death():
 func save():
 	config.set_value("Inventory", "inventory", inventory)
 	config.set_value("Inventory", "inventory_filled", inventory_filled)
+	config.set_value("Inventory", "cur_active", cur_active)
 	config.set_value("Stats", "hp", health)
 	config.set_value("Stats", "max_hp", max_health)
 	config.set_value("Stats", "attack", att)
@@ -338,10 +418,11 @@ func load_data():
 	if load != OK:
 		return
 	inventory = config.get_value("Inventory", "inventory")
-	inventory_filled = config.get_value("Inventory", "inventory_filled")
-	health = config.get_value("Stats", "hp")
-	max_health = config.get_value("Stats", "max_hp")
-	att = config.get_value("Stats", "attack")
-	def = config.get_value("Stats", "defense")
-	money = config.get_value("Stats", "money")
-	experience = config.get_value("Stats", "exp")
+	inventory_filled = config.get_value("Inventory", "inventory_filled", 0)
+	cur_active = config.get_value("Inventory", "cur_active", 0)
+	health = config.get_value("Stats", "hp", 1000)
+	max_health = config.get_value("Stats", "max_hp", 1000)
+	att = config.get_value("Stats", "attack", 1)
+	def = config.get_value("Stats", "defense", 1)
+	money = config.get_value("Stats", "money", 1)
+	experience = config.get_value("Stats", "exp", 0)

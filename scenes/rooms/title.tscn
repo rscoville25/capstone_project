@@ -139,8 +139,8 @@ grow_vertical = 2
 
 [node name="Pointer" type="Label" parent="Options"]
 layout_mode = 2
-offset_left = 208.0
-offset_right = 236.0
+offset_left = 159.0
+offset_right = 187.0
 offset_bottom = 34.0
 text = "-> "
 label_settings = SubResource("LabelSettings_gd6ot")
@@ -159,10 +159,20 @@ layout_mode = 2
 text = "Fullscreen:"
 label_settings = SubResource("LabelSettings_etvkv")
 
+[node name="Resolution" type="Label" parent="Options/HBoxContainer/Option"]
+layout_mode = 2
+text = "Resolution:"
+label_settings = SubResource("LabelSettings_etvkv")
+
 [node name="OnOff" type="VBoxContainer" parent="Options/HBoxContainer"]
 layout_mode = 2
 
 [node name="Fullscreen" type="Label" parent="Options/HBoxContainer/OnOff"]
 layout_mode = 2
 text = " Off"
+label_settings = SubResource("LabelSettings_1o2v1")
+
+[node name="Resolution" type="Label" parent="Options/HBoxContainer/OnOff"]
+layout_mode = 2
+text = " 1920x1080"
 label_settings = SubResource("LabelSettings_1o2v1")

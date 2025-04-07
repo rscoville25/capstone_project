@@ -11,6 +11,7 @@ extends Node3D
 @onready var option_menu : ColorRect = $Options
 @onready var option_pointer : Label = $Options/Pointer
 @onready var fullscreen_opt : Label = $Options/HBoxContainer/OnOff/Fullscreen
+@onready var ui_res : Label = $Options/HBoxContainer/OnOff/Resolution
 
 var select_timer = 0
 var start_timer = false
@@ -18,6 +19,9 @@ var option_select = false
 var option = 0
 
 var game_picked = 0
+
+const RESOLUTIONS = ["1920x1080", "1280x720", "1152x648"]
+var res = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -75,19 +79,40 @@ func _process(delta: float) -> void:
 					option_select = true
 
 	if option_select:
-		if Global.fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-
 		option_menu.visible = true
-		if Input.is_action_just_pressed("ui_right") || Input.is_action_just_pressed("ui_left"):
-			if Global.fullscreen:
-				Global.fullscreen = false
-				fullscreen_opt.text = "Off"
-			else:
-				Global.fullscreen = true
-				fullscreen_opt.text = "On"
+		option_pointer.global_position.y = option_menu.global_position.y + option % 2 * 38
+		if Input.is_action_just_pressed("ui_down"):
+			option += 1
+		if Input.is_action_just_pressed("ui_up"):
+			option -= 1
+		
+		match option % 2:
+			0:
+				if Input.is_action_just_pressed("ui_right") || Input.is_action_just_pressed("ui_left"):
+					if Global.fullscreen:
+						Global.fullscreen = false
+						fullscreen_opt.text = "Off"
+					else:
+						Global.fullscreen = true
+						fullscreen_opt.text = "On"
+					if Global.fullscreen:
+						DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+					else:
+						DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			1:
+				if Input.is_action_just_pressed("ui_right"):
+					res += 1
+				if Input.is_action_just_pressed("ui_left"):
+					res -= 1
+				ui_res.text = RESOLUTIONS[res % len(RESOLUTIONS)]
+				
+				match res % len(RESOLUTIONS):
+					0:
+						DisplayServer.window_set_size(Vector2i(1920, 1080))
+					1:
+						DisplayServer.window_set_size(Vector2i(1280, 720))
+					2:
+						DisplayServer.window_set_size(Vector2i(1152, 648))
 		
 		if Input.is_action_just_pressed("start"):
 			option_select = false
