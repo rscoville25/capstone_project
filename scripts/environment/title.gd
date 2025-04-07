@@ -88,6 +88,10 @@ func _process(delta: float) -> void:
 			else:
 				Global.fullscreen = true
 				fullscreen_opt.text = "On"
+			if Global.fullscreen:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			else:
+				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		
 		if Input.is_action_just_pressed("start"):
 			option_select = false
