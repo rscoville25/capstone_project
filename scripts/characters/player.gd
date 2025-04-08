@@ -23,7 +23,7 @@ extends CharacterBody3D
 @onready var active_box : Area3D = $ActiveBox
 @onready var active_particles : GPUParticles3D = $ActiveParticles
 @onready var poison_fx : GPUParticles3D = $PoisonFX
-
+@onready var active_sfx : AudioStreamPlayer3D = $AbilityExplosion
 
 var config = ConfigFile.new()
 
@@ -100,7 +100,6 @@ func _ready():
 	active_particles.emitting = false
 	
 func _physics_process(delta):
-	print(at_actives_shop)
 	ui_stage.text = str(Global.stage)
 	ui_wave.text = str(Global.wave)
 	if Global.dead:
@@ -153,6 +152,7 @@ func _physics_process(delta):
 			cooldown += 1
 		if cooldown >= downtime:
 			if Input.is_action_just_pressed("interact") && !Global.shop_time:
+				active_sfx.play()
 				use_ability(cur_active)
 	
 	# UI business
@@ -404,6 +404,7 @@ func save():
 	config.set_value("Inventory", "inventory", inventory)
 	config.set_value("Inventory", "inventory_filled", inventory_filled)
 	config.set_value("Inventory", "cur_active", cur_active)
+	config.get_value("Inventory", "has_active", has_active)
 	config.set_value("Stats", "hp", health)
 	config.set_value("Stats", "max_hp", max_health)
 	config.set_value("Stats", "attack", att)
@@ -420,6 +421,7 @@ func load_data():
 	inventory = config.get_value("Inventory", "inventory")
 	inventory_filled = config.get_value("Inventory", "inventory_filled", 0)
 	cur_active = config.get_value("Inventory", "cur_active", 0)
+	has_active = config.get_value("Inventory", "has_active", false)
 	health = config.get_value("Stats", "hp", 1000)
 	max_health = config.get_value("Stats", "max_hp", 1000)
 	att = config.get_value("Stats", "attack", 1)

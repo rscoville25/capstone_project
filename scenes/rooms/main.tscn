@@ -28,8 +28,8 @@
 [ext_resource type="Texture2D" uid="uid://66jv03m0vt7m" path="res://src/textures/controller/Xbox_button_A.svg.png" id="17_dmm5l"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_llaf8"]
-vertices = PackedVector3Array(-99.275, 0.75, -99.275, -99.275, 0.75, 99.475, 99.475, 0.75, 99.475, 99.475, 0.75, -99.275)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+vertices = PackedVector3Array(-149.775, 100.5, -99.75, -149.775, 100.5, -100.25, -150.025, 100.5, -125, 100.725, 100.5, -50.25, 100.725, 100.5, -49.75, 199.725, 100.5, -49.5, 200.225, 100.5, -50.25, 100.725, 100.5, 49.75, 99.475, 100.5, -99.75, 99.475, 100.5, 99.75, 200.225, 100.5, 50.5, 199.725, 100.5, 49.75, 100.725, 100.5, 50.25, -149.775, 100.5, 99.75, -150.025, 100.5, 125, 100.725, 100.5, 100.5, -149.775, 100.5, 100.25, 100.725, 100.5, -100.5, -50.275, 0.5, -125, -50.275, 0.5, -100.25, -49.775, 0.5, -100.25, -49.775, 0.5, -125, 99.975, 0.75, 25.5, 99.975, 0.75, 25.25, 99.475, 0.75, 25.25, 99.475, 0.75, 25.5, 99.475, 0.75, -25, -149.775, 0.75, -99.75, -149.775, 0.75, 99.75, 99.975, 0.75, -25, 99.975, 0.75, -25.25, 99.475, 0.75, -25.25, 99.475, 0.75, 99.75, 99.475, 0.75, -99.75, 100.475, 0.75, -25.5, 100.475, 0.75, -49.5, 99.975, 0.75, -49.5, 99.725, 0.75, -25.5, 99.725, 0.75, -99.75, 100.225, 0.75, -99.75, 100.725, 0.75, -25, 100.725, 0.75, -25.25, 100.725, 0.75, 25.25, 100.725, 0.75, 25.5, 188.475, 0.75, 35.25, 188.475, 0.75, 15, 188.475, 0.75, -14.75, 193.725, 0.75, 15, 193.725, 0.75, 17, 199.725, 0.75, 17, 199.725, 0.75, -16.75, 193.725, 0.75, -16.75, 193.725, 0.75, -14.75, 190.475, 0.75, 49.75, 190.475, 0.75, 35.25, 188.475, 0.75, -35, 190.475, 0.75, -35, 190.475, 0.75, -49.5, 100.725, 0.75, -49.5, 100.725, 0.75, 49.75, 193.725, 0.75, -35, 193.725, 0.75, -33, 199.725, 0.75, -33, 199.725, 0.75, -49.5, 188.475, 4.5, -35, 188.475, 4.5, -15, 193.725, 4.5, -15, 193.725, 4.5, -35, 188.725, 0.75, -34.75, 188.725, 0.75, -15, 193.475, 0.75, -15, 193.475, 0.75, -34.75, 99.725, 50.5, -25, 99.725, 50.5, 25, 100.475, 50.5, 25, 100.475, 50.5, -25, 99.725, 0.75, -24.75, 99.725, 0.75, 25, 100.475, 0.75, 25, 100.475, 0.75, -24.75, 188.475, 4.5, 15, 188.475, 4.5, 35, 193.725, 4.5, 35, 193.725, 4.5, 15, 188.725, 0.75, 15.25, 188.725, 0.75, 35, 193.475, 0.75, 35, 193.475, 0.75, 15.25, 193.725, 0.75, 33.25, 199.725, 0.75, 33.25, 99.975, 0.75, 49.75, 100.475, 0.75, 49.75, 100.475, 0.75, 25.75, 99.725, 0.75, 25.75, 99.725, 0.75, 99.75, 100.225, 0.75, 99.75, 193.725, 0.75, 35.25, 199.725, 0.75, 49.75, -50.275, 0.5, 100.25, -50.275, 0.5, 125, -49.775, 0.5, 125, -49.775, 0.5, 100.25)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Array(5, 3, 6), PackedInt32Array(7, 9, 4), PackedInt32Array(4, 9, 8), PackedInt32Array(11, 5, 10), PackedInt32Array(10, 5, 6), PackedInt32Array(9, 7, 12), PackedInt32Array(7, 11, 12), PackedInt32Array(12, 11, 10), PackedInt32Array(8, 3, 4), PackedInt32Array(13, 14, 0), PackedInt32Array(0, 14, 2), PackedInt32Array(9, 12, 15), PackedInt32Array(16, 14, 13), PackedInt32Array(0, 1, 8), PackedInt32Array(8, 1, 17), PackedInt32Array(13, 9, 16), PackedInt32Array(16, 9, 15), PackedInt32Array(8, 17, 3), PackedInt32Array(21, 20, 18), PackedInt32Array(18, 20, 19), PackedInt32Array(25, 24, 22), PackedInt32Array(22, 24, 23), PackedInt32Array(24, 28, 26), PackedInt32Array(26, 28, 27), PackedInt32Array(31, 30, 26), PackedInt32Array(26, 30, 29), PackedInt32Array(27, 31, 26), PackedInt32Array(25, 32, 28), PackedInt32Array(27, 33, 31), PackedInt32Array(24, 25, 28), PackedInt32Array(35, 34, 36), PackedInt32Array(36, 34, 37), PackedInt32Array(39, 36, 38), PackedInt32Array(38, 36, 37), PackedInt32Array(41, 40, 30), PackedInt32Array(30, 40, 29), PackedInt32Array(43, 42, 44), PackedInt32Array(44, 42, 45), PackedInt32Array(43, 22, 42), PackedInt32Array(42, 22, 23), PackedInt32Array(46, 45, 40), PackedInt32Array(40, 45, 42), PackedInt32Array(49, 48, 47), PackedInt32Array(52, 51, 50), PackedInt32Array(44, 54, 53), PackedInt32Array(57, 56, 55), PackedInt32Array(52, 50, 47), PackedInt32Array(47, 50, 49), PackedInt32Array(57, 55, 58), PackedInt32Array(58, 55, 41), PackedInt32Array(46, 52, 45), PackedInt32Array(45, 52, 47), PackedInt32Array(41, 55, 40), PackedInt32Array(40, 55, 46), PackedInt32Array(53, 59, 44), PackedInt32Array(44, 59, 43), PackedInt32Array(62, 61, 60), PackedInt32Array(60, 56, 57), PackedInt32Array(62, 60, 63), PackedInt32Array(63, 60, 57), PackedInt32Array(67, 66, 64), PackedInt32Array(64, 66, 65), PackedInt32Array(71, 70, 68), PackedInt32Array(68, 70, 69), PackedInt32Array(61, 62, 51), PackedInt32Array(51, 62, 50), PackedInt32Array(75, 74, 72), PackedInt32Array(72, 74, 73), PackedInt32Array(79, 78, 76), PackedInt32Array(76, 78, 77), PackedInt32Array(83, 82, 80), PackedInt32Array(80, 82, 81), PackedInt32Array(87, 86, 84), PackedInt32Array(84, 86, 85), PackedInt32Array(48, 49, 88), PackedInt32Array(88, 49, 89), PackedInt32Array(91, 90, 92), PackedInt32Array(92, 90, 93), PackedInt32Array(95, 94, 90), PackedInt32Array(90, 94, 93), PackedInt32Array(96, 88, 89), PackedInt32Array(53, 54, 96), PackedInt32Array(89, 97, 96), PackedInt32Array(96, 97, 53), PackedInt32Array(101, 100, 98), PackedInt32Array(98, 100, 99)]
 agent_height = 0.0
 agent_radius = 0.0
 agent_max_climb = 0.0
@@ -39,20 +39,20 @@ albedo_texture = ExtResource("3_g06kd")
 
 [sub_resource type="BoxMesh" id="BoxMesh_s3el7"]
 material = SubResource("StandardMaterial3D_vcb78")
-size = Vector3(200, 0.5, 200)
+size = Vector3(250, 0.5, 200)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hb38g"]
-size = Vector3(200, 0.5, 200)
+size = Vector3(250, 0.5, 200)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kathr"]
 albedo_texture = ExtResource("4_vw2ur")
 
 [sub_resource type="BoxMesh" id="BoxMesh_86yn5"]
 material = SubResource("StandardMaterial3D_kathr")
-size = Vector3(0.05, 100, 200)
+size = Vector3(0.05, 100, 250)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e5ns0"]
-size = Vector3(0.5, 100, 200)
+size = Vector3(0.5, 100, 250)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4do8t"]
 size = Vector3(1, 100, 75)
@@ -215,7 +215,7 @@ offset_bottom = 136.0
 texture = ExtResource("15_b31mj")
 
 [node name="Spawner" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.0296, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138.055, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
@@ -224,6 +224,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 96.0104, 0)
 navigation_mesh = SubResource("NavigationMesh_llaf8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 0)
 mesh = SubResource("BoxMesh_s3el7")
 skeleton = NodePath("../..")
 
@@ -233,7 +234,7 @@ skeleton = NodePath("../..")
 shape = SubResource("BoxShape3D_hb38g")
 
 [node name="Wall1" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 50, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -50, 0)
 mesh = SubResource("BoxMesh_86yn5")
 skeleton = NodePath("../..")
 
@@ -243,7 +244,7 @@ skeleton = NodePath("../..")
 shape = SubResource("BoxShape3D_e5ns0")
 
 [node name="Wall2" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, 100)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 50, 100)
 mesh = SubResource("BoxMesh_86yn5")
 skeleton = NodePath("../..")
 
@@ -252,8 +253,18 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall2/StaticBody3D"]
 shape = SubResource("BoxShape3D_e5ns0")
 
+[node name="Wall3" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 50, 0)
+mesh = SubResource("BoxMesh_86yn5")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Wall3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Wall3/StaticBody3D"]
+shape = SubResource("BoxShape3D_e5ns0")
+
 [node name="Wall4" type="MeshInstance3D" parent="NavigationRegion3D"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 50, -100)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 50, -100)
 mesh = SubResource("BoxMesh_86yn5")
 skeleton = NodePath("../..")
 
@@ -291,104 +302,111 @@ mesh = SubResource("BoxMesh_wilp5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopWallDoor/StaticBody3D"]
 shape = SubResource("BoxShape3D_ulm7k")
 
-[node name="ShopFloor" type="MeshInstance3D" parent="."]
+[node name="ShopFloor" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
 mesh = SubResource("BoxMesh_0fywe")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="ShopFloor"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopFloor"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopFloor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopFloor/StaticBody3D"]
 shape = SubResource("BoxShape3D_ff3vs")
 
-[node name="PhysicalDoor" type="MeshInstance3D" parent="."]
+[node name="PhysicalDoor" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 25, 0)
 mesh = SubResource("BoxMesh_ck8pi")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PhysicalDoor"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/PhysicalDoor"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PhysicalDoor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/PhysicalDoor/StaticBody3D"]
 shape = SubResource("BoxShape3D_d62w0")
 
-[node name="Arena" type="Area3D" parent="."]
+[node name="Arena" type="Area3D" parent="NavigationRegion3D"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 shape = SubResource("BoxShape3D_daod8")
 
-[node name="InShopWall1" type="MeshInstance3D" parent="."]
+[node name="InShopWall1" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 50, 0)
 mesh = SubResource("BoxMesh_iloob")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall1"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/InShopWall1"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall1/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/InShopWall1/StaticBody3D"]
 shape = SubResource("BoxShape3D_ld56d")
 
-[node name="InShopWall2" type="MeshInstance3D" parent="."]
+[node name="InShopWall2" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 150, 50, 50)
 mesh = SubResource("BoxMesh_iloob")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/InShopWall2"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall2/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/InShopWall2/StaticBody3D"]
 shape = SubResource("BoxShape3D_ld56d")
 
-[node name="InShopWall3" type="MeshInstance3D" parent="."]
+[node name="InShopWall3" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 150, 50, -50)
 mesh = SubResource("BoxMesh_iloob")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="InShopWall3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/InShopWall3"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InShopWall3/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/InShopWall3/StaticBody3D"]
 shape = SubResource("BoxShape3D_ld56d")
 
-[node name="ShopCounter" type="MeshInstance3D" parent="."]
+[node name="ShopCounter" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, -25)
 mesh = SubResource("BoxMesh_4kshd")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopCounter"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopCounter/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopCounter/StaticBody3D"]
 shape = SubResource("BoxShape3D_bqtd3")
 
-[node name="Shopkeeper" parent="." instance=ExtResource("6_734e5")]
+[node name="Shopkeeper" parent="NavigationRegion3D" instance=ExtResource("6_734e5")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, -25)
 
-[node name="Camera3D" type="Camera3D" parent="Shopkeeper"]
+[node name="Camera3D" type="Camera3D" parent="NavigationRegion3D/Shopkeeper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.317, 34.2228, 0)
 light_energy = 0.0
 light_indirect_energy = 0.0
 sky_mode = 1
 
-[node name="ShopArea" type="Area3D" parent="."]
+[node name="ShopArea" type="Area3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.27, 0, -25)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("BoxShape3D_qk8vd")
 
-[node name="ShopCounter2" type="MeshInstance3D" parent="."]
+[node name="ShopCounter2" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191, 2, 25)
 mesh = SubResource("BoxMesh_4kshd")
+skeleton = NodePath("../..")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="ShopCounter2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/ShopCounter2"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopCounter2/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopCounter2/StaticBody3D"]
 shape = SubResource("BoxShape3D_bqtd3")
 
-[node name="Shopkeeper2" parent="." instance=ExtResource("6_734e5")]
+[node name="Shopkeeper2" parent="NavigationRegion3D" instance=ExtResource("6_734e5")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 196.232, 0, 25)
 
-[node name="Camera3D" type="Camera3D" parent="Shopkeeper2"]
+[node name="Camera3D" type="Camera3D" parent="NavigationRegion3D/Shopkeeper2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.55446, 7.60657, 8.66637)
 
-[node name="ShopArea2" type="Area3D" parent="."]
+[node name="ShopArea2" type="Area3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.741, 0, 25)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShopArea2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/ShopArea2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
 shape = SubResource("BoxShape3D_wfsj6")
 
@@ -812,7 +830,7 @@ Press Start to go to Title Screen"
 label_settings = SubResource("LabelSettings_mjbeh")
 horizontal_alignment = 1
 
-[connection signal="area_entered" from="ShopArea" to="." method="_on_shop_area_area_entered"]
-[connection signal="area_exited" from="ShopArea" to="." method="_on_shop_area_area_exited"]
-[connection signal="area_entered" from="ShopArea2" to="." method="_on_shop_area_2_area_entered"]
-[connection signal="area_exited" from="ShopArea2" to="." method="_on_shop_area_2_area_exited"]
+[connection signal="area_entered" from="NavigationRegion3D/ShopArea" to="." method="_on_shop_area_area_entered"]
+[connection signal="area_exited" from="NavigationRegion3D/ShopArea" to="." method="_on_shop_area_area_exited"]
+[connection signal="area_entered" from="NavigationRegion3D/ShopArea2" to="." method="_on_shop_area_2_area_entered"]
+[connection signal="area_exited" from="NavigationRegion3D/ShopArea2" to="." method="_on_shop_area_2_area_exited"]

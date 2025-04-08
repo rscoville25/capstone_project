@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://bnysjrldq7hr4"]
+[gd_scene load_steps=17 format=3 uid="uid://bnysjrldq7hr4"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_c7bmg"]
 [ext_resource type="Script" path="res://scripts/characters/spring_arm_pivot.gd" id="2_0npem"]
 [ext_resource type="PackedScene" uid="uid://bnhjly5gerpc" path="res://scenes/characters/bases/chara.tscn" id="3_hrgne"]
 [ext_resource type="Texture2D" uid="uid://m2ih20yn1b45" path="res://src/textures/chara_blue.png" id="4_kwek8"]
 [ext_resource type="Texture2D" uid="uid://dwaqb1lctvbdf" path="res://src/textures/controller/Xbox_Left_Bumper.svg.png" id="5_lojhk"]
+[ext_resource type="AudioStream" uid="uid://csihdkn1q031g" path="res://src/sound/sfx/burst.mp3" id="6_ub1re"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ec55"]
 radius = 1.81226
@@ -200,3 +201,6 @@ offset_bottom = 35.0
 scale = Vector2(0.016, 0.008)
 text = "Ability"
 label_settings = SubResource("LabelSettings_0jrv4")
+
+[node name="AbilityExplosion" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_ub1re")

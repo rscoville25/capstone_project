@@ -16,16 +16,17 @@ var config = ConfigFile.new()
 @onready var player_camera : Camera3D = $Player/SpringArmPivot/SpringArm3D/Camera3D
 @onready var spawner : Marker3D = $Spawner
 @onready var boss_spawner : Marker3D = $BossSpawner
-@onready var door_sensor : CollisionShape3D = $ShopDoor/CollisionShape3D
-@onready var door : MeshInstance3D = $PhysicalDoor
+@onready var door_sensor : CollisionShape3D = $NavigationRegion3D/ShopDoor/CollisionShape3D
+@onready var spawn_wall : MeshInstance3D =  $NavigationRegion3D/Wall1
+@onready var door : MeshInstance3D = $NavigationRegion3D/PhysicalDoor
 @onready var ui_text : Label = $Label
 @onready var nav_region : NavigationRegion3D = $NavigationRegion3D
-@onready var arena_area : Area3D = $Arena
-@onready var shopkeeper : AnimationTree = $Shopkeeper/AnimationTree
-@onready var shopkeeper_main : GPUParticles3D = $Shopkeeper/HeatParticles
+@onready var arena_area : Area3D = $NavigationRegion3D/Arena
+@onready var shopkeeper : AnimationTree = $NavigationRegion3D/Shopkeeper/AnimationTree
+@onready var shopkeeper_main : GPUParticles3D = $NavigationRegion3D/Shopkeeper/HeatParticles
 @onready var pause_text : Label = $PauseText
-@onready var shop_camera : Camera3D = $Shopkeeper/Camera3D
-@onready var shop_area : Area3D = $ShopArea
+@onready var shop_camera : Camera3D = $NavigationRegion3D/Shopkeeper/Camera3D
+@onready var shop_area : Area3D = $NavigationRegion3D/ShopArea
 @onready var shop_window : ColorRect = $ShopWindow
 @onready var upgrade_shop : Control = $ShopWindow/ItemsUpgrade
 @onready var actives_shop : Control = $ShopWindow/Actives
@@ -79,6 +80,8 @@ var hp_cost = 1
 var att_cost = 1
 var def_cost = 1
 
+var boss_next = false
+
 func _ready():
 	Global.pause = false
 	if !Global.new_game:
@@ -112,6 +115,11 @@ func _ready():
 	
 	
 func _process(delta):
+	if Global.wave % 4 == 3:
+		boss_next = true
+	else:
+		boss_next = false
+	
 	if Global.dead:
 		death_text.visible = true
 		Global.wave = 1
@@ -368,7 +376,7 @@ func _process(delta):
 	else:
 		controller.visible = false
 	# detects if player is inside the arena. If true, press start to begin the wave
-		if Global.shop_time == true:
+		if Global.shop_time:
 			if !Global.buying:
 				ui_text.visible = true
 			ui_text.text = "Go To Arena"
@@ -379,6 +387,14 @@ func _process(delta):
 					Global.wave += 1
 					Global.shop_time = false
 			# shop door open during shop time
+			if player.global_transform.origin.x > -40:
+				spawn_wall.global_transform.origin.y = 50
+				spawn_time += 1
+				if Global.enemies_spawned < Global.wave:
+					if !boss_next:
+						if spawn_time % 60 == 1:
+							spawn(Global.wave + 1, Global.stage)
+							Global.enemies_spawned += 1
 			door.global_transform.origin.y = -25
 			if player.at_item_shop || player.at_actives_shop:
 				input_prompt.visible = true
@@ -389,9 +405,11 @@ func _process(delta):
 						Global.buying = false
 			else:
 				input_prompt.visible = false
-			
+		
 		else:
 			# shop door closed during fight time
+			if player.global_transform.origin.x > -40:
+				spawn_wall.global_transform.origin.y = -100
 			door.global_transform.origin.y = 25
 			ui_text.visible = false
 			
@@ -399,12 +417,12 @@ func _process(delta):
 			if !Global.pause:
 				spawn_time += 1
 				if Global.wave % 4 == 0 && !Global.boss_alive:
-					if spawn_time % 60 == 1:
+					if spawn_time % 60 == 2:
 						boss_spawn(Global.wave)
 						Global.enemies_spawned += 1
 						Global.boss_alive = true
-				if Global.enemies_spawned < Global.wave:
-					if Global.wave % 4 != 0:
+				if Global.enemies_spawned + 1 < Global.wave:
+					if !Global.boss_alive:
 						if spawn_time % 60 == 1:
 							spawn(Global.wave, Global.stage)
 							Global.enemies_spawned += 1
@@ -448,7 +466,7 @@ func spawn(wave, stage):
 					var kick = kick_enemy.instantiate()
 					kick.global_position = spawner.global_position
 					add_child(kick)
-			3:
+			4:
 				if rng_spawn <= 70:
 					var enemy1 = enemy.instantiate()
 					enemy1.global_position = spawner.global_position

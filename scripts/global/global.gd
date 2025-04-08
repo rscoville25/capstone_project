@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 		save()
 	
 	if dead:
-		stage = 0 
+		stage = 1
 		wave = 0
 		enemies_spawned = 0 
 		enemies_defeated = 0
