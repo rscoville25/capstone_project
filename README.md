@@ -43,6 +43,8 @@ The UI was a lot less headache inducing, as the copy/pasting I did with the scri
 
 Presentation: https://docs.google.com/presentation/d/1PacxHIfX7yGOFtNrbNkDDFRxle_-2seZQ9nFBgyuNDE/edit?usp=sharing
 
+### For the full release reflection, read Reflection.md
+
 ## Resources Used
 - **Godot**: The game engine used to build the project. I chose it because learning a new language (C++ or C#) would be too much to finish within the time I'm given. It's also a bit more user friendly than Unreal Engine and I don't like Unity.
   - https://godotengine.org/
@@ -52,7 +54,7 @@ Presentation: https://docs.google.com/presentation/d/1PacxHIfX7yGOFtNrbNkDDFRxle
   - https://www.blender.org/
 - **Adobe Mixamo**: Premade animations made by Adobe that look better than anything I could do. Has almost everything I could have wanted to animate
   -  https://www.mixamo.com/
-- And of course, random Youtube tutorials helped me with any question I had regarding how certain thing worked 
+- And of course, random Youtube tutorials helped me with any question I had regarding how certain thing worked
 
 ## Known Bugs
 - Some animations playing when the're not supposed to
